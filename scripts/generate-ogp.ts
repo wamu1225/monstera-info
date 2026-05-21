@@ -19,21 +19,13 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" v
   <rect width="1200" height="630" fill="url(#bg)"/>
   <rect x="0" y="0" width="12" height="630" fill="#2D5C3E"/>
 
-  <g transform="translate(860, 60)">
-    <path d="M150 30 C70 60 30 150 30 240 C30 360 110 480 200 510 C290 480 370 360 370 240 C370 150 330 60 250 30 Z" fill="url(#leafGrad)" stroke="#1E3F2A" stroke-width="2"/>
-    <path d="M200 30 L200 510" stroke="#C9A14A" stroke-width="2" opacity="0.5"/>
-    <path d="M80 110 L150 200 L80 220" fill="none" stroke="#1E3F2A" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M320 110 L250 200 L320 220" fill="none" stroke="#1E3F2A" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M50 220 L140 270 L50 310" fill="none" stroke="#1E3F2A" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M350 220 L260 270 L350 310" fill="none" stroke="#1E3F2A" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M90 360 L170 340 L130 420" fill="none" stroke="#1E3F2A" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M310 360 L230 340 L270 420" fill="none" stroke="#1E3F2A" stroke-width="2.5" stroke-linecap="round"/>
-    <ellipse cx="120" cy="160" rx="14" ry="22" fill="#eef4e8" opacity="0.85"/>
-    <ellipse cx="280" cy="160" rx="14" ry="22" fill="#eef4e8" opacity="0.85"/>
-    <ellipse cx="110" cy="270" rx="16" ry="24" fill="#eef4e8" opacity="0.85"/>
-    <ellipse cx="290" cy="270" rx="16" ry="24" fill="#eef4e8" opacity="0.85"/>
-    <ellipse cx="150" cy="390" rx="12" ry="20" fill="#eef4e8" opacity="0.85"/>
-    <ellipse cx="250" cy="390" rx="12" ry="20" fill="#eef4e8" opacity="0.85"/>
+  <g transform="translate(820, 75) scale(7.5)">
+    <path d="M 32 4 C 22 4, 14 10, 10 18 L 18 22 L 8 26 C 6 32, 8 38, 12 42 L 22 38 L 14 46 C 18 54, 24 58, 32 60 L 30 50 L 34 50 L 32 60 C 40 58, 46 54, 50 46 L 42 38 L 52 42 C 56 38, 58 32, 56 26 L 46 22 L 54 18 C 50 10, 42 4, 32 4 Z" fill="url(#leafGrad)" stroke="#1E3F2A" stroke-width="0.5" stroke-linejoin="round"/>
+    <path d="M32 8 L32 56" stroke="#C9A14A" stroke-width="0.4" opacity="0.4"/>
+    <ellipse cx="22" cy="24" rx="2.5" ry="3.5" fill="#eef4e8" opacity="0.75"/>
+    <ellipse cx="42" cy="24" rx="2.5" ry="3.5" fill="#eef4e8" opacity="0.75"/>
+    <ellipse cx="20" cy="36" rx="2.5" ry="3.5" fill="#eef4e8" opacity="0.75"/>
+    <ellipse cx="44" cy="36" rx="2.5" ry="3.5" fill="#eef4e8" opacity="0.75"/>
   </g>
 
   <text x="80" y="200" font-family="'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic',Meiryo,sans-serif" font-size="76" font-weight="700" fill="#2D5C3E">モンステラの基本ガイド</text>

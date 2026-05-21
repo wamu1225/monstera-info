@@ -216,20 +216,18 @@ function Header() {
         >
           <svg className="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <radialGradient id="ml" cx="50%" cy="50%" r="55%">
+              <radialGradient id="ml" cx="50%" cy="55%" r="55%">
                 <stop offset="0%" stopColor="#6FA37F"/>
                 <stop offset="60%" stopColor="#3D7A52"/>
                 <stop offset="100%" stopColor="#1E3F2A"/>
               </radialGradient>
             </defs>
-            <path d="M32 4 C18 8 8 22 8 36 C8 50 20 60 32 60 C44 60 56 50 56 36 C56 22 46 8 32 4 Z" fill="url(#ml)" stroke="#1E3F2A" strokeWidth="0.5"/>
-            <path d="M32 8 L32 58" stroke="#C9A14A" strokeWidth="0.8" opacity="0.5"/>
-            <ellipse cx="20" cy="24" rx="3" ry="5" fill="#f8faf5" opacity="0.85"/>
-            <ellipse cx="44" cy="24" rx="3" ry="5" fill="#f8faf5" opacity="0.85"/>
-            <ellipse cx="16" cy="38" rx="3.5" ry="5.5" fill="#f8faf5" opacity="0.85"/>
-            <ellipse cx="48" cy="38" rx="3.5" ry="5.5" fill="#f8faf5" opacity="0.85"/>
-            <ellipse cx="24" cy="48" rx="2.5" ry="4" fill="#f8faf5" opacity="0.85"/>
-            <ellipse cx="40" cy="48" rx="2.5" ry="4" fill="#f8faf5" opacity="0.85"/>
+            <path d="M 32 4 C 22 4, 14 10, 10 18 L 18 22 L 8 26 C 6 32, 8 38, 12 42 L 22 38 L 14 46 C 18 54, 24 58, 32 60 L 30 50 L 34 50 L 32 60 C 40 58, 46 54, 50 46 L 42 38 L 52 42 C 56 38, 58 32, 56 26 L 46 22 L 54 18 C 50 10, 42 4, 32 4 Z" fill="url(#ml)" stroke="#1E3F2A" strokeWidth="0.8" strokeLinejoin="round"/>
+            <path d="M32 8 L32 56" stroke="#C9A14A" strokeWidth="0.6" opacity="0.4"/>
+            <ellipse cx="22" cy="24" rx="2.5" ry="3.5" fill="#f8faf5" opacity="0.7"/>
+            <ellipse cx="42" cy="24" rx="2.5" ry="3.5" fill="#f8faf5" opacity="0.7"/>
+            <ellipse cx="20" cy="36" rx="2.5" ry="3.5" fill="#f8faf5" opacity="0.7"/>
+            <ellipse cx="44" cy="36" rx="2.5" ry="3.5" fill="#f8faf5" opacity="0.7"/>
           </svg>
           <span>モンステラの基本ガイド</span>
         </a>
