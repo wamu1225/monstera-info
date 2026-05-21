@@ -1,0 +1,475 @@
+import * as fs from 'fs';
+import * as path from 'path';
+import { sections } from '../src/data/sections.ts';
+import { FAQ_BY_SECTION } from '../src/data/faqs.ts';
+import { glossary } from '../src/data/glossary.ts';
+
+const DIST_DIR = path.resolve(process.cwd(), 'dist');
+const INDEX_HTML_PATH = path.join(DIST_DIR, 'index.html');
+const BASE_URL = 'https://study-apps.com/monstera-info';
+
+console.log('--- monstera-info SSG Pre-rendering ---');
+
+if (!fs.existsSync(INDEX_HTML_PATH)) {
+  console.error('Error: dist/index.html not found. Run "npm run build" first.');
+  process.exit(1);
+}
+
+const templateHtml = fs.readFileSync(INDEX_HTML_PATH, 'utf-8');
+
+// ── Markdown → HTML 変換（クライアントの parseContent と同等の出力） ──
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function slugifyAscii(_text: string, index: number): string {
+  return `section-${index}`;
+}
+
+function parseInlineToHtml(text: string): string {
+  let result = '';
+  let remaining = text;
+  const patterns: { re: RegExp; render: (m: RegExpExecArray) => string }[] = [
+    {
+      re: /\[([^\]]+)\]\(([^)]+)\)/,
+      render: (m) => {
+        const label = escapeHtml(m[1]);
+        const href = m[2];
+        const isExternal = /^https?:\/\//.test(href);
+        const attrs = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
+        return `<a href="${escapeHtml(href)}"${attrs}>${label}</a>`;
+      },
+    },
+    { re: /\*\*(.+?)\*\*/, render: (m) => `<strong>${escapeHtml(m[1])}</strong>` },
+    { re: /`([^`]+)`/, render: (m) => `<code class="inline-code">${escapeHtml(m[1])}</code>` },
+  ];
+
+  while (remaining.length > 0) {
+    let earliest: { idx: number; len: number; html: string } | null = null;
+    for (const p of patterns) {
+      const m = p.re.exec(remaining);
+      if (m && (earliest === null || m.index < earliest.idx)) {
+        earliest = { idx: m.index, len: m[0].length, html: p.render(m) };
+      }
+    }
+    if (!earliest) {
+      result += escapeHtml(remaining);
+      break;
+    }
+    if (earliest.idx > 0) result += escapeHtml(remaining.slice(0, earliest.idx));
+    result += earliest.html;
+    remaining = remaining.slice(earliest.idx + earliest.len);
+  }
+  return result;
+}
+
+function markdownToHtml(content: string): string {
+  const lines = content.split('\n');
+  const out: string[] = [];
+  let i = 0;
+  let h2Index = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    if (trimmed === '') { i++; continue; }
+
+    if (trimmed.startsWith('## ')) {
+      const text = trimmed.slice(3);
+      const slug = slugifyAscii(text, h2Index++);
+      out.push(`<h2 id="${slug}" class="content-h2">${parseInlineToHtml(text)}</h2>`);
+      i++;
+      continue;
+    }
+
+    if (trimmed.startsWith('### ')) {
+      const text = trimmed.slice(4);
+      out.push(`<h3 class="content-h3">${parseInlineToHtml(text)}</h3>`);
+      i++;
+      continue;
+    }
+
+    if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+      const tableLines: string[] = [];
+      while (i < lines.length && lines[i].trim().startsWith('|') && lines[i].trim().endsWith('|')) {
+        tableLines.push(lines[i].trim());
+        i++;
+      }
+      if (tableLines.length >= 2) {
+        const rows = tableLines.map((r) => r.split('|').slice(1, -1).map((c) => c.trim()));
+        const isSep = (r: string[]) => r.every((c) => /^[-:]+$/.test(c));
+        const header = rows[0];
+        const data = rows.slice(1).filter((r) => !isSep(r));
+        const headerHtml = header.map((c) => `<th>${parseInlineToHtml(c)}</th>`).join('');
+        const bodyHtml = data
+          .map((row) => `<tr>${row.map((c) => `<td>${parseInlineToHtml(c)}</td>`).join('')}</tr>`)
+          .join('');
+        out.push(
+          `<div class="content-table-wrap"><table class="content-table"><thead><tr>${headerHtml}</tr></thead><tbody>${bodyHtml}</tbody></table></div>`
+        );
+      }
+      continue;
+    }
+
+    if (/^\d+\.\s/.test(trimmed)) {
+      const items: string[] = [];
+      while (i < lines.length && /^\d+\.\s/.test(lines[i].trim())) {
+        items.push(lines[i].trim().replace(/^\d+\.\s/, ''));
+        i++;
+      }
+      out.push(`<ol class="content-ol">${items.map((it) => `<li>${parseInlineToHtml(it)}</li>`).join('')}</ol>`);
+      continue;
+    }
+
+    if (trimmed.startsWith('- ')) {
+      const items: string[] = [];
+      while (i < lines.length && lines[i].trim().startsWith('- ')) {
+        items.push(lines[i].trim().slice(2));
+        i++;
+      }
+      out.push(`<ul class="content-ul">${items.map((it) => `<li>${parseInlineToHtml(it)}</li>`).join('')}</ul>`);
+      continue;
+    }
+
+    if (trimmed.startsWith('💡 ')) {
+      out.push(`<p class="callout callout-tip">${parseInlineToHtml(trimmed.slice(2).trim())}</p>`);
+      i++; continue;
+    }
+    if (trimmed.startsWith('⚠️ ')) {
+      out.push(`<p class="callout callout-warning">${parseInlineToHtml(trimmed.slice(2).trim())}</p>`);
+      i++; continue;
+    }
+    if (trimmed.startsWith('📖 ')) {
+      out.push(`<p class="callout callout-info">${parseInlineToHtml(trimmed.slice(2).trim())}</p>`);
+      i++; continue;
+    }
+    if (trimmed.startsWith('✅ ')) {
+      out.push(`<p class="callout callout-success">${parseInlineToHtml(trimmed.slice(2).trim())}</p>`);
+      i++; continue;
+    }
+
+    if (trimmed === '---') {
+      out.push('<hr>');
+      i++; continue;
+    }
+
+    out.push(`<p class="content-p">${parseInlineToHtml(trimmed)}</p>`);
+    i++;
+  }
+
+  return out.join('\n');
+}
+
+function buildTocHtml(toc: string[]): string {
+  if (!toc.length) return '';
+  const items = toc
+    .map((it, idx) => `<li><a href="#${slugifyAscii(it, idx)}">${escapeHtml(it)}</a></li>`)
+    .join('');
+  return `<nav class="toc"><div class="toc-title">目次</div><ol class="toc-list">${items}</ol></nav>`;
+}
+
+// ── ルート index.html に静的フォールバック + JSON-LD を注入 ──
+const sectionListHtml = sections
+  .map(
+    (s) =>
+      `<li style="margin-bottom:14px"><a href="/monstera-info/${s.id}/" style="color:#2D5C3E;font-weight:600;text-decoration:none">${escapeHtml(s.shortTitle)}</a><br><span style="color:#555;font-size:0.9rem">${escapeHtml(s.description)}</span></li>`
+  )
+  .join('\n');
+
+const rootStaticContent = `<article id="static-fallback" style="font-family:sans-serif;line-height:1.7;max-width:920px;margin:0 auto;padding:24px 16px">
+  <h1 style="font-size:1.8rem;font-weight:700;border-bottom:2px solid #2D5C3E;padding-bottom:8px;margin-bottom:16px;color:#2D5C3E">モンステラの基本ガイド</h1>
+  <p style="color:#444;margin-bottom:24px">人気観葉植物モンステラ（Monstera deliciosa）の総合情報サイト。基礎知識・育て方・剪定や増やし方・病害虫対処・選び方・ペット安全性まで、家庭で実践しやすい形でまとめています。</p>
+  <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:12px">セクション一覧</h2>
+  <ul style="list-style:none;padding:0">
+${sectionListHtml}
+  </ul>
+  <nav style="margin-top:32px;border-top:1px solid #ddd;padding-top:16px;display:flex;gap:16px;flex-wrap:wrap">
+    <a href="/monstera-info/about/" style="color:#2D5C3E">サイトについて</a>
+    <a href="/monstera-info/privacy/" style="color:#2D5C3E">プライバシーポリシー</a>
+  </nav>
+  <p style="font-size:0.8rem;color:#888;margin-top:20px;border-top:1px solid #eee;padding-top:12px">※本サイトは一般的な情報を提供するもので、専門家の助言の代替ではありません。ペットの誤食など緊急時は獣医師にご相談ください。</p>
+</article>`;
+
+const homeJsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'モンステラの基本ガイド',
+  url: `${BASE_URL}/`,
+  description:
+    'モンステラ（Monstera deliciosa）の基礎知識・育て方・剪定・増やし方・病害虫対処・選び方・ペット安全性まで網羅した総合情報サイト。',
+  inLanguage: 'ja',
+});
+
+let rootIndexHtml = templateHtml.replace('<div id="root"></div>', `<div id="root">${rootStaticContent}</div>`);
+rootIndexHtml = rootIndexHtml.replace(
+  '</head>',
+  `<script type="application/ld+json">${homeJsonLd}</script>\n  </head>`
+);
+fs.writeFileSync(INDEX_HTML_PATH, rootIndexHtml);
+
+// ── サブディレクトリ用テンプレート（アセットパスを ../ に書き換え） ──
+const subDirTemplateHtml = templateHtml
+  .replace(/href="\.\/assets\//g, 'href="../assets/')
+  .replace(/src="\.\/assets\//g, 'src="../assets/')
+  .replace(/href="\.\/favicon.svg"/g, 'href="../favicon.svg"');
+
+let generatedCount = 0;
+
+function buildFaqHtml(sectionId: string): string {
+  const faqs = FAQ_BY_SECTION[sectionId];
+  if (!faqs || faqs.length === 0) return '';
+  const items = faqs
+    .map(
+      (qa) =>
+        `<details style="background:#fff;border:1px solid #d4dfc8;border-radius:8px;margin-bottom:8px;padding:14px 18px"><summary style="cursor:pointer;font-weight:600;color:#1f2937">Q. ${escapeHtml(qa.question)}</summary><p style="margin:10px 0 0;color:#4b5563;line-height:1.85">A. ${escapeHtml(qa.answer)}</p></details>`
+    )
+    .join('');
+  return `<section style="margin:40px 0;padding:24px;background:#eef4e8;border:1px solid #d4dfc8;border-radius:12px"><h3 style="margin:0 0 16px;color:#2D5C3E;font-size:1.05rem">❓ よくある質問</h3>${items}</section>`;
+}
+
+function formatDateJa(iso: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  if (!m) return iso;
+  return `${m[1]}年${parseInt(m[2], 10)}月${parseInt(m[3], 10)}日`;
+}
+
+function buildSectionFallback(s: (typeof sections)[number]): string {
+  const tocHtml = buildTocHtml(s.toc);
+  const contentHtml = markdownToHtml(s.content);
+  const faqHtml = buildFaqHtml(s.id);
+  const leadHtml = s.lead && s.lead !== '（準備中）'
+    ? `<p class="lead" style="color:#555;font-size:1.05rem;margin:16px 0 24px">${escapeHtml(s.lead)}</p>`
+    : '';
+  const isYMYL = s.id === 'safety' || s.id === 'troubles';
+  const disclaimerHtml = isYMYL
+    ? `<div style="background:#fef2f2;border:1px solid #fecaca;border-left:4px solid #dc2626;border-radius:6px;padding:14px 16px;margin:0 0 28px;font-size:0.92rem;color:#7f1d1d;line-height:1.75"><strong style="display:block;margin-bottom:4px">⚠️ ペット・小児の誤食にご注意ください</strong>モンステラは不溶性シュウ酸カルシウムを含むため、犬・猫・小児が誤食すると口腔の刺激や嘔吐などを引き起こすことがあります。誤食が疑われる場合は速やかに獣医師または医療機関にご相談ください。本サイトの情報は獣医学的・医学的助言の代替ではありません。</div>`
+    : '';
+
+  return `<article style="font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic',Meiryo,sans-serif;line-height:1.85;max-width:920px;margin:0 auto;padding:24px 16px;color:#1f2937">
+  <nav style="font-size:0.85rem;color:#6b7280;margin:0 0 16px"><a href="/monstera-info/" style="color:#2D5C3E;text-decoration:none">モンステラの基本ガイド</a> <span style="color:#9ca3af">›</span> <span style="color:#4b5563;font-weight:600">${escapeHtml(s.shortTitle)}</span></nav>
+  <header style="margin-bottom:20px">
+    <div style="font-size:2.4rem;line-height:1;margin-bottom:8px">${s.emoji}</div>
+    <h1 style="font-size:1.7rem;color:#2D5C3E;border-bottom:2px solid #2D5C3E;padding-bottom:10px;margin:0 0 8px">${escapeHtml(s.title)}</h1>
+    <div style="font-size:0.85rem;color:#9c8f80;margin-top:10px">最終更新: ${formatDateJa(s.updatedAt)}</div>
+  </header>
+  ${leadHtml}
+  ${disclaimerHtml}
+  ${tocHtml}
+  <div class="section-content">
+${contentHtml}
+  </div>
+  ${faqHtml}
+  <p style="margin-top:32px"><a href="/monstera-info/" style="color:#2D5C3E">← トップへ戻る</a></p>
+</article>`;
+}
+
+function writeSectionPage(s: (typeof sections)[number]) {
+  const dir = path.join(DIST_DIR, s.id);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
+  let html = subDirTemplateHtml
+    .replace(/<title>.*?<\/title>/, `<title>${s.title} | モンステラの基本ガイド</title>`)
+    .replace(
+      /<meta name="description" content="[^"]*"/,
+      `<meta name="description" content="${s.description}"`
+    )
+    .replace(
+      /<meta property="og:title" content="[^"]*"/,
+      `<meta property="og:title" content="${s.title}"`
+    )
+    .replace(
+      /<meta property="og:description" content="[^"]*"/,
+      `<meta property="og:description" content="${s.description}"`
+    )
+    .replace(
+      /<meta property="og:type" content="[^"]*"/,
+      `<meta property="og:type" content="article"`
+    )
+    .replace(
+      /<meta property="og:url" content="[^"]*"/,
+      `<meta property="og:url" content="${BASE_URL}/${s.id}/"`
+    )
+    .replace(
+      /<link rel="canonical" href="[^"]*"/,
+      `<link rel="canonical" href="${BASE_URL}/${s.id}/"`
+    )
+    .replace(
+      /<meta name="twitter:title" content="[^"]*"/,
+      `<meta name="twitter:title" content="${s.title}"`
+    )
+    .replace(
+      /<meta name="twitter:description" content="[^"]*"/,
+      `<meta name="twitter:description" content="${s.description}"`
+    )
+    .replace('<div id="root"></div>', `<div id="root">${buildSectionFallback(s)}</div>`);
+
+  const articleJsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: s.title,
+    description: s.description,
+    url: `${BASE_URL}/${s.id}/`,
+    inLanguage: 'ja',
+    datePublished: s.updatedAt,
+    dateModified: s.updatedAt,
+    author: { '@type': 'Organization', name: 'study-apps.com' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'study-apps.com',
+      url: 'https://study-apps.com/',
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE_URL}/${s.id}/` },
+  });
+
+  const breadcrumbJsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'モンステラの基本ガイド', item: `${BASE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: s.shortTitle, item: `${BASE_URL}/${s.id}/` },
+    ],
+  });
+
+  const extraJsonLd: string[] = [];
+  const faqList = FAQ_BY_SECTION[s.id];
+  if (faqList && faqList.length) {
+    const faqJsonLd = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqList.map((qa) => ({
+        '@type': 'Question',
+        name: qa.question,
+        acceptedAnswer: { '@type': 'Answer', text: qa.answer },
+      })),
+    });
+    extraJsonLd.push(`<script type="application/ld+json">${faqJsonLd}</script>`);
+  }
+
+  html = html.replace(
+    '</head>',
+    `<script type="application/ld+json">${articleJsonLd}</script>\n  <script type="application/ld+json">${breadcrumbJsonLd}</script>\n  ${extraJsonLd.join('\n  ')}\n  </head>`
+  );
+
+  fs.writeFileSync(path.join(dir, 'index.html'), html);
+  generatedCount++;
+}
+
+for (const s of sections) writeSectionPage(s);
+
+// ── About / Privacy 静的ページ ──
+function writeStaticPage(id: string, title: string, description: string, bodyHtml: string) {
+  const dir = path.join(DIST_DIR, id);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
+  const fallback = `<article style="font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic',Meiryo,sans-serif;line-height:1.85;max-width:920px;margin:0 auto;padding:24px 16px;color:#1f2937">
+  <nav style="font-size:0.85rem;color:#6b7280;margin:0 0 16px"><a href="/monstera-info/" style="color:#2D5C3E;text-decoration:none">モンステラの基本ガイド</a> <span style="color:#9ca3af">›</span> <span style="color:#4b5563;font-weight:600">${escapeHtml(title)}</span></nav>
+  <h1 style="font-size:1.7rem;color:#2D5C3E;border-bottom:2px solid #2D5C3E;padding-bottom:10px">${title}</h1>
+  ${bodyHtml}
+  <p style="margin-top:32px"><a href="/monstera-info/" style="color:#2D5C3E">← トップへ戻る</a></p>
+</article>`;
+
+  const pageJsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: `${BASE_URL}/${id}/`,
+    inLanguage: 'ja',
+    isPartOf: { '@type': 'WebSite', name: 'モンステラの基本ガイド', url: `${BASE_URL}/` },
+  });
+
+  const breadcrumbJsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'モンステラの基本ガイド', item: `${BASE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: title, item: `${BASE_URL}/${id}/` },
+    ],
+  });
+
+  let html = subDirTemplateHtml
+    .replace(/<title>.*?<\/title>/, `<title>${title} | モンステラの基本ガイド</title>`)
+    .replace(
+      /<meta name="description" content="[^"]*"/,
+      `<meta name="description" content="${description}"`
+    )
+    .replace(
+      /<meta property="og:title" content="[^"]*"/,
+      `<meta property="og:title" content="${title}"`
+    )
+    .replace(
+      /<meta property="og:description" content="[^"]*"/,
+      `<meta property="og:description" content="${description}"`
+    )
+    .replace(
+      /<link rel="canonical" href="[^"]*"/,
+      `<link rel="canonical" href="${BASE_URL}/${id}/"`
+    )
+    .replace(
+      /<meta property="og:url" content="[^"]*"/,
+      `<meta property="og:url" content="${BASE_URL}/${id}/"`
+    )
+    .replace(
+      /<meta name="twitter:title" content="[^"]*"/,
+      `<meta name="twitter:title" content="${title}"`
+    )
+    .replace(
+      /<meta name="twitter:description" content="[^"]*"/,
+      `<meta name="twitter:description" content="${description}"`
+    )
+    .replace('<div id="root"></div>', `<div id="root">${fallback}</div>`);
+
+  html = html.replace(
+    '</head>',
+    `<script type="application/ld+json">${pageJsonLd}</script>\n  <script type="application/ld+json">${breadcrumbJsonLd}</script>\n  </head>`
+  );
+
+  fs.writeFileSync(path.join(dir, 'index.html'), html);
+  generatedCount++;
+}
+
+// 用語集ページ
+const glossarySorted = [...glossary].sort((a, b) =>
+  (a.reading || a.term).localeCompare(b.reading || b.term, 'ja')
+);
+const glossaryHtml = glossarySorted
+  .map((g) => {
+    const related = g.relatedSectionId ? sections.find((s) => s.id === g.relatedSectionId) : null;
+    const relatedLink = related
+      ? `<a href="/monstera-info/${related.id}/" style="display:inline-block;font-size:0.88rem;color:#2D5C3E;margin-top:4px">関連ページ：${escapeHtml(related.shortTitle)} →</a>`
+      : '';
+    const readingSpan = g.reading && g.reading !== g.term
+      ? `<span style="color:#9c8f80;font-size:0.9rem;font-weight:400">（${escapeHtml(g.reading)}）</span>`
+      : '';
+    return `<div style="border-bottom:1px solid #d4dfc8;padding:20px 0"><dt style="font-weight:700;color:#2D5C3E;font-size:1.1rem;margin-bottom:8px"><span style="margin-right:4px">${escapeHtml(g.term)}</span>${readingSpan}</dt><dd style="margin:0"><p style="margin:0 0 8px;line-height:1.85;color:#1f2937">${escapeHtml(g.description)}</p>${relatedLink}</dd></div>`;
+  })
+  .join('');
+
+writeStaticPage(
+  'glossary',
+  '用語集',
+  'モンステラの関連用語（フェネストレーション、気根、節、斑入り、不溶性シュウ酸カルシウムなど）の解説。',
+  `<p style="color:#555;font-size:1.05rem;margin:16px 0 24px">本サイトに登場する園芸用語をまとめました。気根、葉裂、斑入り、シュウ酸カルシウムなど、育て方や安全性の理解に役立ててください。</p><dl style="margin:0;padding:0">${glossaryHtml}</dl>`
+);
+
+writeStaticPage(
+  'about',
+  'サイトについて',
+  'モンステラの基本ガイドについて。本サイトの目的と情報源、免責事項を説明します。',
+  `<p>本サイト「モンステラの基本ガイド」は、観葉植物モンステラ（Monstera deliciosa）に興味を持った方が、まずひととおりの情報に触れられるようにまとめたリファレンスサイトです。植物としての基礎知識、育て方、季節管理、剪定や増やし方、病害虫対処、選び方、ペットを含む安全性までを家庭目線で紹介しています。</p><p>本サイトの内容は一般的な情報提供を目的としており、専門家による診断・処方・処置の代わりにはなりません。植物が深刻な病害虫被害を受けた場合は園芸専門店や植物医に、ペットの誤食が疑われる場合は速やかに獣医師にご相談ください。</p>`
+);
+
+writeStaticPage(
+  'privacy',
+  'プライバシーポリシー',
+  'モンステラの基本ガイドのプライバシーポリシー。Cookie・アクセス解析・広告の使用について。',
+  `<h2 class="content-h2" style="font-size:1.35rem;color:#2D5C3E;border-left:4px solid #2D5C3E;background:#eef4e8;padding:8px 14px;margin:32px 0 16px">アクセス解析</h2><p>本サイトでは Google Analytics を使用しています。Cookie を利用して匿名のトラフィックデータを収集します。</p><h2 class="content-h2" style="font-size:1.35rem;color:#2D5C3E;border-left:4px solid #2D5C3E;background:#eef4e8;padding:8px 14px;margin:32px 0 16px">広告について</h2><p>本サイトでは Google AdSense などの第三者配信の広告サービスを利用することがあります。広告配信事業者は、ユーザーの興味に応じた広告を表示するために Cookie を使用することがあります。</p><h2 class="content-h2" style="font-size:1.35rem;color:#2D5C3E;border-left:4px solid #2D5C3E;background:#eef4e8;padding:8px 14px;margin:32px 0 16px">免責事項</h2><p>本サイトの情報の利用により生じた損害について、運営者は一切の責任を負いません。</p>`
+);
+
+console.log(`✓ Generated ${generatedCount} static pages`);
+console.log('--- Done ---');
