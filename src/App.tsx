@@ -10,6 +10,8 @@ import type { Severity } from './data/symptoms';
 import { getCurrentMonthTip } from './data/monthly-tips';
 import { checkCategories, checkItems } from './data/variegated-checklist';
 import type { CheckCategory, Weight } from './data/variegated-checklist';
+import { quizQuestions, varieties } from './data/variety-quiz';
+import type { VarietyId } from './data/variety-quiz';
 import './App.css';
 
 const BASE = '/monstera-info';
@@ -316,7 +318,7 @@ function Home() {
         </p>
       </div>
 
-      <div className="tool-cta-row">
+      <div className="tool-cta-row tool-cta-row-3">
         <a
           href={`${BASE}/diagnose/`}
           className="tool-cta diagnose-cta"
@@ -325,7 +327,19 @@ function Home() {
           <Stethoscope className="tool-cta-icon" size={28} aria-hidden="true" />
           <div className="tool-cta-text">
             <div className="tool-cta-title">症状から原因を診断</div>
-            <div className="tool-cta-desc">うちのモンステラ、何かおかしい？を 2 ステップで切り分け</div>
+            <div className="tool-cta-desc">2 ステップで切り分け</div>
+          </div>
+          <ChevronRight size={20} aria-hidden="true" />
+        </a>
+        <a
+          href={`${BASE}/variety-check/`}
+          className="tool-cta variety-cta"
+          onClick={(e) => { e.preventDefault(); navigateTo('/variety-check/'); }}
+        >
+          <span className="tool-cta-emoji" aria-hidden="true">🔬</span>
+          <div className="tool-cta-text">
+            <div className="tool-cta-title">うちのは何系？品種判別</div>
+            <div className="tool-cta-desc">5 問で品種系統を推定</div>
           </div>
           <ChevronRight size={20} aria-hidden="true" />
         </a>
@@ -337,7 +351,7 @@ function Home() {
           <span className="tool-cta-emoji" aria-hidden="true">🧬</span>
           <div className="tool-cta-text">
             <div className="tool-cta-title">斑入り苗 購入前チェック</div>
-            <div className="tool-cta-desc">5 項目で緑戻り・致死性白化のリスクを事前判定</div>
+            <div className="tool-cta-desc">5 項目で購入リスクを判定</div>
           </div>
           <ChevronRight size={20} aria-hidden="true" />
         </a>
@@ -492,6 +506,190 @@ function SectionPage({ section }: { section: Section }) {
         </div>
         <FAQBlock sectionId={section.id} />
         <RelatedSections currentId={section.id} />
+        <div className="section-footer">
+          <a
+            href={`${BASE}/`}
+            className="back-link"
+            onClick={(e) => { e.preventDefault(); navigateTo('/'); }}
+          >
+            <ArrowLeft size={16} /> トップへ戻る
+          </a>
+        </div>
+      </article>
+    </>
+  );
+}
+
+function VarietyCheck() {
+  const [step, setStep] = useState(0);
+  const [scores, setScores] = useState<Partial<Record<VarietyId, number>>>({});
+  const [showResult, setShowResult] = useState(false);
+  const [history, setHistory] = useState<{ scores: Partial<Record<VarietyId, number>> }[]>([]);
+
+  useEffect(() => {
+    document.title = '品種判別ガイド | モンステラの基本ガイド';
+    window.scrollTo(0, 0);
+  }, []);
+
+  const total = quizQuestions.length;
+
+  const handleAnswer = (optionScores: Partial<Record<VarietyId, number>>) => {
+    setHistory((h) => [...h, { scores }]);
+    const newScores: Partial<Record<VarietyId, number>> = { ...scores };
+    for (const [vid, s] of Object.entries(optionScores)) {
+      const id = vid as VarietyId;
+      newScores[id] = (newScores[id] ?? 0) + (s ?? 0);
+    }
+    setScores(newScores);
+    if (step + 1 >= total) {
+      setShowResult(true);
+      window.scrollTo(0, 0);
+    } else {
+      setStep(step + 1);
+      window.scrollTo(0, 0);
+    }
+  };
+
+  const handleBack = () => {
+    if (history.length === 0) return;
+    const last = history[history.length - 1];
+    setScores(last.scores);
+    setHistory(history.slice(0, -1));
+    setStep(Math.max(0, step - 1));
+    window.scrollTo(0, 0);
+  };
+
+  const reset = () => {
+    setStep(0);
+    setScores({});
+    setShowResult(false);
+    setHistory([]);
+    window.scrollTo(0, 0);
+  };
+
+  // 結果の算出：得点上位を取り、確信度を計算
+  const sortedResults = (Object.keys(varieties) as VarietyId[])
+    .map((id) => ({ id, score: scores[id] ?? 0 }))
+    .filter((r) => r.score > 0)
+    .sort((a, b) => b.score - a.score);
+
+  const topScore = sortedResults[0]?.score ?? 0;
+  const second = sortedResults[1]?.score ?? 0;
+  const gap = topScore - second;
+  const confidence: '◎' | '○' | '△' =
+    gap >= 4 ? '◎' : gap >= 2 ? '○' : '△';
+  const confidenceText =
+    confidence === '◎' ? '確信度：高' : confidence === '○' ? '確信度：中' : '確信度：低（候補が拮抗）';
+
+  const current = quizQuestions[step];
+
+  return (
+    <>
+      <Breadcrumb currentTitle="品種判別ガイド" />
+      <article className="section-page">
+        <header className="article-header">
+          <div className="article-emoji" aria-hidden="true">🔬</div>
+          <h1>品種判別ガイド</h1>
+        </header>
+        <p className="lead">
+          あなたのモンステラがどの品種系統かを、5 問の質問で推定します。デリシオーサ／ボルシギアナ／アダンソニー／ヒメモンステラ／コンパクタを区別します。
+        </p>
+
+        <div className="diagnose-disclaimer">
+          <AlertCircle size={18} aria-hidden="true" />
+          <div>
+            これは確定的な同定ではなく、<strong>形態的特徴から推定される最も近い系統</strong> です。希少品種や交配種、別属（ラフィドフォラ等）の可能性もあります。
+          </div>
+        </div>
+
+        {!showResult && (
+          <section className="variety-step">
+            <div className="diagnose-step-num">STEP {step + 1} / {total}</div>
+            <h2 className="diagnose-step-title">{current.question}</h2>
+            {current.hint && <p className="variety-hint">{current.hint}</p>}
+            <div className="variety-options">
+              {current.options.map((opt, i) => (
+                <button
+                  key={i}
+                  className="variety-option"
+                  onClick={() => handleAnswer(opt.scores)}
+                  type="button"
+                >
+                  <span>{opt.label}</span>
+                  <ChevronRight size={16} aria-hidden="true" />
+                </button>
+              ))}
+            </div>
+            {step > 0 && (
+              <button className="diagnose-back" onClick={handleBack} type="button">
+                <ArrowLeft size={14} /> 前の質問に戻る
+              </button>
+            )}
+          </section>
+        )}
+
+        {showResult && (
+          <section className="variety-result">
+            {sortedResults.length === 0 ? (
+              <div className="check-verdict verdict-caution">
+                <h2 className="check-verdict-title">判定できませんでした</h2>
+                <p className="check-verdict-message">回答から特定の品種を絞り込めませんでした。もう一度試してみてください。</p>
+              </div>
+            ) : (
+              <>
+                <div className={`check-verdict verdict-${confidence === '◎' ? 'good' : confidence === '○' ? 'caution' : 'caution'}`}>
+                  <div className="variety-confidence">{confidenceText}</div>
+                  <h2 className="variety-top-name">
+                    <span className="variety-top-emoji" aria-hidden="true">{varieties[sortedResults[0].id].emoji}</span>
+                    {varieties[sortedResults[0].id].name}
+                  </h2>
+                  <div className="variety-scientific">{varieties[sortedResults[0].id].scientificName}</div>
+                  <p className="check-verdict-message">{varieties[sortedResults[0].id].summary}</p>
+                </div>
+
+                <div className="variety-traits">
+                  <h3 className="variety-traits-title">この品種の主な特徴</h3>
+                  <ul>
+                    {varieties[sortedResults[0].id].traits.map((t, i) => (
+                      <li key={i}>{t}</li>
+                    ))}
+                  </ul>
+                  <p className="variety-notes">{varieties[sortedResults[0].id].notes}</p>
+                </div>
+
+                {sortedResults.length > 1 && (
+                  <div className="variety-others">
+                    <h3 className="variety-others-title">他の候補</h3>
+                    {sortedResults.slice(1, 4).map((r) => (
+                      <div key={r.id} className="variety-other">
+                        <span className="variety-other-emoji" aria-hidden="true">{varieties[r.id].emoji}</span>
+                        <div>
+                          <div className="variety-other-name">{varieties[r.id].name}</div>
+                          <div className="variety-other-summary">{varieties[r.id].summary}</div>
+                        </div>
+                        <div className="variety-other-score">{r.score} 点</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+
+            <div className="check-result-actions">
+              <button className="check-restart" onClick={reset} type="button">
+                やり直す
+              </button>
+              <a
+                href={`${BASE}/basics/`}
+                className="check-related-link"
+                onClick={(e) => { e.preventDefault(); navigateTo('/basics/'); }}
+              >
+                基礎知識を読む →
+              </a>
+            </div>
+          </section>
+        )}
+
         <div className="section-footer">
           <a
             href={`${BASE}/`}
@@ -1048,6 +1246,8 @@ export default function App() {
     content = <Diagnose />;
   } else if (normalized === '/variegated-check') {
     content = <VariegatedCheck />;
+  } else if (normalized === '/variety-check') {
+    content = <VarietyCheck />;
   } else {
     const id = normalized.replace(/^\//, '');
     const section = sections.find((s) => s.id === id);

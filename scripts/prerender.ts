@@ -7,6 +7,8 @@ import { symptomCategories } from '../src/data/symptoms.ts';
 import { getCurrentMonthTip } from '../src/data/monthly-tips.ts';
 import { checkCategories, checkItems } from '../src/data/variegated-checklist.ts';
 import type { CheckCategory } from '../src/data/variegated-checklist.ts';
+import { varieties, quizQuestions } from '../src/data/variety-quiz.ts';
+import type { VarietyId } from '../src/data/variety-quiz.ts';
 
 const DIST_DIR = path.resolve(process.cwd(), 'dist');
 const INDEX_HTML_PATH = path.join(DIST_DIR, 'index.html');
@@ -500,6 +502,29 @@ const checkCategoriesHtml = (Object.keys(checkCategories) as CheckCategory[])
     return `<section style="margin:28px 0"><h2 style="font-size:1.15rem;color:#2D5C3E;margin:0 0 6px;padding-left:12px;border-left:4px solid #2D5C3E"><span aria-hidden="true">${meta.emoji}</span> ${escapeHtml(meta.label)}</h2><p style="font-size:0.9rem;color:#4b5563;margin:0 0 14px;padding-left:16px">${escapeHtml(meta.description)}</p>${itemsHtml}</section>`;
   })
   .join('');
+
+// ── 品種判別ガイドページ ──
+const varietiesListHtml = (Object.keys(varieties) as VarietyId[])
+  .map((id) => {
+    const v = varieties[id];
+    const traitsHtml = v.traits.map((t) => `<li style="margin-bottom:4px;line-height:1.75">${escapeHtml(t)}</li>`).join('');
+    return `<section style="background:#fff;border:1px solid #d4dfc8;border-radius:10px;padding:16px 18px;margin-bottom:14px"><h3 style="font-size:1.05rem;color:#2D5C3E;margin:0 0 4px"><span aria-hidden="true">${v.emoji}</span> ${escapeHtml(v.name)} <span style="font-size:0.85rem;color:#6b7280;font-weight:400">(${escapeHtml(v.scientificName)})</span></h3><p style="font-size:0.9rem;color:#4b5563;margin:0 0 10px;line-height:1.75">${escapeHtml(v.summary)}</p><ul style="margin:0 0 8px;padding-left:22px;font-size:0.87rem;color:#1f2937">${traitsHtml}</ul><p style="font-size:0.85rem;color:#6b7280;margin:8px 0 0;font-style:italic">${escapeHtml(v.notes)}</p></section>`;
+  })
+  .join('');
+
+const quizQuestionsHtml = quizQuestions
+  .map((q, idx) => {
+    const optsHtml = q.options.map((o) => `<li style="margin-bottom:4px;line-height:1.75">${escapeHtml(o.label)}</li>`).join('');
+    return `<div style="margin-bottom:16px"><div style="font-weight:700;color:#2D5C3E;margin-bottom:4px">Q${idx + 1}. ${escapeHtml(q.question)}</div>${q.hint ? `<div style="font-size:0.85rem;color:#6b7280;margin-bottom:6px">${escapeHtml(q.hint)}</div>` : ''}<ul style="margin:0;padding-left:22px;font-size:0.9rem;color:#1f2937">${optsHtml}</ul></div>`;
+  })
+  .join('');
+
+writeStaticPage(
+  'variety-check',
+  '品種判別ガイド',
+  '5 問の質問でモンステラの品種系統（デリシオーサ／ボルシギアナ／アダンソニー／ヒメモンステラ／コンパクタ）を推定する判別ガイド。',
+  `<p style="color:#555;font-size:1.05rem;margin:16px 0 16px">あなたのモンステラがどの品種系統かを、5 問の質問で推定します。デリシオーサ／ボルシギアナ／アダンソニー／ヒメモンステラ／コンパクタを区別します。</p><div style="background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;margin:0 0 24px;font-size:0.92rem;line-height:1.75;color:#78410f">これは確定的な同定ではなく、<strong>形態的特徴から推定される最も近い系統</strong>です。希少品種や交配種、別属（ラフィドフォラ等）の可能性もあります。JavaScript が有効な環境では、インタラクティブな質問形式で判定できます。</div><h2 style="font-size:1.15rem;color:#2D5C3E;margin:32px 0 10px;padding-left:12px;border-left:4px solid #2D5C3E">判別の対象品種</h2>${varietiesListHtml}<h2 style="font-size:1.15rem;color:#2D5C3E;margin:32px 0 10px;padding-left:12px;border-left:4px solid #2D5C3E">質問と選択肢</h2>${quizQuestionsHtml}`
+);
 
 writeStaticPage(
   'variegated-check',

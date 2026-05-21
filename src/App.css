@@ -607,6 +607,9 @@
     grid-template-columns: 1fr 1fr;
     gap: 14px;
   }
+  .tool-cta-row-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }
 
 .tool-cta {
@@ -634,6 +637,10 @@
 
 .variegated-cta {
   background: linear-gradient(135deg, #8B6914 0%, #5C4509 100%);
+}
+
+.variety-cta {
+  background: linear-gradient(135deg, #4A7C5C 0%, #2D5C3E 100%);
 }
 
 .tool-cta-icon {
@@ -976,6 +983,181 @@
   .diagnose-option-label {
     font-size: 0.95rem;
   }
+}
+
+/* ── 品種判別ガイド ── */
+.variety-step {
+  margin: 20px 0;
+}
+
+.variety-hint {
+  font-size: 0.88rem;
+  color: var(--text-subtle);
+  background: var(--bg-warm);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin: 0 0 16px;
+}
+
+.variety-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.variety-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+  text-align: left;
+  line-height: 1.6;
+  transition: all 0.15s;
+}
+
+.variety-option:hover {
+  border-color: var(--primary);
+  background: var(--bg-warm);
+  color: var(--primary-dark);
+}
+
+.variety-option svg {
+  flex-shrink: 0;
+  color: var(--primary);
+}
+
+.variety-result {
+  margin: 20px 0;
+}
+
+.variety-confidence {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: 0.03em;
+}
+
+.variety-top-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.variety-top-emoji {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.variety-scientific {
+  font-size: 0.9rem;
+  color: var(--text-subtle);
+  font-style: italic;
+  margin-bottom: 12px;
+}
+
+.variety-traits {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin: 20px 0;
+}
+
+.variety-traits-title {
+  font-size: 1.05rem;
+  color: var(--primary);
+  border-left: 4px solid var(--primary);
+  padding-left: 12px;
+  margin: 0 0 12px;
+}
+
+.variety-traits ul {
+  margin: 0 0 12px;
+  padding-left: 24px;
+}
+
+.variety-traits ul li {
+  margin-bottom: 6px;
+  line-height: 1.75;
+  color: var(--text);
+  font-size: 0.93rem;
+}
+
+.variety-traits ul li::marker {
+  color: var(--primary);
+}
+
+.variety-notes {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  background: var(--bg-warm);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 12px 0 0;
+  line-height: 1.75;
+}
+
+.variety-others {
+  margin: 24px 0;
+}
+
+.variety-others-title {
+  font-size: 1rem;
+  color: var(--text);
+  margin: 0 0 12px;
+}
+
+.variety-other {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.variety-other-emoji {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.variety-other-name {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+.variety-other-summary {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.variety-other-score {
+  flex-shrink: 0;
+  font-size: 0.82rem;
+  color: var(--primary);
+  font-weight: 600;
+  background: var(--bg-warm);
+  padding: 4px 10px;
+  border-radius: 999px;
 }
 
 /* ── 斑入り苗チェックリスト ── */
