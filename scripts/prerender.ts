@@ -80,6 +80,15 @@ function markdownToHtml(content: string): string {
 
     if (trimmed === '') { i++; continue; }
 
+    // インタラクティブ要素のフォールバック
+    if (trimmed === '[[interactive:leaf-splits]]') {
+      out.push(
+        `<div style="background:#eef4e8;border:1px solid #d4dfc8;border-radius:8px;padding:18px 20px;margin:24px 0;font-size:0.92rem;color:#4b5563;line-height:1.75"><strong style="color:#2D5C3E">🔬 インタラクティブ図解：葉の切れ込みの原理</strong><br/>このページでは、株の成熟度と光量を変えると葉形がどう変わるかを示すインタラクティブな概念図を表示します。JavaScript を有効にしてご覧ください。</div>`
+      );
+      i++;
+      continue;
+    }
+
     if (trimmed.startsWith('## ')) {
       const text = trimmed.slice(3);
       const slug = slugifyAscii(text, h2Index++);

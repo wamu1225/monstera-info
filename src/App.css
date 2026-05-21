@@ -487,6 +487,111 @@
   color: var(--primary);
 }
 
+/* ── インタラクティブ葉の切れ込み図解 ── */
+.leaf-diagram {
+  background: var(--bg-warm);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  padding: 24px 22px;
+  margin: 28px 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.leaf-diagram-disclaimer {
+  font-size: 0.82rem;
+  color: var(--text-subtle);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.leaf-diagram-stage {
+  text-align: center;
+  font-weight: 700;
+  color: var(--primary-dark);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+}
+
+.leaf-diagram-canvas {
+  display: flex;
+  justify-content: center;
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
+
+.leaf-diagram-canvas svg {
+  width: 280px;
+  height: 280px;
+  max-width: 100%;
+}
+
+.leaf-diagram-controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.leaf-diagram-control label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.leaf-diagram-value {
+  display: inline-block;
+  min-width: 36px;
+  padding: 2px 8px;
+  background: var(--primary);
+  color: white;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.leaf-diagram-control input[type="range"] {
+  width: 100%;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.leaf-diagram-range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-subtle);
+  margin-top: 2px;
+}
+
+.leaf-diagram-hint {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+  padding: 12px 14px;
+  background: var(--card-bg);
+  border-left: 3px solid var(--primary);
+  border-radius: 4px;
+}
+
+@media (min-width: 640px) {
+  .leaf-diagram-controls {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+}
+
 /* ── 症状逆引き診断 ── */
 .diagnose-cta {
   display: flex;
