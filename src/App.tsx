@@ -216,14 +216,20 @@ function Header() {
         >
           <svg className="brand-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <radialGradient id="ml" cx="50%" cy="55%" r="55%">
+              <radialGradient id="ml" cx="50%" cy="50%" r="55%">
                 <stop offset="0%" stopColor="#6FA37F"/>
                 <stop offset="60%" stopColor="#3D7A52"/>
                 <stop offset="100%" stopColor="#1E3F2A"/>
               </radialGradient>
             </defs>
-            <path d="M32 4 C18 8 8 22 8 36 C8 50 20 60 32 60 C44 60 56 50 56 36 C56 22 46 8 32 4 Z M32 12 L32 56 M20 16 L26 28 L20 30 M44 16 L38 28 L44 30 M14 30 L24 36 L14 40 M50 30 L40 36 L50 40 M18 46 L26 44 L22 52 M46 46 L38 44 L42 52" fill="url(#ml)" stroke="#1E3F2A" strokeWidth="0.5"/>
-            <path d="M32 12 L32 56" stroke="#C9A14A" strokeWidth="1" opacity="0.6"/>
+            <path d="M32 4 C18 8 8 22 8 36 C8 50 20 60 32 60 C44 60 56 50 56 36 C56 22 46 8 32 4 Z" fill="url(#ml)" stroke="#1E3F2A" strokeWidth="0.5"/>
+            <path d="M32 8 L32 58" stroke="#C9A14A" strokeWidth="0.8" opacity="0.5"/>
+            <ellipse cx="20" cy="24" rx="3" ry="5" fill="#f8faf5" opacity="0.85"/>
+            <ellipse cx="44" cy="24" rx="3" ry="5" fill="#f8faf5" opacity="0.85"/>
+            <ellipse cx="16" cy="38" rx="3.5" ry="5.5" fill="#f8faf5" opacity="0.85"/>
+            <ellipse cx="48" cy="38" rx="3.5" ry="5.5" fill="#f8faf5" opacity="0.85"/>
+            <ellipse cx="24" cy="48" rx="2.5" ry="4" fill="#f8faf5" opacity="0.85"/>
+            <ellipse cx="40" cy="48" rx="2.5" ry="4" fill="#f8faf5" opacity="0.85"/>
           </svg>
           <span>モンステラの基本ガイド</span>
         </a>
@@ -367,7 +373,7 @@ function FAQBlock({ sectionId }: { sectionId: string }) {
 
 function SafetyDisclaimer() {
   return (
-    <div className="medical-disclaimer">
+    <div className="safety-disclaimer">
       <strong>⚠️ ペット・小児の誤食にご注意ください</strong>：モンステラは不溶性シュウ酸カルシウムを含むため、犬・猫・小児が誤食すると口腔の刺激や嘔吐などを引き起こすことがあります。誤食が疑われる場合は速やかに獣医師または医療機関にご相談ください。本サイトの情報は獣医学的・医学的助言の代替ではありません。
     </div>
   );
@@ -388,7 +394,7 @@ function SectionPage({ section }: { section: Section }) {
     }
   }, [section.id, section.title]);
 
-  const isYMYL = section.id === 'safety' || section.id === 'troubles';
+  const isYMYL = section.id === 'safety';
 
   return (
     <>

@@ -528,8 +528,8 @@
   gap: 4px;
 }
 
-/* ── 医療免責 ── */
-.medical-disclaimer {
+/* ── 安全性注意（ペット誤食） ── */
+.safety-disclaimer {
   background: #fef2f2;
   border: 1px solid #fecaca;
   border-left: 4px solid #dc2626;
@@ -541,7 +541,7 @@
   line-height: 1.75;
 }
 
-.medical-disclaimer strong {
+.safety-disclaimer strong {
   display: block;
   margin-bottom: 4px;
   font-size: 0.95rem;

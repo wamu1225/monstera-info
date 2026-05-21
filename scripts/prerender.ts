@@ -245,7 +245,7 @@ function buildSectionFallback(s: (typeof sections)[number]): string {
   const leadHtml = s.lead && s.lead !== '（準備中）'
     ? `<p class="lead" style="color:#555;font-size:1.05rem;margin:16px 0 24px">${escapeHtml(s.lead)}</p>`
     : '';
-  const isYMYL = s.id === 'safety' || s.id === 'troubles';
+  const isYMYL = s.id === 'safety';
   const disclaimerHtml = isYMYL
     ? `<div style="background:#fef2f2;border:1px solid #fecaca;border-left:4px solid #dc2626;border-radius:6px;padding:14px 16px;margin:0 0 28px;font-size:0.92rem;color:#7f1d1d;line-height:1.75"><strong style="display:block;margin-bottom:4px">⚠️ ペット・小児の誤食にご注意ください</strong>モンステラは不溶性シュウ酸カルシウムを含むため、犬・猫・小児が誤食すると口腔の刺激や嘔吐などを引き起こすことがあります。誤食が疑われる場合は速やかに獣医師または医療機関にご相談ください。本サイトの情報は獣医学的・医学的助言の代替ではありません。</div>`
     : '';
@@ -255,7 +255,7 @@ function buildSectionFallback(s: (typeof sections)[number]): string {
   <header style="margin-bottom:20px">
     <div style="font-size:2.4rem;line-height:1;margin-bottom:8px">${s.emoji}</div>
     <h1 style="font-size:1.7rem;color:#2D5C3E;border-bottom:2px solid #2D5C3E;padding-bottom:10px;margin:0 0 8px">${escapeHtml(s.title)}</h1>
-    <div style="font-size:0.85rem;color:#9c8f80;margin-top:10px">最終更新: ${formatDateJa(s.updatedAt)}</div>
+    <div style="font-size:0.85rem;color:#6b7280;margin-top:10px">最終更新: ${formatDateJa(s.updatedAt)}</div>
   </header>
   ${leadHtml}
   ${disclaimerHtml}
@@ -444,7 +444,7 @@ const glossaryHtml = glossarySorted
       ? `<a href="/monstera-info/${related.id}/" style="display:inline-block;font-size:0.88rem;color:#2D5C3E;margin-top:4px">関連ページ：${escapeHtml(related.shortTitle)} →</a>`
       : '';
     const readingSpan = g.reading && g.reading !== g.term
-      ? `<span style="color:#9c8f80;font-size:0.9rem;font-weight:400">（${escapeHtml(g.reading)}）</span>`
+      ? `<span style="color:#6b7280;font-size:0.9rem;font-weight:400">（${escapeHtml(g.reading)}）</span>`
       : '';
     return `<div style="border-bottom:1px solid #d4dfc8;padding:20px 0"><dt style="font-weight:700;color:#2D5C3E;font-size:1.1rem;margin-bottom:8px"><span style="margin-right:4px">${escapeHtml(g.term)}</span>${readingSpan}</dt><dd style="margin:0"><p style="margin:0 0 8px;line-height:1.85;color:#1f2937">${escapeHtml(g.description)}</p>${relatedLink}</dd></div>`;
   })
