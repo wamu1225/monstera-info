@@ -486,22 +486,26 @@ const checkCategoriesHtml = (Object.keys(checkCategories) as CheckCategory[])
   .map((cat) => {
     const meta = checkCategories[cat];
     const items = checkItems.filter((i) => i.category === cat);
+    if (items.length === 0) return '';
     const itemsHtml = items
       .map((item) => {
         const wtText = item.weight === 'critical' ? '必須' : item.weight === 'important' ? '重要' : '推奨';
         const wtColor = item.weight === 'critical' ? '#dc2626' : item.weight === 'important' ? '#f59e0b' : '#2D5C3E';
-        return `<li style="margin-bottom:10px;line-height:1.7"><span style="display:inline-block;font-size:0.72rem;font-weight:700;padding:2px 8px;border-radius:999px;background:${wtColor};color:white;margin-right:8px">${wtText}</span><strong>${escapeHtml(item.question)}</strong><br/><span style="font-size:0.9rem;color:#4b5563">${escapeHtml(item.detail)}</span></li>`;
+        const pointsHtml = item.checkPoints
+          .map((pt) => `<li style="margin-bottom:4px;line-height:1.75">${escapeHtml(pt)}</li>`)
+          .join('');
+        return `<div style="background:#fff;border:1px solid #d4dfc8;border-radius:10px;padding:16px 18px;margin-bottom:12px"><div style="margin-bottom:6px"><span style="display:inline-block;font-size:0.72rem;font-weight:700;padding:3px 9px;border-radius:999px;background:${wtColor};color:white;margin-right:8px">${wtText}</span><strong style="font-size:0.97rem">${escapeHtml(item.question)}</strong></div><div style="font-size:0.88rem;color:#4b5563;line-height:1.75;margin:4px 0 10px">${escapeHtml(item.detail)}</div><ul style="background:#eef4e8;border-radius:6px;padding:10px 14px 10px 30px;margin:0;font-size:0.87rem;color:#1f2937">${pointsHtml}</ul></div>`;
       })
       .join('');
-    return `<section style="margin:24px 0;padding:18px;background:#fff;border:1px solid #d4dfc8;border-radius:10px"><h2 style="font-size:1.1rem;color:#2D5C3E;margin:0 0 10px"><span aria-hidden="true">${meta.emoji}</span> ${escapeHtml(meta.label)}</h2><p style="font-size:0.9rem;color:#4b5563;margin:0 0 12px">${escapeHtml(meta.description)}</p><ul style="margin:0;padding-left:20px">${itemsHtml}</ul></section>`;
+    return `<section style="margin:28px 0"><h2 style="font-size:1.15rem;color:#2D5C3E;margin:0 0 6px;padding-left:12px;border-left:4px solid #2D5C3E"><span aria-hidden="true">${meta.emoji}</span> ${escapeHtml(meta.label)}</h2><p style="font-size:0.9rem;color:#4b5563;margin:0 0 14px;padding-left:16px">${escapeHtml(meta.description)}</p>${itemsHtml}</section>`;
   })
   .join('');
 
 writeStaticPage(
   'variegated-check',
   '斑入り苗チェックリスト',
-  'モンステラの斑入り苗を購入する前に、株の状態・出品情報・受け入れ環境を 18 項目でチェックし、緑戻り・致死性白化のリスクを事前判定。',
-  `<p style="color:#555;font-size:1.05rem;margin:16px 0 16px">斑入りモンステラは高額になりがちな一方、緑戻りや致死性白化のリスクがあります。購入前に株の状態・出品情報・受け入れ環境を 18 項目でチェックして、失敗のない購入判断を支援します。</p><div style="background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;margin:0 0 24px;font-size:0.92rem;line-height:1.75;color:#78410f">これは購入判断の補助ツールです。最終判断は購入者の責任で行ってください。JavaScript が有効な環境では、各項目に「はい／いいえ／不明」で回答してインタラクティブに判定できます。</div>${checkCategoriesHtml}`
+  'モンステラの斑入り苗を購入する前に、株の状態・出品情報・受け入れ環境を 5 項目でチェックし、緑戻り・致死性白化のリスクを事前判定。',
+  `<p style="color:#555;font-size:1.05rem;margin:16px 0 16px">斑入りモンステラは高額になりがちな一方、緑戻りや致死性白化のリスクがあります。購入前に株の状態・出品情報・受け入れ環境を 5 項目でチェックして、失敗のない購入判断を支援します。各項目には複数の確認ポイントが含まれます。</p><div style="background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;margin:0 0 24px;font-size:0.92rem;line-height:1.75;color:#78410f">これは購入判断の補助ツールです。最終判断は購入者の責任で行ってください。JavaScript が有効な環境では、各項目に「はい／いいえ／不明」で回答してインタラクティブに判定できます。</div>${checkCategoriesHtml}`
 );
 
 writeStaticPage(

@@ -1072,7 +1072,29 @@
   font-size: 0.88rem;
   color: var(--text-muted);
   line-height: 1.75;
-  margin: 4px 0 12px;
+  margin: 4px 0 10px;
+}
+
+.check-item-points {
+  background: var(--bg-warm);
+  border-radius: 6px;
+  padding: 10px 14px 10px 30px;
+  margin: 0 0 14px;
+  font-size: 0.87rem;
+  color: var(--text);
+  line-height: 1.75;
+}
+
+.check-item-points li {
+  margin-bottom: 4px;
+}
+
+.check-item-points li::marker {
+  color: var(--primary);
+}
+
+.check-item-points li:last-child {
+  margin-bottom: 0;
 }
 
 .check-item-answers {

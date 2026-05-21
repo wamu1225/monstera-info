@@ -337,7 +337,7 @@ function Home() {
           <span className="tool-cta-emoji" aria-hidden="true">🧬</span>
           <div className="tool-cta-text">
             <div className="tool-cta-title">斑入り苗 購入前チェック</div>
-            <div className="tool-cta-desc">18 項目で緑戻り・致死性白化のリスクを事前判定</div>
+            <div className="tool-cta-desc">5 項目で緑戻り・致死性白化のリスクを事前判定</div>
           </div>
           <ChevronRight size={20} aria-hidden="true" />
         </a>
@@ -550,17 +550,17 @@ function VariegatedCheck() {
       title: '購入は避けた方が無難です',
       message: '必須項目で「いいえ」がついています。緑戻り・致死性白化・致命的な健康問題のリスクがあり、高額な投資に見合わない可能性が高いです。別の苗を探すことをおすすめします。',
     };
-  } else if (criticalUnknown > 1 || importantFail > 2) {
+  } else if (criticalUnknown > 0) {
     verdict = {
       level: 'caution',
-      title: '慎重に判断してください',
-      message: '必須項目に確認できない点、または重要項目に懸念があります。出品者に追加情報を求める、より詳しい写真の提示を依頼する等の対応をおすすめします。',
+      title: '必須項目を確認してください',
+      message: '必須項目に「不明」が残っています。出品者に追加情報を求める、より詳しい写真の提示を依頼するなど、必ず確認した上で判断してください。',
     };
-  } else if (importantFail > 0 || importantUnknown > 2) {
+  } else if (importantFail > 0) {
     verdict = {
       level: 'caution',
       title: 'リスクを理解した上での購入を',
-      message: '必須項目はクリアしていますが、重要項目に一部懸念があります。リスクを理解した上で、購入後の管理に万全を期せる場合のみおすすめします。',
+      message: '必須項目はクリアしていますが、重要項目に懸念があります。リスクを理解した上で、購入後の管理に万全を期せる場合のみおすすめします。',
     };
   } else {
     verdict = {
@@ -584,7 +584,7 @@ function VariegatedCheck() {
         </header>
         <p className="lead">
           斑入りモンステラは高額になりがちな一方、緑戻りや致死性白化のリスクがあります。
-          購入前に株の状態・出品情報・受け入れ環境を 18 項目でチェックして、失敗のない購入判断を支援します。
+          購入前に株の状態・出品情報・受け入れ環境を 5 項目でチェックして、失敗のない購入判断を支援します。各項目には複数の確認ポイントが含まれます。
         </p>
 
         <div className="diagnose-disclaimer">
@@ -622,6 +622,11 @@ function VariegatedCheck() {
                           <div className="check-item-question">{item.question}</div>
                         </div>
                         <div className="check-item-detail">{item.detail}</div>
+                        <ul className="check-item-points">
+                          {item.checkPoints.map((pt, idx) => (
+                            <li key={idx}>{pt}</li>
+                          ))}
+                        </ul>
                         <div className="check-item-answers">
                           {(['yes', 'no', 'unknown'] as CheckAnswer[]).map((val) => (
                             <button
