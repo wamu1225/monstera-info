@@ -5,6 +5,8 @@ import { FAQ_BY_SECTION } from '../src/data/faqs.ts';
 import { glossary } from '../src/data/glossary.ts';
 import { symptomCategories } from '../src/data/symptoms.ts';
 import { getCurrentMonthTip } from '../src/data/monthly-tips.ts';
+import { checkCategories, checkItems } from '../src/data/variegated-checklist.ts';
+import type { CheckCategory } from '../src/data/variegated-checklist.ts';
 
 const DIST_DIR = path.resolve(process.cwd(), 'dist');
 const INDEX_HTML_PATH = path.join(DIST_DIR, 'index.html');
@@ -477,6 +479,29 @@ writeStaticPage(
   '症状逆引き診断',
   'モンステラの異変（葉色・葉先・茎・根の症状）から考えられる原因と対処を 2 ステップで絞り込む診断ツール。',
   `<p style="color:#555;font-size:1.05rem;margin:16px 0 16px">モンステラの異変から、考えられる原因と対処を絞り込みます。質問は 2 ステップで完了します。</p><div style="background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;margin:0 0 24px;font-size:0.92rem;line-height:1.75;color:#78410f">これは確定診断ではなく、症状から推定される<strong>可能性の高い原因</strong>です。複数の症状が当てはまる場合は、複数の原因が重なっていることもあります。</div><p style="font-size:0.93rem;color:#4b5563;margin:0 0 16px">下記は症状の一覧です。JavaScript が有効な環境では、ステップ式の診断ツールが表示されます。</p>${diagnoseCategoriesHtml}`
+);
+
+// ── 斑入り苗チェックリストページ ──
+const checkCategoriesHtml = (Object.keys(checkCategories) as CheckCategory[])
+  .map((cat) => {
+    const meta = checkCategories[cat];
+    const items = checkItems.filter((i) => i.category === cat);
+    const itemsHtml = items
+      .map((item) => {
+        const wtText = item.weight === 'critical' ? '必須' : item.weight === 'important' ? '重要' : '推奨';
+        const wtColor = item.weight === 'critical' ? '#dc2626' : item.weight === 'important' ? '#f59e0b' : '#2D5C3E';
+        return `<li style="margin-bottom:10px;line-height:1.7"><span style="display:inline-block;font-size:0.72rem;font-weight:700;padding:2px 8px;border-radius:999px;background:${wtColor};color:white;margin-right:8px">${wtText}</span><strong>${escapeHtml(item.question)}</strong><br/><span style="font-size:0.9rem;color:#4b5563">${escapeHtml(item.detail)}</span></li>`;
+      })
+      .join('');
+    return `<section style="margin:24px 0;padding:18px;background:#fff;border:1px solid #d4dfc8;border-radius:10px"><h2 style="font-size:1.1rem;color:#2D5C3E;margin:0 0 10px"><span aria-hidden="true">${meta.emoji}</span> ${escapeHtml(meta.label)}</h2><p style="font-size:0.9rem;color:#4b5563;margin:0 0 12px">${escapeHtml(meta.description)}</p><ul style="margin:0;padding-left:20px">${itemsHtml}</ul></section>`;
+  })
+  .join('');
+
+writeStaticPage(
+  'variegated-check',
+  '斑入り苗チェックリスト',
+  'モンステラの斑入り苗を購入する前に、株の状態・出品情報・受け入れ環境を 18 項目でチェックし、緑戻り・致死性白化のリスクを事前判定。',
+  `<p style="color:#555;font-size:1.05rem;margin:16px 0 16px">斑入りモンステラは高額になりがちな一方、緑戻りや致死性白化のリスクがあります。購入前に株の状態・出品情報・受け入れ環境を 18 項目でチェックして、失敗のない購入判断を支援します。</p><div style="background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;margin:0 0 24px;font-size:0.92rem;line-height:1.75;color:#78410f">これは購入判断の補助ツールです。最終判断は購入者の責任で行ってください。JavaScript が有効な環境では、各項目に「はい／いいえ／不明」で回答してインタラクティブに判定できます。</div>${checkCategoriesHtml}`
 );
 
 writeStaticPage(

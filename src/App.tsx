@@ -8,6 +8,8 @@ import { glossary } from './data/glossary';
 import { symptomCategories } from './data/symptoms';
 import type { Severity } from './data/symptoms';
 import { getCurrentMonthTip } from './data/monthly-tips';
+import { checkCategories, checkItems } from './data/variegated-checklist';
+import type { CheckCategory, Weight } from './data/variegated-checklist';
 import './App.css';
 
 const BASE = '/monstera-info';
@@ -314,18 +316,32 @@ function Home() {
         </p>
       </div>
 
-      <a
-        href={`${BASE}/diagnose/`}
-        className="diagnose-cta"
-        onClick={(e) => { e.preventDefault(); navigateTo('/diagnose/'); }}
-      >
-        <Stethoscope className="diagnose-cta-icon" size={28} aria-hidden="true" />
-        <div className="diagnose-cta-text">
-          <div className="diagnose-cta-title">うちのモンステラ、何かおかしい？</div>
-          <div className="diagnose-cta-desc">症状から考えられる原因と対処を 2 ステップで絞り込み</div>
-        </div>
-        <ChevronRight size={20} aria-hidden="true" />
-      </a>
+      <div className="tool-cta-row">
+        <a
+          href={`${BASE}/diagnose/`}
+          className="tool-cta diagnose-cta"
+          onClick={(e) => { e.preventDefault(); navigateTo('/diagnose/'); }}
+        >
+          <Stethoscope className="tool-cta-icon" size={28} aria-hidden="true" />
+          <div className="tool-cta-text">
+            <div className="tool-cta-title">症状から原因を診断</div>
+            <div className="tool-cta-desc">うちのモンステラ、何かおかしい？を 2 ステップで切り分け</div>
+          </div>
+          <ChevronRight size={20} aria-hidden="true" />
+        </a>
+        <a
+          href={`${BASE}/variegated-check/`}
+          className="tool-cta variegated-cta"
+          onClick={(e) => { e.preventDefault(); navigateTo('/variegated-check/'); }}
+        >
+          <span className="tool-cta-emoji" aria-hidden="true">🧬</span>
+          <div className="tool-cta-text">
+            <div className="tool-cta-title">斑入り苗 購入前チェック</div>
+            <div className="tool-cta-desc">18 項目で緑戻り・致死性白化のリスクを事前判定</div>
+          </div>
+          <ChevronRight size={20} aria-hidden="true" />
+        </a>
+      </div>
 
       <MonthlyTipCard />
 
@@ -476,6 +492,228 @@ function SectionPage({ section }: { section: Section }) {
         </div>
         <FAQBlock sectionId={section.id} />
         <RelatedSections currentId={section.id} />
+        <div className="section-footer">
+          <a
+            href={`${BASE}/`}
+            className="back-link"
+            onClick={(e) => { e.preventDefault(); navigateTo('/'); }}
+          >
+            <ArrowLeft size={16} /> トップへ戻る
+          </a>
+        </div>
+      </article>
+    </>
+  );
+}
+
+function weightLabel(w: Weight): { text: string; className: string } {
+  switch (w) {
+    case 'critical': return { text: '必須', className: 'wt-critical' };
+    case 'important': return { text: '重要', className: 'wt-important' };
+    case 'recommended': return { text: '推奨', className: 'wt-recommended' };
+  }
+}
+
+type CheckAnswer = 'yes' | 'no' | 'unknown';
+
+function VariegatedCheck() {
+  const [answers, setAnswers] = useState<Record<string, CheckAnswer>>({});
+  const [showResult, setShowResult] = useState(false);
+
+  useEffect(() => {
+    document.title = '斑入り苗チェックリスト | モンステラの基本ガイド';
+    window.scrollTo(0, 0);
+  }, []);
+
+  const setAnswer = (id: string, val: CheckAnswer) => {
+    setAnswers((prev) => ({ ...prev, [id]: val }));
+  };
+
+  const reset = () => {
+    setAnswers({});
+    setShowResult(false);
+    window.scrollTo(0, 0);
+  };
+
+  // 判定ロジック
+  const criticalItems = checkItems.filter((i) => i.weight === 'critical');
+  const importantItems = checkItems.filter((i) => i.weight === 'important');
+  const criticalFail = criticalItems.filter((i) => answers[i.id] === 'no').length;
+  const criticalUnknown = criticalItems.filter((i) => answers[i.id] === 'unknown' || !answers[i.id]).length;
+  const importantFail = importantItems.filter((i) => answers[i.id] === 'no').length;
+  const importantUnknown = importantItems.filter((i) => answers[i.id] === 'unknown' || !answers[i.id]).length;
+
+  let verdict: { level: 'good' | 'caution' | 'bad'; title: string; message: string };
+  if (criticalFail > 0) {
+    verdict = {
+      level: 'bad',
+      title: '購入は避けた方が無難です',
+      message: '必須項目で「いいえ」がついています。緑戻り・致死性白化・致命的な健康問題のリスクがあり、高額な投資に見合わない可能性が高いです。別の苗を探すことをおすすめします。',
+    };
+  } else if (criticalUnknown > 1 || importantFail > 2) {
+    verdict = {
+      level: 'caution',
+      title: '慎重に判断してください',
+      message: '必須項目に確認できない点、または重要項目に懸念があります。出品者に追加情報を求める、より詳しい写真の提示を依頼する等の対応をおすすめします。',
+    };
+  } else if (importantFail > 0 || importantUnknown > 2) {
+    verdict = {
+      level: 'caution',
+      title: 'リスクを理解した上での購入を',
+      message: '必須項目はクリアしていますが、重要項目に一部懸念があります。リスクを理解した上で、購入後の管理に万全を期せる場合のみおすすめします。',
+    };
+  } else {
+    verdict = {
+      level: 'good',
+      title: '購入を検討して良さそうです',
+      message: '必須項目をすべてクリアしており、重要項目もおおむね問題ありません。購入後 1〜2 週間の順化期間を必ず取って、丁寧に迎え入れてください。',
+    };
+  }
+
+  const totalAnswered = Object.values(answers).filter((v) => v === 'yes' || v === 'no').length;
+  const totalItems = checkItems.length;
+  const progress = Math.round((totalAnswered / totalItems) * 100);
+
+  return (
+    <>
+      <Breadcrumb currentTitle="斑入り苗チェックリスト" />
+      <article className="section-page">
+        <header className="article-header">
+          <div className="article-emoji" aria-hidden="true">🧬</div>
+          <h1>斑入り苗チェックリスト</h1>
+        </header>
+        <p className="lead">
+          斑入りモンステラは高額になりがちな一方、緑戻りや致死性白化のリスクがあります。
+          購入前に株の状態・出品情報・受け入れ環境を 18 項目でチェックして、失敗のない購入判断を支援します。
+        </p>
+
+        <div className="diagnose-disclaimer">
+          <AlertCircle size={18} aria-hidden="true" />
+          <div>
+            これは購入判断の補助ツールです。最終判断は購入者の責任で行ってください。
+            判定結果は<strong>「必須」項目を最重視</strong>し、必須項目に「いいえ」があれば購入回避を推奨します。
+          </div>
+        </div>
+
+        {!showResult && (
+          <>
+            <div className="check-progress">
+              <div className="check-progress-bar">
+                <div className="check-progress-fill" style={{ width: `${progress}%` }} />
+              </div>
+              <div className="check-progress-label">{totalAnswered} / {totalItems} 回答済み</div>
+            </div>
+
+            {(Object.keys(checkCategories) as CheckCategory[]).map((cat) => {
+              const items = checkItems.filter((i) => i.category === cat);
+              const meta = checkCategories[cat];
+              return (
+                <section key={cat} className="check-category">
+                  <h2 className="check-category-title">
+                    <span aria-hidden="true">{meta.emoji}</span> {meta.label}
+                  </h2>
+                  <p className="check-category-desc">{meta.description}</p>
+                  {items.map((item) => {
+                    const wt = weightLabel(item.weight);
+                    return (
+                      <div key={item.id} className="check-item">
+                        <div className="check-item-head">
+                          <span className={`check-weight ${wt.className}`}>{wt.text}</span>
+                          <div className="check-item-question">{item.question}</div>
+                        </div>
+                        <div className="check-item-detail">{item.detail}</div>
+                        <div className="check-item-answers">
+                          {(['yes', 'no', 'unknown'] as CheckAnswer[]).map((val) => (
+                            <button
+                              key={val}
+                              className={`check-answer ${answers[item.id] === val ? 'active' : ''} answer-${val}`}
+                              onClick={() => setAnswer(item.id, val)}
+                              type="button"
+                            >
+                              {val === 'yes' ? 'はい' : val === 'no' ? 'いいえ' : '不明'}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </section>
+              );
+            })}
+
+            <div className="check-submit-wrap">
+              <button
+                className="check-submit"
+                disabled={totalAnswered === 0}
+                onClick={() => { setShowResult(true); window.scrollTo(0, 0); }}
+                type="button"
+              >
+                判定する（{totalAnswered} / {totalItems} 回答済み）
+              </button>
+              {totalAnswered === 0 && (
+                <p className="check-submit-hint">1 つ以上の項目に回答してください</p>
+              )}
+            </div>
+          </>
+        )}
+
+        {showResult && (
+          <section className="check-result">
+            <div className={`check-verdict verdict-${verdict.level}`}>
+              <h2 className="check-verdict-title">{verdict.title}</h2>
+              <p className="check-verdict-message">{verdict.message}</p>
+            </div>
+
+            <div className="check-summary">
+              <div className="check-summary-item">
+                <span className="check-summary-label">必須項目</span>
+                <span className="check-summary-value">
+                  「いいえ」{criticalFail} 件 / 「不明」{criticalUnknown} 件 / 全 {criticalItems.length} 件
+                </span>
+              </div>
+              <div className="check-summary-item">
+                <span className="check-summary-label">重要項目</span>
+                <span className="check-summary-value">
+                  「いいえ」{importantFail} 件 / 「不明」{importantUnknown} 件 / 全 {importantItems.length} 件
+                </span>
+              </div>
+            </div>
+
+            {(criticalFail > 0 || importantFail > 0) && (
+              <div className="check-issues">
+                <h3 className="check-issues-title">確認が必要な項目</h3>
+                {checkItems
+                  .filter((i) => answers[i.id] === 'no')
+                  .map((item) => {
+                    const wt = weightLabel(item.weight);
+                    return (
+                      <div key={item.id} className="check-issue">
+                        <span className={`check-weight ${wt.className}`}>{wt.text}</span>
+                        <div>
+                          <div className="check-issue-question">{item.question}</div>
+                          <div className="check-issue-why">{item.whyMatters}</div>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            )}
+
+            <div className="check-result-actions">
+              <button className="check-restart" onClick={reset} type="button">
+                やり直す
+              </button>
+              <a
+                href={`${BASE}/selection/`}
+                className="check-related-link"
+                onClick={(e) => { e.preventDefault(); navigateTo('/selection/'); }}
+              >
+                選び方の詳細を読む →
+              </a>
+            </div>
+          </section>
+        )}
+
         <div className="section-footer">
           <a
             href={`${BASE}/`}
@@ -803,6 +1041,8 @@ export default function App() {
     content = <Glossary />;
   } else if (normalized === '/diagnose') {
     content = <Diagnose />;
+  } else if (normalized === '/variegated-check') {
+    content = <VariegatedCheck />;
   } else {
     const id = normalized.replace(/^\//, '');
     const section = sections.find((s) => s.id === id);
