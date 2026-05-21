@@ -8,7 +8,6 @@ import { glossary } from './data/glossary';
 import { symptomCategories } from './data/symptoms';
 import type { Severity } from './data/symptoms';
 import { getCurrentMonthTip } from './data/monthly-tips';
-import { LeafSplitsDiagram } from './components/LeafSplitsDiagram';
 import './App.css';
 
 const BASE = '/monstera-info';
@@ -107,13 +106,6 @@ function parseContent(content: string): ReactNode[] {
 
     // 空行 → スキップ
     if (trimmed === '') { i++; continue; }
-
-    // インタラクティブ要素
-    if (trimmed === '[[interactive:leaf-splits]]') {
-      result.push(<LeafSplitsDiagram key={key++} />);
-      i++;
-      continue;
-    }
 
     // 見出し h2
     if (trimmed.startsWith('## ')) {
