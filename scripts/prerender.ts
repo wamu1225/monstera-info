@@ -254,10 +254,26 @@ function formatDateJa(iso: string): string {
   return `${m[1]}年${parseInt(m[2], 10)}月${parseInt(m[3], 10)}日`;
 }
 
+function buildChapterNav(currentId: string): string {
+  const idx = sections.findIndex((s) => s.id === currentId);
+  if (idx === -1) return '';
+  const prev = idx > 0 ? sections[idx - 1] : null;
+  const next = idx < sections.length - 1 ? sections[idx + 1] : null;
+  if (!prev && !next) return '';
+  const prevHtml = prev
+    ? `<a href="/monstera-info/${prev.id}/" style="display:block;flex:1;padding:14px 16px;background:#fff;border:1px solid #d4dfc8;border-radius:10px;text-decoration:none;color:#1f2937"><div style="font-size:0.78rem;color:#6b7280;margin-bottom:4px">← 前の章</div><div style="font-size:0.95rem;font-weight:700;color:#2D5C3E">${prev.emoji} ${escapeHtml(prev.shortTitle)}</div></a>`
+    : `<span style="flex:1"></span>`;
+  const nextHtml = next
+    ? `<a href="/monstera-info/${next.id}/" style="display:block;flex:1;padding:14px 16px;background:#fff;border:1px solid #d4dfc8;border-radius:10px;text-decoration:none;color:#1f2937;text-align:right"><div style="font-size:0.78rem;color:#6b7280;margin-bottom:4px">次の章 →</div><div style="font-size:0.95rem;font-weight:700;color:#2D5C3E">${next.emoji} ${escapeHtml(next.shortTitle)}</div></a>`
+    : `<span style="flex:1"></span>`;
+  return `<nav style="display:flex;gap:10px;margin:32px 0">${prevHtml}${nextHtml}</nav>`;
+}
+
 function buildSectionFallback(s: (typeof sections)[number]): string {
   const tocHtml = buildTocHtml(s.toc);
   const contentHtml = markdownToHtml(s.content);
   const faqHtml = buildFaqHtml(s.id);
+  const chapterNavHtml = buildChapterNav(s.id);
   const leadHtml = s.lead && s.lead !== '（準備中）'
     ? `<p class="lead" style="color:#555;font-size:1.05rem;margin:16px 0 24px">${escapeHtml(s.lead)}</p>`
     : '';
@@ -280,6 +296,7 @@ function buildSectionFallback(s: (typeof sections)[number]): string {
 ${contentHtml}
   </div>
   ${faqHtml}
+  ${chapterNavHtml}
   <p style="margin-top:32px"><a href="/monstera-info/" style="color:#2D5C3E">← トップへ戻る</a></p>
 </article>`;
 }

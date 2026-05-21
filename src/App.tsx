@@ -427,6 +427,38 @@ function formatDate(iso: string): string {
   return `${m[1]}年${parseInt(m[2], 10)}月${parseInt(m[3], 10)}日`;
 }
 
+function ChapterNav({ currentId }: { currentId: string }) {
+  const idx = sections.findIndex((s) => s.id === currentId);
+  if (idx === -1) return null;
+  const prev = idx > 0 ? sections[idx - 1] : null;
+  const next = idx < sections.length - 1 ? sections[idx + 1] : null;
+  if (!prev && !next) return null;
+  return (
+    <nav className="chapter-nav" aria-label="章ナビゲーション">
+      {prev ? (
+        <a
+          href={`${BASE}/${prev.id}/`}
+          className="chapter-nav-link chapter-nav-prev"
+          onClick={(e) => { e.preventDefault(); navigateTo(`/${prev.id}/`); }}
+        >
+          <span className="chapter-nav-label"><ArrowLeft size={14} aria-hidden="true" /> 前の章</span>
+          <span className="chapter-nav-title">{prev.emoji} {prev.shortTitle}</span>
+        </a>
+      ) : <span className="chapter-nav-spacer" />}
+      {next ? (
+        <a
+          href={`${BASE}/${next.id}/`}
+          className="chapter-nav-link chapter-nav-next"
+          onClick={(e) => { e.preventDefault(); navigateTo(`/${next.id}/`); }}
+        >
+          <span className="chapter-nav-label">次の章 <ChevronRight size={14} aria-hidden="true" /></span>
+          <span className="chapter-nav-title">{next.emoji} {next.shortTitle}</span>
+        </a>
+      ) : <span className="chapter-nav-spacer" />}
+    </nav>
+  );
+}
+
 function RelatedSections({ currentId }: { currentId: string }) {
   const related = sections.filter((s) => s.id !== currentId);
   return (
@@ -511,6 +543,7 @@ function SectionPage({ section }: { section: Section }) {
           {parseContent(section.content)}
         </div>
         <FAQBlock sectionId={section.id} />
+        <ChapterNav currentId={section.id} />
         <RelatedSections currentId={section.id} />
         <div className="section-footer">
           <a
