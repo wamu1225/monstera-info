@@ -7,6 +7,7 @@ import { FAQ_BY_SECTION } from './data/faqs';
 import { glossary } from './data/glossary';
 import { symptomCategories } from './data/symptoms';
 import type { Severity } from './data/symptoms';
+import { getCurrentMonthTip } from './data/monthly-tips';
 import { LeafSplitsDiagram } from './components/LeafSplitsDiagram';
 import './App.css';
 
@@ -265,6 +266,49 @@ function Header() {
   );
 }
 
+function MonthlyTipCard() {
+  const tip = getCurrentMonthTip();
+  return (
+    <section className="monthly-tip" aria-label={`${tip.month}月の管理ポイント`}>
+      <div className="monthly-tip-header">
+        <span className="monthly-tip-emoji" aria-hidden="true">{tip.emoji}</span>
+        <div className="monthly-tip-head-text">
+          <div className="monthly-tip-label">
+            <span className="monthly-tip-month">{tip.month}月</span>
+            <span className="monthly-tip-season">{tip.season}</span>
+          </div>
+          <h2 className="monthly-tip-headline">{tip.headline}</h2>
+        </div>
+      </div>
+      <ul className="monthly-tip-points">
+        {tip.points.map((p, i) => {
+          const related = p.relatedSectionId ? sections.find((s) => s.id === p.relatedSectionId) : null;
+          return (
+            <li key={i} className="monthly-tip-point">
+              <div className="monthly-tip-point-label">{p.label}</div>
+              <div className="monthly-tip-point-detail">
+                {p.detail}
+                {related && (
+                  <>
+                    {' '}
+                    <a
+                      href={`${BASE}/${related.id}/`}
+                      className="monthly-tip-link"
+                      onClick={(e) => { e.preventDefault(); navigateTo(`/${related.id}/`); }}
+                    >
+                      {related.shortTitle} →
+                    </a>
+                  </>
+                )}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
 function Home() {
   return (
     <>
@@ -290,6 +334,8 @@ function Home() {
         </div>
         <ChevronRight size={20} aria-hidden="true" />
       </a>
+
+      <MonthlyTipCard />
 
       <h2 className="home-section-title">セクション一覧</h2>
       <div className="section-grid">

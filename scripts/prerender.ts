@@ -4,6 +4,7 @@ import { sections } from '../src/data/sections.ts';
 import { FAQ_BY_SECTION } from '../src/data/faqs.ts';
 import { glossary } from '../src/data/glossary.ts';
 import { symptomCategories } from '../src/data/symptoms.ts';
+import { getCurrentMonthTip } from '../src/data/monthly-tips.ts';
 
 const DIST_DIR = path.resolve(process.cwd(), 'dist');
 const INDEX_HTML_PATH = path.join(DIST_DIR, 'index.html');
@@ -191,9 +192,19 @@ const sectionListHtml = sections
   )
   .join('\n');
 
+const tip = getCurrentMonthTip();
+const monthlyTipHtml = `<section style="background:#fff;border:1px solid #d4dfc8;border-left:5px solid #2D5C3E;border-radius:10px;padding:20px 22px;margin:0 0 24px"><div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:14px"><span style="font-size:2rem;line-height:1" aria-hidden="true">${tip.emoji}</span><div><div style="font-size:0.82rem;color:#6b7280;font-weight:600;margin-bottom:4px"><span style="background:#2D5C3E;color:#fff;padding:2px 10px;border-radius:999px;margin-right:8px">${tip.month}月</span><span>${escapeHtml(tip.season)}</span></div><h2 style="font-size:1.1rem;font-weight:700;color:#1f2937;margin:0;line-height:1.5">${escapeHtml(tip.headline)}</h2></div></div><ul style="list-style:none;margin:0;padding:0">${tip.points
+  .map((p, i) => {
+    const related = p.relatedSectionId ? sections.find((s) => s.id === p.relatedSectionId) : null;
+    const link = related ? ` <a href="/monstera-info/${related.id}/" style="color:#2D5C3E;font-weight:600;font-size:0.85rem;text-decoration:none">${escapeHtml(related.shortTitle)} →</a>` : '';
+    return `<li style="padding:10px 0;${i > 0 ? 'border-top:1px solid #d4dfc8' : ''}"><div style="font-weight:700;color:#1E3F2A;font-size:0.95rem;margin-bottom:2px">${escapeHtml(p.label)}</div><div style="font-size:0.9rem;color:#4b5563;line-height:1.75">${escapeHtml(p.detail)}${link}</div></li>`;
+  })
+  .join('')}</ul></section>`;
+
 const rootStaticContent = `<article id="static-fallback" style="font-family:sans-serif;line-height:1.7;max-width:920px;margin:0 auto;padding:24px 16px">
   <h1 style="font-size:1.8rem;font-weight:700;border-bottom:2px solid #2D5C3E;padding-bottom:8px;margin-bottom:16px;color:#2D5C3E">モンステラの基本ガイド</h1>
   <p style="color:#444;margin-bottom:24px">人気観葉植物モンステラ（Monstera deliciosa）の総合情報サイト。基礎知識・育て方・剪定や増やし方・病害虫対処・選び方・ペット安全性まで、家庭で実践しやすい形でまとめています。</p>
+  ${monthlyTipHtml}
   <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:12px">セクション一覧</h2>
   <ul style="list-style:none;padding:0">
 ${sectionListHtml}
