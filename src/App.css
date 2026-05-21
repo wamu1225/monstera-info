@@ -487,6 +487,354 @@
   color: var(--primary);
 }
 
+/* ── 症状逆引き診断 ── */
+.diagnose-cta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  margin: 0 0 32px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  border-radius: 12px;
+  text-decoration: none;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.diagnose-cta:hover {
+  color: white;
+  text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(45, 92, 62, 0.22);
+}
+
+.diagnose-cta-icon {
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.18);
+  padding: 8px;
+  border-radius: 50%;
+}
+
+.diagnose-cta-text {
+  flex-grow: 1;
+}
+
+.diagnose-cta-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 2px;
+}
+
+.diagnose-cta-desc {
+  font-size: 0.88rem;
+  opacity: 0.92;
+}
+
+.diagnose-disclaimer {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-left: 4px solid #f59e0b;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 24px 0;
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: #78410f;
+}
+
+.diagnose-disclaimer svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #f59e0b;
+}
+
+.diagnose-step {
+  margin: 24px 0;
+}
+
+.diagnose-step-num {
+  display: inline-block;
+  background: var(--bg-warm);
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+}
+
+.diagnose-step-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 20px;
+}
+
+.diagnose-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.diagnose-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  font-family: inherit;
+}
+
+.diagnose-option:hover {
+  border-color: var(--primary);
+  background: var(--bg-warm);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.diagnose-option-emoji {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.diagnose-option-label {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+}
+
+.diagnose-option-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.diagnose-symptom-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.diagnose-symptom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+  text-align: left;
+  line-height: 1.6;
+  transition: all 0.15s;
+}
+
+.diagnose-symptom:hover {
+  border-color: var(--primary);
+  background: var(--bg-warm);
+  color: var(--primary-dark);
+}
+
+.diagnose-symptom svg {
+  flex-shrink: 0;
+  color: var(--primary);
+}
+
+.diagnose-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: var(--text-subtle);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 8px;
+  font-family: inherit;
+}
+
+.diagnose-back:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.diagnose-result-header {
+  background: var(--bg-warm);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 12px 0 28px;
+}
+
+.diagnose-result-label {
+  font-size: 0.78rem;
+  color: var(--text-subtle);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.diagnose-result-symptom {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.diagnose-result-title {
+  font-size: 1.1rem;
+  color: var(--primary);
+  border-left: 4px solid var(--primary);
+  padding-left: 12px;
+  margin: 24px 0 16px;
+}
+
+.diagnose-causes {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.diagnose-cause {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.diagnose-cause-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.diagnose-sev {
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+
+.sev-high { background: #fee2e2; color: #991b1b; }
+.sev-medium { background: #fef3c7; color: #92400e; }
+.sev-low { background: #dcfce7; color: #166534; }
+
+.diagnose-cause-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.diagnose-cause-desc {
+  color: var(--text-muted);
+  font-size: 0.93rem;
+  line-height: 1.8;
+  margin: 0 0 12px;
+}
+
+.diagnose-cause-action {
+  background: var(--bg-warm);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 12px 0;
+}
+
+.diagnose-cause-action-label {
+  font-size: 0.78rem;
+  color: var(--primary);
+  font-weight: 700;
+  margin-bottom: 4px;
+  letter-spacing: 0.03em;
+}
+
+.diagnose-cause-action p {
+  margin: 0;
+  font-size: 0.93rem;
+  line-height: 1.75;
+  color: var(--text);
+}
+
+.diagnose-cause-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.88rem;
+  color: var(--primary);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.diagnose-result-footer {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.diagnose-restart {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.diagnose-restart:hover {
+  background: var(--primary-dark);
+}
+
+@media (max-width: 640px) {
+  .diagnose-cta {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+  .diagnose-cta-title {
+    font-size: 0.98rem;
+  }
+  .diagnose-cta-desc {
+    font-size: 0.82rem;
+  }
+  .diagnose-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .diagnose-option {
+    padding: 16px 10px;
+  }
+  .diagnose-option-emoji {
+    font-size: 1.8rem;
+  }
+  .diagnose-option-label {
+    font-size: 0.95rem;
+  }
+}
+
 .portal-banner {
   background: var(--bg-warm);
   border-bottom: 1px solid var(--border);

@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
-import { ArrowLeft, List, ChevronRight, Menu, X, Calendar } from 'lucide-react';
+import { ArrowLeft, List, ChevronRight, Menu, X, Calendar, Stethoscope, AlertCircle } from 'lucide-react';
 import { sections } from './data/sections';
 import type { Section } from './data/sections';
 import { FAQ_BY_SECTION } from './data/faqs';
 import { glossary } from './data/glossary';
+import { symptomCategories } from './data/symptoms';
+import type { Severity } from './data/symptoms';
 import './App.css';
 
 const BASE = '/monstera-info';
@@ -268,6 +270,19 @@ function Home() {
         </p>
       </div>
 
+      <a
+        href={`${BASE}/diagnose/`}
+        className="diagnose-cta"
+        onClick={(e) => { e.preventDefault(); navigateTo('/diagnose/'); }}
+      >
+        <Stethoscope className="diagnose-cta-icon" size={28} aria-hidden="true" />
+        <div className="diagnose-cta-text">
+          <div className="diagnose-cta-title">うちのモンステラ、何かおかしい？</div>
+          <div className="diagnose-cta-desc">症状から考えられる原因と対処を 2 ステップで絞り込み</div>
+        </div>
+        <ChevronRight size={20} aria-hidden="true" />
+      </a>
+
       <h2 className="home-section-title">セクション一覧</h2>
       <div className="section-grid">
         {sections.map((s) => (
@@ -415,6 +430,163 @@ function SectionPage({ section }: { section: Section }) {
         </div>
         <FAQBlock sectionId={section.id} />
         <RelatedSections currentId={section.id} />
+        <div className="section-footer">
+          <a
+            href={`${BASE}/`}
+            className="back-link"
+            onClick={(e) => { e.preventDefault(); navigateTo('/'); }}
+          >
+            <ArrowLeft size={16} /> トップへ戻る
+          </a>
+        </div>
+      </article>
+    </>
+  );
+}
+
+function severityLabel(s: Severity): { text: string; className: string } {
+  switch (s) {
+    case 'high': return { text: '緊急度：高', className: 'sev-high' };
+    case 'medium': return { text: '緊急度：中', className: 'sev-medium' };
+    case 'low': return { text: '緊急度：低', className: 'sev-low' };
+  }
+}
+
+function Diagnose() {
+  const [categoryId, setCategoryId] = useState<string | null>(null);
+  const [symptomId, setSymptomId] = useState<string | null>(null);
+
+  useEffect(() => {
+    document.title = '症状逆引き診断 | モンステラの基本ガイド';
+    window.scrollTo(0, 0);
+  }, [categoryId, symptomId]);
+
+  const category = symptomCategories.find((c) => c.id === categoryId) ?? null;
+  const symptom = category ? category.symptoms.find((s) => s.id === symptomId) ?? null : null;
+
+  return (
+    <>
+      <Breadcrumb currentTitle="症状逆引き診断" />
+      <article className="section-page">
+        <header className="article-header">
+          <div className="article-emoji" aria-hidden="true">🔍</div>
+          <h1>症状逆引き診断</h1>
+        </header>
+        <p className="lead">
+          モンステラの異変から、考えられる原因と対処を絞り込みます。質問は 2 ステップで完了します。
+        </p>
+
+        <div className="diagnose-disclaimer">
+          <AlertCircle size={18} aria-hidden="true" />
+          <div>
+            これは確定診断ではなく、症状から推定される <strong>可能性の高い原因</strong> です。
+            複数の症状が当てはまる場合は、複数の原因が重なっていることもあります。最終判断は株の状態を直接見て行ってください。
+          </div>
+        </div>
+
+        {!category && (
+          <section className="diagnose-step">
+            <div className="diagnose-step-num">STEP 1 / 2</div>
+            <h2 className="diagnose-step-title">どこに異変がありますか？</h2>
+            <div className="diagnose-grid">
+              {symptomCategories.map((c) => (
+                <button
+                  key={c.id}
+                  className="diagnose-option"
+                  onClick={() => setCategoryId(c.id)}
+                >
+                  <span className="diagnose-option-emoji" aria-hidden="true">{c.emoji}</span>
+                  <span className="diagnose-option-label">{c.label}</span>
+                  <span className="diagnose-option-desc">{c.description}</span>
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {category && !symptom && (
+          <section className="diagnose-step">
+            <div className="diagnose-step-num">STEP 2 / 2</div>
+            <button
+              className="diagnose-back"
+              onClick={() => { setCategoryId(null); setSymptomId(null); }}
+            >
+              <ArrowLeft size={14} /> カテゴリを選び直す
+            </button>
+            <h2 className="diagnose-step-title">
+              <span aria-hidden="true">{category.emoji}</span> {category.label}：当てはまる症状を選んでください
+            </h2>
+            <div className="diagnose-symptom-list">
+              {category.symptoms.map((s) => (
+                <button
+                  key={s.id}
+                  className="diagnose-symptom"
+                  onClick={() => setSymptomId(s.id)}
+                >
+                  <span>{s.label}</span>
+                  <ChevronRight size={16} aria-hidden="true" />
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {category && symptom && (
+          <section className="diagnose-result">
+            <button
+              className="diagnose-back"
+              onClick={() => setSymptomId(null)}
+            >
+              <ArrowLeft size={14} /> 症状を選び直す
+            </button>
+            <div className="diagnose-result-header">
+              <div className="diagnose-result-label">選択した症状</div>
+              <h2 className="diagnose-result-symptom">
+                <span aria-hidden="true">{category.emoji}</span> {symptom.label}
+              </h2>
+            </div>
+
+            <h3 className="diagnose-result-title">考えられる原因（{symptom.causes.length}件）</h3>
+            <div className="diagnose-causes">
+              {symptom.causes.map((cause, idx) => {
+                const sev = severityLabel(cause.severity);
+                const related = sections.find((s) => s.id === cause.relatedSectionId);
+                return (
+                  <div key={idx} className="diagnose-cause">
+                    <div className="diagnose-cause-head">
+                      <span className={`diagnose-sev ${sev.className}`}>{sev.text}</span>
+                      <h4 className="diagnose-cause-title">{cause.title}</h4>
+                    </div>
+                    <p className="diagnose-cause-desc">{cause.description}</p>
+                    <div className="diagnose-cause-action">
+                      <div className="diagnose-cause-action-label">すぐできる対処</div>
+                      <p>{cause.quickAction}</p>
+                    </div>
+                    {related && (
+                      <a
+                        href={`${BASE}/${related.id}/`}
+                        className="diagnose-cause-link"
+                        onClick={(e) => { e.preventDefault(); navigateTo(`/${related.id}/`); }}
+                      >
+                        詳しく：{related.shortTitle} <ChevronRight size={14} />
+                      </a>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="diagnose-result-footer">
+              <button
+                className="diagnose-restart"
+                onClick={() => { setCategoryId(null); setSymptomId(null); }}
+              >
+                別の症状を診断する
+              </button>
+            </div>
+          </section>
+        )}
+
         <div className="section-footer">
           <a
             href={`${BASE}/`}
@@ -583,6 +755,8 @@ export default function App() {
     content = <Privacy />;
   } else if (normalized === '/glossary') {
     content = <Glossary />;
+  } else if (normalized === '/diagnose') {
+    content = <Diagnose />;
   } else {
     const id = normalized.replace(/^\//, '');
     const section = sections.find((s) => s.id === id);

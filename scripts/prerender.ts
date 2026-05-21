@@ -3,6 +3,7 @@ import * as path from 'path';
 import { sections } from '../src/data/sections.ts';
 import { FAQ_BY_SECTION } from '../src/data/faqs.ts';
 import { glossary } from '../src/data/glossary.ts';
+import { symptomCategories } from '../src/data/symptoms.ts';
 
 const DIST_DIR = path.resolve(process.cwd(), 'dist');
 const INDEX_HTML_PATH = path.join(DIST_DIR, 'index.html');
@@ -449,6 +450,23 @@ const glossaryHtml = glossarySorted
     return `<div style="border-bottom:1px solid #d4dfc8;padding:20px 0"><dt style="font-weight:700;color:#2D5C3E;font-size:1.1rem;margin-bottom:8px"><span style="margin-right:4px">${escapeHtml(g.term)}</span>${readingSpan}</dt><dd style="margin:0"><p style="margin:0 0 8px;line-height:1.85;color:#1f2937">${escapeHtml(g.description)}</p>${relatedLink}</dd></div>`;
   })
   .join('');
+
+// ── 症状逆引き診断ページ ──
+const diagnoseCategoriesHtml = symptomCategories
+  .map((c) => {
+    const symptomsHtml = c.symptoms
+      .map((s) => `<li style="margin-bottom:6px;line-height:1.7"><a href="/monstera-info/troubles/" style="color:#2D5C3E;text-decoration:none">${escapeHtml(s.label)}</a></li>`)
+      .join('');
+    return `<section style="margin:24px 0;padding:18px;background:#fff;border:1px solid #d4dfc8;border-radius:10px"><h2 style="font-size:1.15rem;color:#2D5C3E;margin:0 0 10px"><span aria-hidden="true">${c.emoji}</span> ${escapeHtml(c.label)}：${escapeHtml(c.description)}</h2><ul style="margin:0;padding-left:22px;font-size:0.93rem">${symptomsHtml}</ul></section>`;
+  })
+  .join('');
+
+writeStaticPage(
+  'diagnose',
+  '症状逆引き診断',
+  'モンステラの異変（葉色・葉先・茎・根の症状）から考えられる原因と対処を 2 ステップで絞り込む診断ツール。',
+  `<p style="color:#555;font-size:1.05rem;margin:16px 0 16px">モンステラの異変から、考えられる原因と対処を絞り込みます。質問は 2 ステップで完了します。</p><div style="background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;margin:0 0 24px;font-size:0.92rem;line-height:1.75;color:#78410f">これは確定診断ではなく、症状から推定される<strong>可能性の高い原因</strong>です。複数の症状が当てはまる場合は、複数の原因が重なっていることもあります。</div><p style="font-size:0.93rem;color:#4b5563;margin:0 0 16px">下記は症状の一覧です。JavaScript が有効な環境では、ステップ式の診断ツールが表示されます。</p>${diagnoseCategoriesHtml}`
+);
 
 writeStaticPage(
   'glossary',
