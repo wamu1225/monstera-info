@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
-import { ArrowLeft, List, ChevronRight, Menu, X, Calendar, AlertCircle } from 'lucide-react';
+import { ArrowLeft, List, ChevronRight, Menu, X, Calendar, AlertCircle, Stethoscope, Microscope, Dna } from 'lucide-react';
 import { sections } from './data/sections';
 import type { Section } from './data/sections';
 import { FAQ_BY_SECTION } from './data/faqs';
@@ -324,7 +324,9 @@ function Home() {
           className="tool-cta diagnose-cta"
           onClick={(e) => { e.preventDefault(); navigateTo('/diagnose/'); }}
         >
-          <span className="tool-cta-emoji" aria-hidden="true">🩺</span>
+          <span className="tool-cta-icon-wrap" aria-hidden="true">
+            <Stethoscope size={22} strokeWidth={2.2} />
+          </span>
           <div className="tool-cta-text">
             <div className="tool-cta-title">症状から原因を診断</div>
             <div className="tool-cta-desc">2 ステップで切り分け</div>
@@ -336,7 +338,9 @@ function Home() {
           className="tool-cta variety-cta"
           onClick={(e) => { e.preventDefault(); navigateTo('/variety-check/'); }}
         >
-          <span className="tool-cta-emoji" aria-hidden="true">🔬</span>
+          <span className="tool-cta-icon-wrap" aria-hidden="true">
+            <Microscope size={22} strokeWidth={2.2} />
+          </span>
           <div className="tool-cta-text">
             <div className="tool-cta-title">うちのは何系？品種判別</div>
             <div className="tool-cta-desc">5 問で品種系統を推定</div>
@@ -348,7 +352,9 @@ function Home() {
           className="tool-cta variegated-cta"
           onClick={(e) => { e.preventDefault(); navigateTo('/variegated-check/'); }}
         >
-          <span className="tool-cta-emoji" aria-hidden="true">🧬</span>
+          <span className="tool-cta-icon-wrap" aria-hidden="true">
+            <Dna size={22} strokeWidth={2.2} />
+          </span>
           <div className="tool-cta-text">
             <div className="tool-cta-title">斑入り苗 購入前チェック</div>
             <div className="tool-cta-desc">5 項目で購入リスクを判定</div>
