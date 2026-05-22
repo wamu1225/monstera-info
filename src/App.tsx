@@ -16,6 +16,27 @@ import './App.css';
 
 const BASE = '/monstera-info';
 
+const SECTION_GROUPS: { label: string; emoji: string; description: string; sectionIds: string[] }[] = [
+  {
+    label: '知る・選ぶ',
+    emoji: '🪴',
+    description: '迎える前にまず理解する基礎と、購入時のチェックポイント',
+    sectionIds: ['basics', 'selection'],
+  },
+  {
+    label: '育てる',
+    emoji: '☀️',
+    description: '光・水・温度の基本から、季節ごとの管理・剪定・増やし方まで',
+    sectionIds: ['growing', 'seasonal'],
+  },
+  {
+    label: '守る',
+    emoji: '🛡️',
+    description: 'トラブルの早期発見と対処、ペットや家族と安全に暮らすための注意',
+    sectionIds: ['troubles', 'safety'],
+  },
+];
+
 
 function getCurrentPath(): string {
   if (typeof window === 'undefined') return '/';
@@ -366,21 +387,36 @@ function Home() {
       <MonthlyTipCard />
 
       <h2 className="home-section-title">セクション一覧</h2>
-      <div className="section-grid">
-        {sections.map((s) => (
-          <a
-            key={s.id}
-            href={`${BASE}/${s.id}/`}
-            className="section-card"
-            onClick={(e) => { e.preventDefault(); navigateTo(`/${s.id}/`); }}
-          >
-            <div className="section-card-emoji" aria-hidden="true">{s.emoji}</div>
-            <h2 className="section-card-title">{s.shortTitle}</h2>
-            <p className="section-card-desc">{s.description}</p>
-            <span className="section-card-cta">読む →</span>
-          </a>
-        ))}
-      </div>
+      {SECTION_GROUPS.map((group) => (
+        <div key={group.label} className="section-group">
+          <div className="section-group-head">
+            <h3 className="section-group-label">
+              <span className="section-group-emoji" aria-hidden="true">{group.emoji}</span>
+              {group.label}
+            </h3>
+            <p className="section-group-desc">{group.description}</p>
+          </div>
+          <div className="section-grid">
+            {group.sectionIds.map((id) => {
+              const s = sections.find((sec) => sec.id === id);
+              if (!s) return null;
+              return (
+                <a
+                  key={s.id}
+                  href={`${BASE}/${s.id}/`}
+                  className="section-card"
+                  onClick={(e) => { e.preventDefault(); navigateTo(`/${s.id}/`); }}
+                >
+                  <div className="section-card-emoji" aria-hidden="true">{s.emoji}</div>
+                  <h2 className="section-card-title">{s.shortTitle}</h2>
+                  <p className="section-card-desc">{s.description}</p>
+                  <span className="section-card-cta">読む →</span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      ))}
 
       <div className="home-trust">
         <h3>このサイトの方針</h3>

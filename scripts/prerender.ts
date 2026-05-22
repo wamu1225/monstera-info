@@ -180,11 +180,24 @@ function buildTocHtml(toc: string[]): string {
 }
 
 // ── ルート index.html に静的フォールバック + JSON-LD を注入 ──
-const sectionListHtml = sections
-  .map(
-    (s) =>
-      `<li style="margin-bottom:14px"><a href="/monstera-info/${s.id}/" style="color:#2D5C3E;font-weight:600;text-decoration:none">${escapeHtml(s.shortTitle)}</a><br><span style="color:#555;font-size:0.9rem">${escapeHtml(s.description)}</span></li>`
-  )
+const PRERENDER_GROUPS: { label: string; emoji: string; description: string; sectionIds: string[] }[] = [
+  { label: '知る・選ぶ', emoji: '🪴', description: '迎える前にまず理解する基礎と、購入時のチェックポイント', sectionIds: ['basics', 'selection'] },
+  { label: '育てる', emoji: '☀️', description: '光・水・温度の基本から、季節ごとの管理・剪定・増やし方まで', sectionIds: ['growing', 'seasonal'] },
+  { label: '守る', emoji: '🛡️', description: 'トラブルの早期発見と対処、ペットや家族と安全に暮らすための注意', sectionIds: ['troubles', 'safety'] },
+];
+
+const sectionListHtml = PRERENDER_GROUPS
+  .map((group) => {
+    const groupItems = group.sectionIds
+      .map((id) => sections.find((s) => s.id === id))
+      .filter((s): s is (typeof sections)[number] => Boolean(s))
+      .map(
+        (s) =>
+          `<li style="margin-bottom:14px"><a href="/monstera-info/${s.id}/" style="color:#2D5C3E;font-weight:600;text-decoration:none">${escapeHtml(s.shortTitle)}</a><br><span style="color:#555;font-size:0.9rem">${escapeHtml(s.description)}</span></li>`
+      )
+      .join('\n');
+    return `<div style="margin:24px 0 16px"><div style="font-size:0.78rem;color:#6b7280;font-weight:700;margin-bottom:4px;letter-spacing:0.05em">${group.emoji} ${escapeHtml(group.label)}</div><div style="font-size:0.85rem;color:#4b5563;margin-bottom:10px">${escapeHtml(group.description)}</div><ul style="list-style:none;padding:0;margin:0">${groupItems}</ul></div>`;
+  })
   .join('\n');
 
 const tip = getCurrentMonthTip();
