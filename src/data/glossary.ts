@@ -189,13 +189,6 @@ export const glossary: GlossaryTerm[] = [
     relatedSectionId: 'troubles',
   },
   {
-    term: 'ピースリリー',
-    reading: 'ぴーすりりー',
-    description:
-      '学名 Spathiphyllum。サトイモ科の観葉植物で、英語名に「リリー」を含むが本物のユリ（Lilium 属）とは別系統。モンステラと同じく不溶性シュウ酸カルシウムが毒性機序で、誤食しても局所刺激のみで予後良好。本物のユリ（猫に致死的）との混同に注意が必要。',
-    relatedSectionId: 'safety',
-  },
-  {
     term: 'IPM（統合的病害虫管理）',
     reading: 'あいぴーえむ',
     description:
