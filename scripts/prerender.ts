@@ -224,7 +224,7 @@ ${sectionListHtml}
   <p style="font-size:0.8rem;color:#888;margin-top:20px;border-top:1px solid #eee;padding-top:12px">※本サイトは一般的な情報を提供するもので、専門家の助言の代替ではありません。ペットの誤食など緊急時は獣医師にご相談ください。</p>
 </article>`;
 
-const homeJsonLd = JSON.stringify({
+const homeWebSiteJsonLd = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'モンステラの基本ガイド',
@@ -232,12 +232,30 @@ const homeJsonLd = JSON.stringify({
   description:
     'モンステラ（Monstera deliciosa）の基礎知識・育て方・剪定・増やし方・病害虫対処・選び方・ペット安全性まで網羅した総合情報サイト。',
   inLanguage: 'ja',
+  publisher: {
+    '@type': 'Organization',
+    name: 'study-apps.com',
+    url: 'https://study-apps.com/',
+  },
+});
+
+const homeItemListJsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'モンステラの基本ガイド：セクション一覧',
+  itemListElement: sections.map((s, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: s.shortTitle,
+    description: s.description,
+    url: `${BASE_URL}/${s.id}/`,
+  })),
 });
 
 let rootIndexHtml = templateHtml.replace('<div id="root"></div>', `<div id="root">${rootStaticContent}</div>`);
 rootIndexHtml = rootIndexHtml.replace(
   '</head>',
-  `<script type="application/ld+json">${homeJsonLd}</script>\n  </head>`
+  `<script type="application/ld+json">${homeWebSiteJsonLd}</script>\n  <script type="application/ld+json">${homeItemListJsonLd}</script>\n  </head>`
 );
 fs.writeFileSync(INDEX_HTML_PATH, rootIndexHtml);
 
@@ -408,7 +426,7 @@ function writeSectionPage(s: (typeof sections)[number]) {
 for (const s of sections) writeSectionPage(s);
 
 // ── About / Privacy 静的ページ ──
-function writeStaticPage(id: string, title: string, description: string, bodyHtml: string) {
+function writeStaticPage(id: string, title: string, description: string, bodyHtml: string, extraJsonLd: string[] = []) {
   const dir = path.join(DIST_DIR, id);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
@@ -470,13 +488,32 @@ function writeStaticPage(id: string, title: string, description: string, bodyHtm
     )
     .replace('<div id="root"></div>', `<div id="root">${fallback}</div>`);
 
+  const extraScripts = extraJsonLd.length
+    ? extraJsonLd.map((j) => `<script type="application/ld+json">${j}</script>`).join('\n  ')
+    : '';
   html = html.replace(
     '</head>',
-    `<script type="application/ld+json">${pageJsonLd}</script>\n  <script type="application/ld+json">${breadcrumbJsonLd}</script>\n  </head>`
+    `<script type="application/ld+json">${pageJsonLd}</script>\n  <script type="application/ld+json">${breadcrumbJsonLd}</script>\n  ${extraScripts}\n  </head>`
   );
 
   fs.writeFileSync(path.join(dir, 'index.html'), html);
   generatedCount++;
+}
+
+function buildWebApplicationJsonLd(name: string, description: string, url: string): string {
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name,
+    description,
+    url,
+    applicationCategory: 'UtilityApplication',
+    operatingSystem: 'Any',
+    browserRequirements: 'Requires JavaScript. Requires HTML5.',
+    isAccessibleForFree: true,
+    inLanguage: 'ja',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+  });
 }
 
 // 用語集ページ
@@ -510,7 +547,8 @@ writeStaticPage(
   'diagnose',
   '症状逆引き診断',
   'モンステラの異変（葉色・葉先・茎・根の症状）から考えられる原因と対処を 2 ステップで絞り込む診断ツール。',
-  `<p style="color:#555;font-size:1.05rem;margin:16px 0 16px">モンステラの異変から、考えられる原因と対処を絞り込みます。質問は 2 ステップで完了します。</p><div style="background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;margin:0 0 24px;font-size:0.92rem;line-height:1.75;color:#78410f">これは確定診断ではなく、症状から推定される<strong>可能性の高い原因</strong>です。複数の症状が当てはまる場合は、複数の原因が重なっていることもあります。</div><p style="font-size:0.93rem;color:#4b5563;margin:0 0 16px">下記は症状の一覧です。JavaScript が有効な環境では、ステップ式の診断ツールが表示されます。</p>${diagnoseCategoriesHtml}`
+  `<p style="color:#555;font-size:1.05rem;margin:16px 0 16px">モンステラの異変から、考えられる原因と対処を絞り込みます。質問は 2 ステップで完了します。</p><div style="background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;margin:0 0 24px;font-size:0.92rem;line-height:1.75;color:#78410f">これは確定診断ではなく、症状から推定される<strong>可能性の高い原因</strong>です。複数の症状が当てはまる場合は、複数の原因が重なっていることもあります。</div><p style="font-size:0.93rem;color:#4b5563;margin:0 0 16px">下記は症状の一覧です。JavaScript が有効な環境では、ステップ式の診断ツールが表示されます。</p>${diagnoseCategoriesHtml}`,
+  [buildWebApplicationJsonLd('モンステラ症状逆引き診断', 'モンステラの葉・茎・根・全体の異変から、考えられる原因と対処を 2 ステップで絞り込む無料診断ツール。', `${BASE_URL}/diagnose/`)]
 );
 
 // ── 斑入り苗チェックリストページ ──
@@ -553,14 +591,16 @@ writeStaticPage(
   'variety-check',
   '品種判別ガイド',
   '5 問の質問でモンステラの品種系統（デリシオーサ／ボルシギアナ／アダンソニー／ヒメモンステラ／コンパクタ）を推定する判別ガイド。',
-  `<p style="color:#555;font-size:1.05rem;margin:16px 0 16px">あなたのモンステラがどの品種系統かを、5 問の質問で推定します。デリシオーサ／ボルシギアナ／アダンソニー／ヒメモンステラ／コンパクタを区別します。</p><div style="background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;margin:0 0 24px;font-size:0.92rem;line-height:1.75;color:#78410f">これは確定的な同定ではなく、<strong>形態的特徴から推定される最も近い系統</strong>です。希少品種や交配種、別属（ラフィドフォラ等）の可能性もあります。JavaScript が有効な環境では、インタラクティブな質問形式で判定できます。</div><h2 style="font-size:1.15rem;color:#2D5C3E;margin:32px 0 10px;padding-left:12px;border-left:4px solid #2D5C3E">判別の対象品種</h2>${varietiesListHtml}<h2 style="font-size:1.15rem;color:#2D5C3E;margin:32px 0 10px;padding-left:12px;border-left:4px solid #2D5C3E">質問と選択肢</h2>${quizQuestionsHtml}`
+  `<p style="color:#555;font-size:1.05rem;margin:16px 0 16px">あなたのモンステラがどの品種系統かを、5 問の質問で推定します。デリシオーサ／ボルシギアナ／アダンソニー／ヒメモンステラ／コンパクタを区別します。</p><div style="background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;margin:0 0 24px;font-size:0.92rem;line-height:1.75;color:#78410f">これは確定的な同定ではなく、<strong>形態的特徴から推定される最も近い系統</strong>です。希少品種や交配種、別属（ラフィドフォラ等）の可能性もあります。JavaScript が有効な環境では、インタラクティブな質問形式で判定できます。</div><h2 style="font-size:1.15rem;color:#2D5C3E;margin:32px 0 10px;padding-left:12px;border-left:4px solid #2D5C3E">判別の対象品種</h2>${varietiesListHtml}<h2 style="font-size:1.15rem;color:#2D5C3E;margin:32px 0 10px;padding-left:12px;border-left:4px solid #2D5C3E">質問と選択肢</h2>${quizQuestionsHtml}`,
+  [buildWebApplicationJsonLd('モンステラ品種判別ガイド', '5 問の質問でモンステラの品種系統（デリシオーサ・ボルシギアナ・アダンソニー・ヒメモンステラ・コンパクタ）を推定する無料判別ツール。', `${BASE_URL}/variety-check/`)]
 );
 
 writeStaticPage(
   'variegated-check',
   '斑入り苗チェックリスト',
   'モンステラの斑入り苗を購入する前に、株の状態・出品情報・受け入れ環境を 5 項目でチェックし、緑戻り・致死性白化のリスクを事前判定。',
-  `<p style="color:#555;font-size:1.05rem;margin:16px 0 16px">斑入りモンステラは高額になりがちな一方、緑戻りや致死性白化のリスクがあります。購入前に株の状態・出品情報・受け入れ環境を 5 項目でチェックして、失敗のない購入判断を支援します。各項目には複数の確認ポイントが含まれます。</p><div style="background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;margin:0 0 24px;font-size:0.92rem;line-height:1.75;color:#78410f">これは購入判断の補助ツールです。最終判断は購入者の責任で行ってください。JavaScript が有効な環境では、各項目に「はい／いいえ／不明」で回答してインタラクティブに判定できます。</div>${checkCategoriesHtml}`
+  `<p style="color:#555;font-size:1.05rem;margin:16px 0 16px">斑入りモンステラは高額になりがちな一方、緑戻りや致死性白化のリスクがあります。購入前に株の状態・出品情報・受け入れ環境を 5 項目でチェックして、失敗のない購入判断を支援します。各項目には複数の確認ポイントが含まれます。</p><div style="background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;margin:0 0 24px;font-size:0.92rem;line-height:1.75;color:#78410f">これは購入判断の補助ツールです。最終判断は購入者の責任で行ってください。JavaScript が有効な環境では、各項目に「はい／いいえ／不明」で回答してインタラクティブに判定できます。</div>${checkCategoriesHtml}`,
+  [buildWebApplicationJsonLd('斑入りモンステラ苗チェックリスト', '斑入り苗の購入前に株の状態・出品情報・受け入れ環境を 5 項目でチェックし、緑戻り・致死性白化のリスクを事前判定する無料ツール。', `${BASE_URL}/variegated-check/`)]
 );
 
 writeStaticPage(
@@ -583,6 +623,42 @@ writeStaticPage(
   'モンステラの基本ガイドのプライバシーポリシー。Cookie・アクセス解析・広告の使用について。',
   `<h2 class="content-h2" style="font-size:1.35rem;color:#2D5C3E;border-left:4px solid #2D5C3E;background:#eef4e8;padding:8px 14px;margin:32px 0 16px">アクセス解析</h2><p>本サイトでは Google Analytics を使用しています。Cookie を利用して匿名のトラフィックデータを収集します。</p><h2 class="content-h2" style="font-size:1.35rem;color:#2D5C3E;border-left:4px solid #2D5C3E;background:#eef4e8;padding:8px 14px;margin:32px 0 16px">広告について</h2><p>本サイトでは Google AdSense などの第三者配信の広告サービスを利用することがあります。広告配信事業者は、ユーザーの興味に応じた広告を表示するために Cookie を使用することがあります。</p><h2 class="content-h2" style="font-size:1.35rem;color:#2D5C3E;border-left:4px solid #2D5C3E;background:#eef4e8;padding:8px 14px;margin:32px 0 16px">免責事項</h2><p>本サイトの情報の利用により生じた損害について、運営者は一切の責任を負いません。</p>`
 );
+
+// ── sitemap.xml を動的生成（lastmod 付き） ──
+const today = new Date().toISOString().split('T')[0];
+type SitemapEntry = { path: string; lastmod: string; changefreq: string; priority: string };
+const sitemapEntries: SitemapEntry[] = [
+  { path: '/', lastmod: today, changefreq: 'weekly', priority: '1.0' },
+  { path: '/diagnose/', lastmod: today, changefreq: 'monthly', priority: '0.9' },
+  { path: '/variety-check/', lastmod: today, changefreq: 'monthly', priority: '0.8' },
+  { path: '/variegated-check/', lastmod: today, changefreq: 'monthly', priority: '0.8' },
+  ...sections.map((s) => ({
+    path: `/${s.id}/`,
+    lastmod: s.updatedAt,
+    changefreq: 'monthly',
+    priority: '0.9',
+  })),
+  { path: '/glossary/', lastmod: today, changefreq: 'monthly', priority: '0.7' },
+  { path: '/about/', lastmod: today, changefreq: 'yearly', priority: '0.3' },
+  { path: '/privacy/', lastmod: today, changefreq: 'yearly', priority: '0.3' },
+];
+
+const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${sitemapEntries
+  .map(
+    (e) => `  <url>
+    <loc>${BASE_URL}${e.path}</loc>
+    <lastmod>${e.lastmod}</lastmod>
+    <changefreq>${e.changefreq}</changefreq>
+    <priority>${e.priority}</priority>
+  </url>`
+  )
+  .join('\n')}
+</urlset>
+`;
+fs.writeFileSync(path.join(DIST_DIR, 'sitemap.xml'), sitemapXml);
+console.log(`✓ Generated sitemap.xml (${sitemapEntries.length} URLs, lastmod attached)`);
 
 console.log(`✓ Generated ${generatedCount} static pages`);
 console.log('--- Done ---');
