@@ -52,6 +52,16 @@ function parseInlineToHtml(text: string): string {
     },
     { re: /\*\*(.+?)\*\*/, render: (m) => `<strong>${escapeHtml(m[1])}</strong>` },
     { re: /`([^`]+)`/, render: (m) => `<code class="inline-code">${escapeHtml(m[1])}</code>` },
+    {
+      re: /\{\{term:([^|}]+)(?:\|([^}]+))?\}\}/,
+      render: (m) => {
+        const term = m[1];
+        const label = m[2] ?? term;
+        const entry = glossary.find((g) => g.term === term);
+        if (!entry) return escapeHtml(label);
+        return `<abbr title="${escapeHtml(entry.description)}" style="text-decoration:underline dotted #2D5C3E;text-underline-offset:3px;cursor:help;font-weight:700;color:#1E3F2A">${escapeHtml(label)}</abbr>`;
+      },
+    },
   ];
 
   while (remaining.length > 0) {

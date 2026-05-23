@@ -1812,6 +1812,95 @@
   font-weight: 700;
 }
 
+/* ── 用語集ツールチップ（本文中の用語） ── */
+.glossary-tip-wrap {
+  position: relative;
+  display: inline;
+}
+
+.glossary-tip-trigger {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--primary-dark);
+  font-weight: 700;
+  cursor: help;
+  text-decoration: underline dotted var(--primary);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.glossary-tip-trigger:hover,
+.glossary-tip-trigger:focus-visible {
+  background: var(--bg-warm);
+  border-radius: 3px;
+}
+
+.glossary-tip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: min(320px, 90vw);
+  background: #1f2937;
+  color: white;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  z-index: 30;
+  text-align: left;
+  font-weight: 400;
+  pointer-events: auto;
+  white-space: normal;
+}
+
+.glossary-tip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #1f2937;
+}
+
+.glossary-tip-term {
+  display: block;
+  font-weight: 700;
+  color: var(--accent-light);
+  margin-bottom: 4px;
+  font-size: 0.92rem;
+}
+
+.glossary-tip-desc {
+  display: block;
+  color: #e5e7eb;
+}
+
+.glossary-tip-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.82rem;
+  color: var(--accent-light);
+  text-decoration: underline;
+}
+
+.glossary-tip-link:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .glossary-tip {
+    max-width: min(280px, 85vw);
+    font-size: 0.85rem;
+  }
+}
+
 /* ── 章ナビゲーション ── */
 .chapter-nav {
   display: grid;

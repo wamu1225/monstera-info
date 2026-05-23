@@ -55,6 +55,48 @@ function slugify(_text: string, index: number): string {
   return `section-${index}`;
 }
 
+function GlossaryTooltip({ term, children }: { term: string; children: ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const entry = glossary.find((g) => g.term === term);
+  if (!entry) return <>{children}</>;
+  const tooltipId = `tt-${encodeURIComponent(term)}`;
+  return (
+    <span className="glossary-tip-wrap">
+      <button
+        type="button"
+        className="glossary-tip-trigger"
+        aria-describedby={open ? tooltipId : undefined}
+        aria-expanded={open}
+        onClick={(e) => { e.stopPropagation(); setOpen(!open); }}
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+      >
+        {children}
+      </button>
+      {open && (
+        <span className="glossary-tip" id={tooltipId} role="tooltip">
+          <span className="glossary-tip-term">{entry.term}</span>
+          <span className="glossary-tip-desc">{entry.description}</span>
+          {entry.relatedSectionId && (() => {
+            const related = sections.find((s) => s.id === entry.relatedSectionId);
+            return related ? (
+              <a
+                href={`${BASE}/${related.id}/`}
+                className="glossary-tip-link"
+                onClick={(e) => { e.preventDefault(); navigateTo(`/${related.id}/`); setOpen(false); }}
+              >
+                関連：{related.shortTitle} →
+              </a>
+            ) : null;
+          })()}
+        </span>
+      )}
+    </span>
+  );
+}
+
 // ── 簡易マークダウンパーサ ──
 function parseInline(text: string): ReactNode[] {
   const nodes: ReactNode[] = [];
@@ -97,6 +139,10 @@ function parseInline(text: string): ReactNode[] {
     },
     { re: /\*\*(.+?)\*\*/, render: (m) => <strong key={key++}>{m[1]}</strong> },
     { re: /`([^`]+)`/, render: (m) => <code key={key++} className="inline-code">{m[1]}</code> },
+    {
+      re: /\{\{term:([^|}]+)(?:\|([^}]+))?\}\}/,
+      render: (m) => <GlossaryTooltip key={key++} term={m[1]}>{m[2] ?? m[1]}</GlossaryTooltip>,
+    },
   ];
 
   while (remaining.length > 0) {
