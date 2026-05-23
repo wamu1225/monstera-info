@@ -1331,8 +1331,9 @@ export default function App() {
 
   return (
     <>
+      <a href="#main-content" className="skip-link">メインコンテンツへスキップ</a>
       <Header />
-      <main className="site-shell">{content}</main>
+      <main id="main-content" className="site-shell" tabIndex={-1}>{content}</main>
       <Footer />
     </>
   );
