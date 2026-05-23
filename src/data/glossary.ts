@@ -161,20 +161,6 @@ export const glossary: GlossaryTerm[] = [
     relatedSectionId: 'basics',
   },
   {
-    term: '炭疽病',
-    reading: 'たんそびょう',
-    description:
-      '糸状菌（カビ）による葉の病害。葉面に不整形の黒褐色斑点が現れ、拡大すると内側が淡褐色〜灰白色に乾燥して組織に穴が開く。高温多湿・窒素過多・散水時の水滴のはね返りで発生・拡大する。',
-    relatedSectionId: 'troubles',
-  },
-  {
-    term: '斑点細菌病',
-    reading: 'はんてんさいきんびょう',
-    description:
-      '細菌（バクテリア）による葉の病害。葉脈に沿う黒褐色〜水浸状の不整形シミ斑が特徴。剪定ハサミ・手・水滴を介して伝染する。カビ用殺菌剤は無効で、銅殺菌剤を使用する。',
-    relatedSectionId: 'troubles',
-  },
-  {
     term: 'アザミウマ',
     reading: 'あざみうま',
     description:

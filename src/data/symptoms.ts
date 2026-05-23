@@ -203,53 +203,14 @@ export const symptomCategories: SymptomCategory[] = [
         ],
       },
       {
-        id: 'pests-leafroller',
-        label: '葉が筒状に巻かれて内部から食害されている',
+        id: 'disease-leafspot',
+        label: '葉面に不整形の黒褐色斑点が広がる（屋外管理時）',
         causes: [
           {
-            title: 'ハマキムシ',
-            description: 'チョウ目の幼虫が糸でシェルター（巻いた葉）を作り内部から食害。成虫は夜行性で照明に誘引されて室内へ。',
-            severity: 'medium',
-            quickAction: '巻かれた葉を発見し次第切除して廃棄。シェルター内に薬剤が届きにくいため物理的除去が確実。',
-            relatedSectionId: 'troubles',
-          },
-        ],
-      },
-      {
-        id: 'pests-cutworm',
-        label: '夜間に葉に巨大な食い穴が一晩で現れる',
-        causes: [
-          {
-            title: 'ヨトウムシ類',
-            description: '夜行性の大型チョウ目幼虫。日中は鉢底や土壌浅層に隠れ、夜間に葉肉を旺盛に食害する。',
-            severity: 'medium',
-            quickAction: '夜間に懐中電灯で捜索して捕殺、または株元への顆粒殺虫剤。鉢底の隙間や土の表層を点検。',
-            relatedSectionId: 'troubles',
-          },
-        ],
-      },
-      {
-        id: 'disease-anthracnose',
-        label: '葉面に不整形の黒褐色斑点・内側が白化して穴が空く',
-        causes: [
-          {
-            title: '炭疽病（カビ性病害）',
-            description: '糸状菌による病害。20〜25°C の高温多湿、窒素過多、散水時の水滴のはね返りで発生・拡大。',
+            title: 'カビ・細菌性の葉斑病害',
+            description: '炭疽病・斑点細菌病・葉枯病など。室内では稀ですが、屋外管理や過湿環境では発生することがあります。同心円状に広がるのはカビ性、葉脈に沿う水浸状なら細菌性の可能性。',
             severity: 'high',
-            quickAction: '発病葉を即時切除して密閉廃棄。風通しを確保し、広範囲ならベンレート系等の殺菌剤を散布。器具を消毒。',
-            relatedSectionId: 'troubles',
-          },
-        ],
-      },
-      {
-        id: 'disease-bacterial',
-        label: '葉脈に沿う黒褐色の水浸状シミ斑（境界が不鮮明）',
-        causes: [
-          {
-            title: '斑点細菌病（細菌性病害）',
-            description: '細菌による感染。剪定ハサミ・手・水滴を介して伝染。カビ性病害のような同心円状の拡大は示さない。',
-            severity: 'high',
-            quickAction: '発病組織を切除、器具を石鹸とアルコールで消毒。広範囲なら銅殺菌剤（サンボルドー系）。カビ用殺菌剤は無効。',
+            quickAction: '発病葉を即時切除してビニール袋に密閉廃棄。風通しを確保し、器具を消毒。広範囲なら観葉植物適用の殺菌剤（カビ性ならベンレート系、細菌性なら銅殺菌剤）を規定濃度で使用。',
             relatedSectionId: 'troubles',
           },
         ],
