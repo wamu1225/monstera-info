@@ -151,6 +151,19 @@ export const symptomCategories: SymptomCategory[] = [
         ],
       },
       {
+        id: 'pests-thrips',
+        label: '葉脈に沿うかすり状の銀白色斑',
+        causes: [
+          {
+            title: 'アザミウマ（スリップス）',
+            description: '体長 1〜2mm の細長い微小昆虫。新芽や葉裏に寄生し、表皮を破壊して吸汁。被害組織が銀白色に反射する。ウイルス病の媒介者でもある。',
+            severity: 'medium',
+            quickAction: '黄色〜青色の粘着トラップで初期捕獲。広範囲なら浸透移行性殺虫剤（オルトラン粒剤等の観葉植物適用品）を株元へ。',
+            relatedSectionId: 'troubles',
+          },
+        ],
+      },
+      {
         id: 'pests-scale',
         label: '葉や茎に白い綿状のかたまり・茶色いカサブタ状',
         causes: [
@@ -159,6 +172,84 @@ export const symptomCategories: SymptomCategory[] = [
             description: '茎や葉に固着する害虫。ベタつく排泄物がすす状の汚れの原因にもなる。',
             severity: 'medium',
             quickAction: '歯ブラシや綿棒で物理的にこすり落とす。広範囲なら市販の殺虫剤を使用。',
+            relatedSectionId: 'troubles',
+          },
+        ],
+      },
+      {
+        id: 'pests-whitefly',
+        label: '葉裏に白い粉状の小虫が密集・葉を揺らすと一斉に舞う',
+        causes: [
+          {
+            title: 'コナジラミ',
+            description: '全長 3mm 以下の白い羽虫。葉裏に密集して吸汁し、加害部位が白っぽく退色。甘い排泄物ですす病を誘発、ウイルス病も媒介する。',
+            severity: 'medium',
+            quickAction: '黄色粘着トラップで誘引。葉裏へ薬剤を散布。サーキュレーターで風を当て発生を抑える。',
+            relatedSectionId: 'troubles',
+          },
+        ],
+      },
+      {
+        id: 'pests-aphid',
+        label: '新芽や柔組織に黄〜緑〜黒の小虫が群がる',
+        causes: [
+          {
+            title: 'アブラムシ',
+            description: '極めて高い繁殖力で集団寄生。葉の巻き込み・縮れを引き起こし、甘い排泄物（甘露）ですす病を誘発。モザイクウイルス等の媒介者でもある。',
+            severity: 'medium',
+            quickAction: '強めのシャワーで物理的に洗い流す。広範囲なら浸透移行性殺虫剤を株元に。',
+            relatedSectionId: 'troubles',
+          },
+        ],
+      },
+      {
+        id: 'pests-leafroller',
+        label: '葉が筒状に巻かれて内部から食害されている',
+        causes: [
+          {
+            title: 'ハマキムシ',
+            description: 'チョウ目の幼虫が糸でシェルター（巻いた葉）を作り内部から食害。成虫は夜行性で照明に誘引されて室内へ。',
+            severity: 'medium',
+            quickAction: '巻かれた葉を発見し次第切除して廃棄。シェルター内に薬剤が届きにくいため物理的除去が確実。',
+            relatedSectionId: 'troubles',
+          },
+        ],
+      },
+      {
+        id: 'pests-cutworm',
+        label: '夜間に葉に巨大な食い穴が一晩で現れる',
+        causes: [
+          {
+            title: 'ヨトウムシ類',
+            description: '夜行性の大型チョウ目幼虫。日中は鉢底や土壌浅層に隠れ、夜間に葉肉を旺盛に食害する。',
+            severity: 'medium',
+            quickAction: '夜間に懐中電灯で捜索して捕殺、または株元への顆粒殺虫剤。鉢底の隙間や土の表層を点検。',
+            relatedSectionId: 'troubles',
+          },
+        ],
+      },
+      {
+        id: 'disease-anthracnose',
+        label: '葉面に不整形の黒褐色斑点・内側が白化して穴が空く',
+        causes: [
+          {
+            title: '炭疽病（カビ性病害）',
+            description: '糸状菌による病害。20〜25°C の高温多湿、窒素過多、散水時の水滴のはね返りで発生・拡大。',
+            severity: 'high',
+            quickAction: '発病葉を即時切除して密閉廃棄。風通しを確保し、広範囲ならベンレート系等の殺菌剤を散布。器具を消毒。',
+            relatedSectionId: 'troubles',
+          },
+        ],
+      },
+      {
+        id: 'disease-bacterial',
+        label: '葉脈に沿う黒褐色の水浸状シミ斑（境界が不鮮明）',
+        causes: [
+          {
+            title: '斑点細菌病（細菌性病害）',
+            description: '細菌による感染。剪定ハサミ・手・水滴を介して伝染。カビ性病害のような同心円状の拡大は示さない。',
+            severity: 'high',
+            quickAction: '発病組織を切除、器具を石鹸とアルコールで消毒。広範囲なら銅殺菌剤（サンボルドー系）。カビ用殺菌剤は無効。',
             relatedSectionId: 'troubles',
           },
         ],

@@ -153,4 +153,53 @@ export const glossary: GlossaryTerm[] = [
       'American Society for the Prevention of Cruelty to Animals（米国動物虐待防止協会）。ペットへの植物の毒性データベースを公開しており、観葉植物の安全性評価で世界的に参照される。モンステラは犬・猫に対する有害植物として登録されている。',
     relatedSectionId: 'safety',
   },
+  {
+    term: 'ラフィドフォラ・テトラスペルマ',
+    reading: 'らふぃどふぉら てとらすぺるま',
+    description:
+      '学名 Rhaphidophora tetrasperma。東南アジア（マレーシア・タイ南部）原産のサトイモ科のつる性植物で、日本では「ヒメモンステラ」「ミニモンステラ」の名で流通する。植物分類学上はモンステラ属ではなく別属。葉に切れ込みは入るが、モンステラ属のような完全に閉じた穿孔は形成しない。',
+    relatedSectionId: 'basics',
+  },
+  {
+    term: '炭疽病',
+    reading: 'たんそびょう',
+    description:
+      '糸状菌（カビ）による葉の病害。葉面に不整形の黒褐色斑点が現れ、拡大すると内側が淡褐色〜灰白色に乾燥して組織に穴が開く。高温多湿・窒素過多・散水時の水滴のはね返りで発生・拡大する。',
+    relatedSectionId: 'troubles',
+  },
+  {
+    term: '斑点細菌病',
+    reading: 'はんてんさいきんびょう',
+    description:
+      '細菌（バクテリア）による葉の病害。葉脈に沿う黒褐色〜水浸状の不整形シミ斑が特徴。剪定ハサミ・手・水滴を介して伝染する。カビ用殺菌剤は無効で、銅殺菌剤を使用する。',
+    relatedSectionId: 'troubles',
+  },
+  {
+    term: 'アザミウマ',
+    reading: 'あざみうま',
+    description:
+      'スリップスとも呼ばれる体長 1〜2mm の細長い微小昆虫。新芽や葉裏に寄生して吸汁し、葉脈に沿うかすり状の銀白色斑を生じさせる。トマト黄化えそウイルス等のウイルス病を媒介することでも知られる。',
+    relatedSectionId: 'troubles',
+  },
+  {
+    term: 'コナジラミ',
+    reading: 'こなじらみ',
+    description:
+      '全長 3mm 以下の白い粉状の羽虫。葉裏に密集して吸汁し、加害部位が白っぽく退色する。甘い排泄物（甘露）ですす病を誘発し、ウイルス病も媒介する。',
+    relatedSectionId: 'troubles',
+  },
+  {
+    term: 'ピースリリー',
+    reading: 'ぴーすりりー',
+    description:
+      '学名 Spathiphyllum。サトイモ科の観葉植物で、英語名に「リリー」を含むが本物のユリ（Lilium 属）とは別系統。モンステラと同じく不溶性シュウ酸カルシウムが毒性機序で、誤食しても局所刺激のみで予後良好。本物のユリ（猫に致死的）との混同に注意が必要。',
+    relatedSectionId: 'safety',
+  },
+  {
+    term: 'IPM（統合的病害虫管理）',
+    reading: 'あいぴーえむ',
+    description:
+      'Integrated Pest Management の略。「予防（環境整備）→ 監視（早期発見）→ 物理的対処 → 化学防除」の順に段階的に対応する考え方。最初から薬剤散布に頼らず、まず風通し・灌水管理・葉水観察などの基本管理を優先する持続可能な防除アプローチ。',
+    relatedSectionId: 'troubles',
+  },
 ];
