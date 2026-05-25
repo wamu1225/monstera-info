@@ -70,10 +70,65 @@ for (const { id, block } of sectionBlocks) {
   }
 }
 
+// --- Render-smoke check (2026-05-26 追加) ---
+// Bold + tooltip ネストが再帰パースされず生表示される不具合を再発させないため、
+// parseInline 相当のロジックで sections.ts の lead/content を擬似展開し、
+// 出力に未展開の {{term: や ** が残っていないかを検査する。
+function renderSmoke(text) {
+  let remaining = text;
+  let out = '';
+  const patterns = [
+    /\[([^\]]+)\]\(([^)]+)\)/,           // link
+    /\*\*(.+?)\*\*/,                      // bold (再帰対象)
+    /`([^`]+)`/,                          // code (再帰しない)
+    /\{\{term:([^|}]+)(?:\|([^}]+))?\}\}/, // tooltip
+  ];
+  while (remaining.length > 0) {
+    let earliest = null;
+    for (let i = 0; i < patterns.length; i++) {
+      const m = patterns[i].exec(remaining);
+      if (m && (earliest === null || m.index < earliest.idx)) {
+        earliest = { idx: m.index, len: m[0].length, patternIdx: i, inner: m[1] };
+      }
+    }
+    if (!earliest) {
+      out += remaining;
+      break;
+    }
+    out += remaining.slice(0, earliest.idx);
+    // bold (idx 1) と link label (idx 0) は再帰展開、code (idx 2) はリテラル
+    if (earliest.patternIdx === 1 || earliest.patternIdx === 0) {
+      out += renderSmoke(earliest.inner);
+    } else {
+      out += earliest.inner;
+    }
+    remaining = remaining.slice(earliest.idx + earliest.len);
+  }
+  return out;
+}
+
+for (const { id, block } of sectionBlocks) {
+  const leadMatch = block.match(/lead:\s*'([\s\S]*?)',\s*\n/);
+  const contentMatch = block.match(/content:\s*`([\s\S]*?)`,\s*updatedAt/);
+  const targets = [
+    leadMatch && { field: 'lead', text: leadMatch[1] },
+    contentMatch && { field: 'content', text: contentMatch[1] },
+  ].filter(Boolean);
+  for (const t of targets) {
+    const rendered = renderSmoke(t.text);
+    if (rendered.includes('{{term:')) {
+      errors.push(`[${id}] ${t.field} に未展開の {{term:...}} が残っている（bold等のネストでパーサが取りこぼしている可能性）`);
+    }
+    if (/\*\*[^*\n]+\*\*/.test(rendered)) {
+      errors.push(`[${id}] ${t.field} に未展開の **bold** が残っている`);
+    }
+  }
+}
+
 if (errors.length) {
   console.error('Validation errors:');
   for (const e of errors) console.error('  - ' + e);
   process.exit(1);
 }
 
-console.log(`✓ validate-data: ${ids.length} sections (${ids.join(', ')})`);
+console.log(`✓ validate-data: ${ids.length} sections (${ids.join(', ')}) + render-smoke OK`);
