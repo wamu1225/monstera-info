@@ -50,7 +50,7 @@ function parseInlineToHtml(text: string): string {
         return `<a href="${escapeHtml(href)}"${attrs}>${label}</a>`;
       },
     },
-    { re: /\*\*(.+?)\*\*/, render: (m) => `<strong>${escapeHtml(m[1])}</strong>` },
+    { re: /\*\*(.+?)\*\*/, render: (m) => `<strong>${parseInlineToHtml(m[1])}</strong>` },
     { re: /`([^`]+)`/, render: (m) => `<code class="inline-code">${escapeHtml(m[1])}</code>` },
     {
       re: /\{\{term:([^|}]+)(?:\|([^}]+))?\}\}/,

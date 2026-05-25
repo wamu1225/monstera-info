@@ -137,7 +137,7 @@ function parseInline(text: string): ReactNode[] {
         );
       },
     },
-    { re: /\*\*(.+?)\*\*/, render: (m) => <strong key={key++}>{m[1]}</strong> },
+    { re: /\*\*(.+?)\*\*/, render: (m) => <strong key={key++}>{parseInline(m[1])}</strong> },
     { re: /`([^`]+)`/, render: (m) => <code key={key++} className="inline-code">{m[1]}</code> },
     {
       re: /\{\{term:([^|}]+)(?:\|([^}]+))?\}\}/,
