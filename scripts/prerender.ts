@@ -316,7 +316,7 @@ function buildSectionFallback(s: (typeof sections)[number]): string {
   const faqHtml = buildFaqHtml(s.id);
   const chapterNavHtml = buildChapterNav(s.id);
   const leadHtml = s.lead && s.lead !== '（準備中）'
-    ? `<p class="lead" style="color:#555;font-size:1.05rem;margin:16px 0 24px">${escapeHtml(s.lead)}</p>`
+    ? `<p class="lead" style="color:#555;font-size:1.05rem;margin:16px 0 24px">${parseInlineToHtml(s.lead)}</p>`
     : '';
   const isYMYL = s.id === 'safety';
   const disclaimerHtml = isYMYL

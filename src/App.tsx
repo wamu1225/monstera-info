@@ -617,7 +617,7 @@ function SectionPage({ section }: { section: Section }) {
           </div>
         </header>
         {section.lead && section.lead !== '（準備中）' && (
-          <p className="lead">{section.lead}</p>
+          <p className="lead">{parseInline(section.lead)}</p>
         )}
         {isYMYL && <SafetyDisclaimer />}
         <TOC items={section.toc} />
