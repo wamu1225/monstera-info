@@ -62,8 +62,61 @@ const VARIETY_PANELS: Panel[] = [
   },
 ];
 
+// 症状パネル: 葉身ベースに症状（変色/斑点/カスリ等）を重ねた模式図
+const SYMPTOM_BLADE = 'M50 18 C71 18 86 33 86 56 C86 79 69 95 50 95 C31 95 14 79 14 56 C14 33 29 18 50 18 Z';
+const SYMPTOM_SLITS = [
+  'M86 51 L62 56 L86 61 Z', 'M14 51 L38 56 L14 61 Z',
+];
+
+function symptomLeafSvg(o: {
+  label: string; sub: string;
+  bladeFill?: string; edge?: string; blotches?: { cx: number; cy: number; r: number }[];
+  stipple?: boolean;
+}): string {
+  const fill = o.bladeFill ?? '#3D7A52';
+  const edge = o.edge ? `<path d="${SYMPTOM_BLADE}" fill="none" stroke="${o.edge}" stroke-width="7" stroke-linejoin="round"/>` : '';
+  const blotches = (o.blotches ?? []).map(b => `<circle cx="${b.cx}" cy="${b.cy}" r="${b.r}" fill="#4a2c18" opacity="0.78"/>`).join('');
+  let stip = '';
+  if (o.stipple) {
+    const pts: string[] = [];
+    for (let gx = 26; gx <= 74; gx += 7) for (let gy = 30; gy <= 84; gy += 8) {
+      if (Math.abs(gx - 50) + Math.abs(gy - 56) > 60) continue;
+      const jx = gx + ((gx * gy) % 5) - 2, jy = gy + ((gx + gy) % 5) - 2;
+      pts.push(`<circle cx="${jx}" cy="${jy}" r="1.1" fill="#d9d2a6" opacity="0.85"/>`);
+    }
+    stip = pts.join('');
+  }
+  // 症状図はクリップで葉の内側にだけ重ねる
+  const clipId = `c_${o.label}`;
+  return (
+    `<figure class="leaf-panel">` +
+    `<svg viewBox="0 0 100 110" width="100%" role="img" aria-label="${o.label}の葉">` +
+    `<defs><clipPath id="${clipId}"><path d="${SYMPTOM_BLADE}"/></clipPath></defs>` +
+    `<rect width="100" height="110" fill="${LEAF_BG}"/>` +
+    `<path d="${SYMPTOM_BLADE}" fill="${fill}"/>` +
+    `<g clip-path="url(#${clipId})">${blotches}${stip}</g>` +
+    edge +
+    SYMPTOM_SLITS.map(d => `<path d="${d}" fill="${LEAF_BG}"/>`).join('') +
+    `<path d="M50 16 L50 96" stroke="#2c5b3c" stroke-width="1.2" opacity="0.5"/>` +
+    `</svg>` +
+    `<figcaption><strong>${o.label}</strong><span>${o.sub}</span></figcaption>` +
+    `</figure>`
+  );
+}
+
+const SYMPTOM_PANELS: string[] = [
+  symptomLeafSvg({ label: '黄変', sub: '下葉から全体が黄色く', bladeFill: '#bcae3f' }),
+  symptomLeafSvg({ label: '葉先の枯れ込み', sub: '縁が茶色くパリパリに', edge: '#7a4a23' }),
+  symptomLeafSvg({ label: '葉焼け', sub: '褐色〜黒の斑点', blotches: [{ cx: 60, cy: 42, r: 6 }, { cx: 66, cy: 60, r: 4.5 }, { cx: 40, cy: 52, r: 5 }, { cx: 52, cy: 72, r: 4 }] }),
+  symptomLeafSvg({ label: 'ハダニ被害', sub: '細かなカスリ状の白点', bladeFill: '#5f7a4e', stipple: true }),
+];
+
 // figure id → { caption, innerHtml }
 const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
+  'leaf-symptoms': {
+    caption: 'よくある葉の不調の見え方（模式図）。黄変・葉先枯れ・葉焼け・ハダニ被害は原因も対処も異なるため、まず見た目で切り分けるのが近道です。',
+    inner: `<div class="leaf-grid">${SYMPTOM_PANELS.join('')}</div>`,
+  },
   'variety-leaves': {
     caption: '主要品種の葉のかたちの比較（模式図）。実際の葉は個体差がありますが、切れ込みと窓の入り方が見分けの手がかりになります。',
     inner: `<div class="leaf-grid">${VARIETY_PANELS.map(leafSvg).join('')}</div>`,
