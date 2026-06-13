@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { ArrowLeft, List, ChevronRight, Menu, X, Calendar, AlertCircle, Stethoscope, Microscope, Dna } from 'lucide-react';
 import { Figure } from './figures';
+import { referencesHtml } from './references';
 import { sections } from './data/sections';
 import type { Section } from './data/sections';
 import { FAQ_BY_SECTION } from './data/faqs';
@@ -634,6 +635,9 @@ function SectionPage({ section }: { section: Section }) {
           {parseContent(section.content)}
         </div>
         <FAQBlock sectionId={section.id} />
+        {section.references && section.references.length > 0 && (
+          <div dangerouslySetInnerHTML={{ __html: referencesHtml(section.references) }} />
+        )}
         <ChapterNav currentId={section.id} />
         <RelatedSections currentId={section.id} />
         <div className="section-footer">

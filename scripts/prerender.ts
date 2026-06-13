@@ -10,6 +10,7 @@ import type { CheckCategory } from '../src/data/variegated-checklist.ts';
 import { varieties, quizQuestions } from '../src/data/variety-quiz.ts';
 import type { VarietyId } from '../src/data/variety-quiz.ts';
 import { figureHtml } from '../src/figures-data.ts';
+import { referencesHtml } from '../src/references.ts';
 
 const DIST_DIR = path.resolve(process.cwd(), 'dist');
 const INDEX_HTML_PATH = path.join(DIST_DIR, 'index.html');
@@ -345,6 +346,7 @@ function buildSectionFallback(s: (typeof sections)[number]): string {
 ${contentHtml}
   </div>
   ${faqHtml}
+  ${referencesHtml(s.references)}
   ${chapterNavHtml}
   <p style="margin-top:32px"><a href="/monstera-info/" style="color:#2D5C3E">← トップへ戻る</a></p>
 </article>`;

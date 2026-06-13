@@ -1,3 +1,5 @@
+import type { Reference } from '../references';
+
 export type Section = {
   id: string;
   title: string;
@@ -9,6 +11,7 @@ export type Section = {
   toc: string[];
   content: string;
   updatedAt: string;
+  references?: Reference[];
 };
 
 export const sections: Section[] = [
@@ -29,7 +32,7 @@ export const sections: Section[] = [
     ],
     content: `## モンステラとは
 
-モンステラは、サトイモ科モンステラ属に分類される常緑のつる性着生植物で、学名を **Monstera deliciosa**（{{term:モンステラ・デリシオーサ}}）といいます。原産地は **中米（メキシコ南部からパナマにかけて）の熱帯雨林** で、野生下では大木の幹や湿った岩肌に {{term:気根}} を絡めながら、光を求めて上方へとよじ登るように生長します。後に世界各地の熱帯・暖地に導入され、ポルトガル・オーストラリア・米国南部などでも野外結実が確認されています。
+モンステラは、サトイモ科モンステラ属に分類される常緑のつる性着生植物で、学名を **Monstera deliciosa**（{{term:モンステラ・デリシオーサ}}）といいます。自生地は **メキシコ南部（ベラクルス・オアハカ・チアパス）からグアテマラにかけての熱帯雨林** で、野生下では大木の幹や湿った岩肌に {{term:気根}} を絡めながら、光を求めて上方へとよじ登るように生長します。コスタリカやパナマ、ポルトガル（アゾレス諸島）など世界各地の熱帯・暖地にも移入され、野生化しているところもあります。
 
 家庭で人気の観葉植物としては、株姿の力強さと独特の葉のフォルムが最大の魅力。インテリア性の高さから、ミッドセンチュリーや北欧モダンといったあらゆるテイストの空間に馴染みます。
 
@@ -94,6 +97,10 @@ export const sections: Section[] = [
 - 斑入り品種は美しいが管理難度が上がる
 `,
     updatedAt: '2026-05-21',
+    references: [
+      { label: 'Monstera deliciosa Liebm.（学名・分類・自生域）', publisher: 'Plants of the World Online, Royal Botanic Gardens, Kew', url: 'https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:87478-1' },
+      { label: 'Monstera deliciosa（科・原産地・特徴）', publisher: 'North Carolina Extension Gardener Plant Toolbox, NC State University', url: 'https://plants.ces.ncsu.edu/plants/monstera-deliciosa/' },
+    ],
   },
   {
     id: 'growing',
@@ -727,5 +734,9 @@ export const sections: Section[] = [
 ⚠️ サトイモ科の植物は鳥・うさぎ・ハムスター等の小動物にも、同様の機序で口腔刺激を起こす可能性があります。これらの動物と同居する場合も、安全な配置を心がけてください。
 `,
     updatedAt: '2026-05-21',
+    references: [
+      { label: 'Swiss Cheese Plant（Monstera deliciosa）— 犬・猫への毒性・不溶性シュウ酸カルシウム・症状', publisher: 'ASPCA Animal Poison Control（米国動物虐待防止協会）', url: 'https://www.aspca.org/pet-care/aspca-poison-control/toxic-and-non-toxic-plants/swiss-cheese-plant' },
+      { label: 'Monstera deliciosa の毒性（針状シュウ酸カルシウム結晶・症状・接触皮膚炎）', publisher: 'North Carolina Extension Gardener Plant Toolbox, NC State University', url: 'https://plants.ces.ncsu.edu/plants/monstera-deliciosa/' },
+    ],
   },
 ];

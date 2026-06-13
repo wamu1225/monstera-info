@@ -371,6 +371,38 @@
   font-weight: 700;
 }
 
+.references {
+  margin: 32px 0 8px;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card-bg);
+}
+.references-h {
+  font-size: 1rem;
+  color: var(--accent-dark, #1E3F2A);
+  margin: 0 0 10px;
+}
+.references-list {
+  margin: 0;
+  padding-left: 1.1em;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.references-list li { margin-bottom: 6px; }
+.references-list a { color: #1f6f43; word-break: break-word; }
+.references .ref-pub {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted, #666);
+}
+.references-note {
+  font-size: 0.78rem;
+  color: var(--text-muted, #666);
+  margin: 12px 0 0;
+  line-height: 1.6;
+}
+
 .section-content .content-figure {
   margin: 0 0 22px;
   padding: 16px;
