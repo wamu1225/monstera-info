@@ -111,8 +111,87 @@ const SYMPTOM_PANELS: string[] = [
   symptomLeafSvg({ label: 'ハダニ被害', sub: '細かなカスリ状の白点', bladeFill: '#5f7a4e', stipple: true }),
 ];
 
+// 斑入りパネル共通の葉body（デリシオーサ型・切れ込み付き）
+const VARG_BLADE = 'M50 18 C72 18 88 34 88 56 C88 80 70 96 50 96 C30 96 12 80 12 56 C12 34 28 18 50 18 Z';
+const VARG_SLITS = ['M88 51 L62 56 L88 61 Z', 'M12 51 L38 56 L12 61 Z'];
+function vargFrame(label: string, sub: string, bladeFill: string, overlay: string): string {
+  const clip = `vc_${label}`;
+  return (
+    `<figure class="leaf-panel">` +
+    `<svg viewBox="0 0 100 110" width="100%" role="img" aria-label="${label}の葉">` +
+    `<defs><clipPath id="${clip}"><path d="${VARG_BLADE}"/></clipPath></defs>` +
+    `<rect width="100" height="110" fill="${LEAF_BG}"/>` +
+    `<path d="${VARG_BLADE}" fill="${bladeFill}"/>` +
+    `<g clip-path="url(#${clip})">${overlay}</g>` +
+    VARG_SLITS.map(d => `<path d="${d}" fill="${LEAF_BG}"/>`).join('') +
+    `<path d="M50 16 L50 96" stroke="#2c5b3c" stroke-width="1.2" opacity="0.5"/>` +
+    `</svg>` +
+    `<figcaption><strong>${label}</strong><span>${sub}</span></figcaption>` +
+    `</figure>`
+  );
+}
+function symptomVarg(label: string, sub: string, patches: { cx: number; cy: number; r: number }[]): string {
+  const ov = patches.map(p => `<circle cx="${p.cx}" cy="${p.cy}" r="${p.r}" fill="#eef3df"/>`).join('');
+  return vargFrame(label, sub, '#3D7A52', ov);
+}
+function symptomVargHalf(label: string, sub: string): string {
+  return vargFrame(label, sub, '#3D7A52', `<rect x="50" y="0" width="50" height="110" fill="#eef3df"/>`);
+}
+function symptomVargGhost(label: string, sub: string): string {
+  return vargFrame(label, sub, '#eef3df', `<path d="M30 70 C40 68 46 78 44 90 C36 86 30 80 30 70 Z" fill="#3D7A52" opacity="0.55"/>`);
+}
+
+// 剪定：節を守る位置の単体注釈図（茎の側面）
+function pruningNodeSvg(): string {
+  return (
+    `<svg class="diagram-single" viewBox="0 0 300 210" width="100%" role="img" aria-label="剪定で切る位置と節・気根の関係図">` +
+    `<rect width="300" height="210" fill="${LEAF_BG}"/>` +
+    // 茎（下から上へ・やや斜め）
+    `<path d="M120 196 L150 96 L150 40" stroke="#5a8a64" stroke-width="20" stroke-linecap="round" fill="none"/>` +
+    // 下の節（ふくらみ）
+    `<ellipse cx="135" cy="150" rx="15" ry="9" fill="#3D7A52" transform="rotate(-72 135 150)"/>` +
+    // 上の節
+    `<ellipse cx="150" cy="78" rx="15" ry="9" fill="#3D7A52"/>` +
+    // 気根（下の節から下へ）
+    `<path d="M132 154 C112 168 110 186 120 198" stroke="#9a7b53" stroke-width="5" fill="none" stroke-linecap="round"/>` +
+    // 葉柄のあと（上の節から右へ）
+    `<path d="M163 76 C182 70 192 74 200 70" stroke="#6b8f57" stroke-width="7" fill="none" stroke-linecap="round"/>` +
+    // 潜伏芽（上の節の芽）
+    `<circle cx="150" cy="70" r="4.5" fill="#c9a14a"/>` +
+    // 切る位置（上の節の約1cm上・破線）
+    `<line x1="118" y1="54" x2="184" y2="54" stroke="#c0392b" stroke-width="2.4" stroke-dasharray="6 4"/>` +
+    `<text x="196" y="50" font-size="12" fill="#c0392b" font-weight="700">ここで切る</text>` +
+    `<text x="196" y="63" font-size="10" fill="#c0392b">節の約1cm上</text>` +
+    // ラベル（重なり回避のため要素に引出線を添える）
+    `<line x1="150" y1="78" x2="178" y2="92" stroke="#1E3F2A" stroke-width="0.8"/>` +
+    `<text x="181" y="96" font-size="11" fill="#1E3F2A" font-weight="700">節</text>` +
+    `<text x="86" y="120" font-size="11" fill="#1E3F2A">節間</text>` +
+    `<line x1="120" y1="186" x2="92" y2="190" stroke="#6b5836" stroke-width="0.8"/>` +
+    `<text x="58" y="194" font-size="11" fill="#6b5836" font-weight="700">気根</text>` +
+    `</svg>`
+  );
+}
+
 // figure id → { caption, innerHtml }
 const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
+  'pruning-node': {
+    caption: '剪定の基本は「節を残す」こと（模式図）。茎を間引くときは節の約1cm上を水平に切ります。節には芽・気根・葉柄が集まり、ここから先の成長が決まります。',
+    inner: `<div class="diagram-wrap">${pruningNodeSvg()}</div>`,
+  },
+  'variegation-patterns': {
+    caption: '斑の入り方のタイプ（模式図）。散り斑は安定しやすく、ハーフムーンや全斑は美しい一方で緑戻り・致死性白化のリスクが高まります。バランス型（白3〜5割）が育てやすい目安です。',
+    inner: `<div class="leaf-grid">` + [
+      symptomVarg('散り斑', '細かく散る・安定しやすい', [
+        { cx: 40, cy: 44, r: 3 }, { cx: 60, cy: 40, r: 2.6 }, { cx: 52, cy: 58, r: 3.2 },
+        { cx: 38, cy: 66, r: 2.4 }, { cx: 64, cy: 64, r: 2.8 }, { cx: 50, cy: 78, r: 2.6 }, { cx: 44, cy: 54, r: 2 },
+      ]),
+      symptomVargHalf('ハーフムーン', '半分が白・リスク高'),
+      symptomVarg('バランス斑', '白3〜5割・育てやすい目安', [
+        { cx: 60, cy: 40, r: 9 }, { cx: 64, cy: 62, r: 8 }, { cx: 54, cy: 78, r: 6 },
+      ]),
+      symptomVargGhost('全斑（幽霊葉）', 'ほぼ白・枯死リスク'),
+    ].join('') + `</div>`,
+  },
   'leaf-symptoms': {
     caption: 'よくある葉の不調の見え方（模式図）。黄変・葉先枯れ・葉焼け・ハダニ被害は原因も対処も異なるため、まず見た目で切り分けるのが近道です。',
     inner: `<div class="leaf-grid">${SYMPTOM_PANELS.join('')}</div>`,
