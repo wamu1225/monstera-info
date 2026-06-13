@@ -159,7 +159,7 @@ Error generating stack: `+e.message+`
 | 成長が止まる・新芽が出ない | 低温・休眠・根詰まり | 10°C以上を確保／1〜2年植え替えていなければ植え替えを検討 |
 
 💡 多くの不調は「水のやりすぎ」「光不足」「乾燥」のいずれかが原因です。肥料を足す前に、まずこの3つを見直すのが回復の近道です。
-`,updatedAt:`2026-06-01`},{id:`seasonal`,title:`季節管理と剪定・増やし方`,shortTitle:`季節管理・剪定・増やし方`,description:`春夏秋冬それぞれの管理ポイント、剪定の正しいやり方、水苔密閉法や水挿しによる増やし方を解説します。`,icon:`scissors`,emoji:`✂️`,lead:`モンステラは季節に合わせた管理が栽培成功の鍵。さらに、剪定の正しい知識と増やし方を覚えれば、株姿を整えながら新しい株も楽しめます。このページでは、四季ごとの管理と、剪定の節（ふし）の扱い、3種類の繁殖手法を整理します。`,toc:[`四季ごとの管理早見表`,`剪定の基本：節を守る`,`幹立ち仕立てと支柱の選び方`,`増やし方の3手法を比較`,`まとめ`],content:`## 四季ごとの管理早見表
+`,updatedAt:`2026-06-01`,references:[{label:`Monstera deliciosa（耐寒性 H1b＝10〜15℃・明るい間接光・水やり・施肥の管理）`,publisher:`Royal Horticultural Society（英国王立園芸協会）`,url:`https://www.rhs.org.uk/plants/11192/monstera-deliciosa-(f)/details`},{label:`How to grow Swiss cheese plants（育て方ガイド）`,publisher:`Royal Horticultural Society`,url:`https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants`}]},{id:`seasonal`,title:`季節管理と剪定・増やし方`,shortTitle:`季節管理・剪定・増やし方`,description:`春夏秋冬それぞれの管理ポイント、剪定の正しいやり方、水苔密閉法や水挿しによる増やし方を解説します。`,icon:`scissors`,emoji:`✂️`,lead:`モンステラは季節に合わせた管理が栽培成功の鍵。さらに、剪定の正しい知識と増やし方を覚えれば、株姿を整えながら新しい株も楽しめます。このページでは、四季ごとの管理と、剪定の節（ふし）の扱い、3種類の繁殖手法を整理します。`,toc:[`四季ごとの管理早見表`,`剪定の基本：節を守る`,`幹立ち仕立てと支柱の選び方`,`増やし方の3手法を比較`,`まとめ`],content:`## 四季ごとの管理早見表
 
 | 時期 | 温度・配置 | 水やり | 肥料 | 主な作業 |
 |---|---|---|---|---|
