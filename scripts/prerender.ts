@@ -9,6 +9,7 @@ import { checkCategories, checkItems } from '../src/data/variegated-checklist.ts
 import type { CheckCategory } from '../src/data/variegated-checklist.ts';
 import { varieties, quizQuestions } from '../src/data/variety-quiz.ts';
 import type { VarietyId } from '../src/data/variety-quiz.ts';
+import { figureHtml } from '../src/figures-data.ts';
 
 const DIST_DIR = path.resolve(process.cwd(), 'dist');
 const INDEX_HTML_PATH = path.join(DIST_DIR, 'index.html');
@@ -171,6 +172,13 @@ function markdownToHtml(content: string): string {
 
     if (trimmed === '---') {
       out.push('<hr>');
+      i++; continue;
+    }
+
+    const figMatch = trimmed.match(/^\{\{figure:([a-z0-9-]+)\}\}$/);
+    if (figMatch) {
+      const html = figureHtml(figMatch[1]);
+      if (html) out.push(html);
       i++; continue;
     }
 

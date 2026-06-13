@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { ArrowLeft, List, ChevronRight, Menu, X, Calendar, AlertCircle, Stethoscope, Microscope, Dna } from 'lucide-react';
+import { Figure } from './figures';
 import { sections } from './data/sections';
 import type { Section } from './data/sections';
 import { FAQ_BY_SECTION } from './data/faqs';
@@ -268,6 +269,14 @@ function parseContent(content: string): ReactNode[] {
     if (trimmed.startsWith('✅ ')) {
       result.push(<p key={key++} className="callout callout-success">{parseInline(trimmed.slice(2).trim())}</p>);
       i++; continue;
+    }
+
+    // 図解ブロック {{figure:KEY}}（自作SVG模式図）
+    const figMatch = trimmed.match(/^\{\{figure:([a-z0-9-]+)\}\}$/);
+    if (figMatch) {
+      result.push(<Figure key={key++} id={figMatch[1]} />);
+      i++;
+      continue;
     }
 
     // 通常の段落

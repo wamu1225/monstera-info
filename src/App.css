@@ -371,6 +371,51 @@
   font-weight: 700;
 }
 
+.section-content .content-figure {
+  margin: 0 0 22px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+}
+.section-content .leaf-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.section-content .leaf-panel {
+  margin: 0;
+  text-align: center;
+}
+.section-content .leaf-panel svg {
+  border-radius: 10px;
+  display: block;
+  width: 100%;
+}
+.section-content .leaf-panel figcaption strong {
+  display: block;
+  font-size: 12.5px;
+  color: var(--accent-dark, #1E3F2A);
+  margin-top: 6px;
+  line-height: 1.3;
+}
+.section-content .leaf-panel figcaption span {
+  display: block;
+  font-size: 10.5px;
+  color: var(--text-muted, #666);
+  line-height: 1.35;
+  margin-top: 2px;
+}
+.section-content .figure-caption {
+  font-size: 12.5px;
+  color: var(--text-muted, #666);
+  margin: 12px 0 0;
+  line-height: 1.55;
+}
+@media (max-width: 520px) {
+  .section-content .leaf-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+}
+
 .section-content .content-table-wrap {
   overflow-x: auto;
   margin: 0 0 20px;

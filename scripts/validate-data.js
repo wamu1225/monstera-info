@@ -122,6 +122,12 @@ for (const { id, block } of sectionBlocks) {
     if (/\*\*[^*\n]+\*\*/.test(rendered)) {
       errors.push(`[${id}] ${t.field} に未展開の **bold** が残っている`);
     }
+    // {{figure:KEY}} は行頭ブロックでのみ展開される。インライン位置や未登録キーを検出
+    const figs = [...t.text.matchAll(/\{\{figure:([a-z0-9-]+)\}\}/g)];
+    for (const f of figs) {
+      const lineOk = t.text.split('\n').some((ln) => ln.trim() === f[0]);
+      if (!lineOk) errors.push(`[${id}] ${t.field} の {{figure:${f[1]}}} が行単独でない（ブロックとして展開されず生タグ露出する）`);
+    }
   }
 }
 
