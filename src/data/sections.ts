@@ -210,6 +210,10 @@ export const sections: Section[] = [
 💡 多くの不調は「水のやりすぎ」「光不足」「乾燥」のいずれかが原因です。肥料を足す前に、まずこの3つを見直すのが回復の近道です。
 `,
     updatedAt: '2026-06-01',
+    references: [
+      { label: 'Monstera deliciosa（耐寒性 H1b＝10〜15℃・明るい間接光・水やり・施肥の管理）', publisher: 'Royal Horticultural Society（英国王立園芸協会）', url: 'https://www.rhs.org.uk/plants/11192/monstera-deliciosa-(f)/details' },
+      { label: 'How to grow Swiss cheese plants（育て方ガイド）', publisher: 'Royal Horticultural Society', url: 'https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants' },
+    ],
   },
   {
     id: 'seasonal',
