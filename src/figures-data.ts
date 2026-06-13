@@ -172,8 +172,79 @@ function pruningNodeSvg(): string {
   );
 }
 
+// シュウ酸カルシウム針状結晶（ラフィド）の刺激機構（2段階の模式図）
+function raphideSvg(): string {
+  // 細胞内の針束
+  const needlesInCell: string[] = [];
+  for (let k = -3; k <= 3; k++) {
+    needlesInCell.push(`<line x1="${66 + k * 3}" y1="48" x2="${72 + k * 3}" y2="104" stroke="#dfe7ef" stroke-width="2"/>`);
+  }
+  // 粘膜に刺さる針
+  const stuck: string[] = [];
+  const xs = [196, 212, 228, 246, 262];
+  for (const x of xs) stuck.push(`<line x1="${x}" y1="82" x2="${x + 6}" y2="120" stroke="#7b8a99" stroke-width="2.4"/>`);
+  return (
+    `<svg class="diagram-single" viewBox="0 0 300 168" width="100%" role="img" aria-label="シュウ酸カルシウム針状結晶が粘膜を刺激する仕組みの図">` +
+    `<rect width="300" height="168" fill="${LEAF_BG}"/>` +
+    // 左：細胞（idioblast）と針束
+    `<ellipse cx="70" cy="78" rx="46" ry="40" fill="#eef3df" stroke="#3D7A52" stroke-width="2"/>` +
+    needlesInCell.join('') +
+    `<text x="70" y="142" font-size="11" fill="#1E3F2A" font-weight="700" text-anchor="middle">細胞の中の針の束</text>` +
+    `<text x="70" y="156" font-size="10" fill="#4f7a3f" text-anchor="middle">（ラフィド）</text>` +
+    // 中央：矢印「噛むと」
+    `<text x="150" y="70" font-size="11" fill="#6b5836" text-anchor="middle">噛むと</text>` +
+    `<path d="M126 80 L174 80" stroke="#6b5836" stroke-width="2.4"/>` +
+    `<path d="M174 80 L166 75 M174 80 L166 85" stroke="#6b5836" stroke-width="2.4" fill="none"/>` +
+    // 右：粘膜に刺さる
+    `<rect x="180" y="116" width="100" height="14" fill="#f3c9c4"/>` +
+    `<path d="M180 116 H280" stroke="#d98b82" stroke-width="2"/>` +
+    stuck.join('') +
+    `<text x="230" y="150" font-size="11" fill="#9b3a30" font-weight="700" text-anchor="middle">粘膜に刺さって刺激</text>` +
+    `</svg>`
+  );
+}
+
+// 鉢の断面（用土の配合・根・鉢底の軽石・排水）
+function potSoilSvg(): string {
+  return (
+    `<svg class="diagram-single" viewBox="0 0 300 200" width="100%" role="img" aria-label="鉢の断面と用土の配合の図">` +
+    `<rect width="300" height="200" fill="${LEAF_BG}"/>` +
+    // 鉢（台形）
+    `<path d="M70 50 L210 50 L196 178 L84 178 Z" fill="#c8b09a" stroke="#8a6f57" stroke-width="2"/>` +
+    // 用土
+    `<path d="M74 56 L206 56 L195 158 L85 158 Z" fill="#6b4f3a"/>` +
+    // 鉢底の軽石層
+    `<path d="M85 158 L195 158 L191 172 L89 172 Z" fill="#cfd3d6"/>` +
+    `${[100, 120, 140, 160, 180].map(x => `<circle cx="${x}" cy="165" r="2.4" fill="#9aa0a4"/>`).join('')}` +
+    // 根（中央から下へ）
+    `<path d="M140 56 C138 90 150 120 142 150 M140 80 C124 96 118 120 120 140 M140 80 C156 96 164 118 162 142" stroke="#e7d8b0" stroke-width="2" fill="none"/>` +
+    // 茎
+    `<path d="M140 56 L140 30" stroke="#5a8a64" stroke-width="6" stroke-linecap="round"/>` +
+    `<path d="M140 38 C150 30 162 30 168 34 C160 42 148 44 140 40 Z" fill="#3D7A52"/>` +
+    // 排水穴と水滴
+    `<rect x="134" y="176" width="12" height="5" fill="#6b4f3a"/>` +
+    `<path d="M140 184 C137 188 137 192 140 193 C143 192 143 188 140 184 Z" fill="#5b9bd5"/>` +
+    // 配合バー（右）
+    `<rect x="232" y="56" width="20" height="71" fill="#cdb48f" stroke="#8a6f57" stroke-width="1"/>` +
+    `<rect x="232" y="127" width="20" height="31" fill="#5a4030" stroke="#8a6f57" stroke-width="1"/>` +
+    `<text x="258" y="92" font-size="10" fill="#1E3F2A">赤玉土7</text>` +
+    `<text x="258" y="146" font-size="10" fill="#1E3F2A">腐葉土3</text>` +
+    // ラベル
+    `<text x="150" y="192" font-size="10" fill="#6b5836" text-anchor="middle">鉢底に軽石・排水穴</text>` +
+    `</svg>`
+  );
+}
+
 // figure id → { caption, innerHtml }
 const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
+  'raphide-mechanism': {
+    caption: '毒性の仕組み（模式図）。葉や茎の細胞には針状の結晶（不溶性シュウ酸カルシウム＝ラフィド）が束で詰まっており、噛むと飛び出して口の粘膜に刺さり、機械的に刺激します。体に吸収される全身毒ではなく、刺さった口まわりの局所的な刺激です。',
+    inner: `<div class="diagram-wrap">${raphideSvg()}</div>`,
+  },
+  'pot-soil': {
+    caption: '用土と鉢の断面（模式図）。基本は赤玉土7：完熟腐葉土3。鉢底に軽石を入れ、排水穴から余分な水が抜ける状態にすると根腐れを防げます。鉢は今より1サイズ大きい程度にとどめます。',
+    inner: `<div class="diagram-wrap">${potSoilSvg()}</div>`,
+  },
   'pruning-node': {
     caption: '剪定の基本は「節を残す」こと（模式図）。茎を間引くときは節の約1cm上を水平に切ります。節には芽・気根・葉柄が集まり、ここから先の成長が決まります。',
     inner: `<div class="diagram-wrap">${pruningNodeSvg()}</div>`,
