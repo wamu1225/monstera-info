@@ -235,8 +235,59 @@ function potSoilSvg(): string {
   );
 }
 
+// 年間サイクルのリング図（12か月・生育/休眠と作業適期）
+function yearCycleSvg(): string {
+  const cx = 150, cy = 150, R = 120, r = 78;
+  // 月ごとの色（休眠=青灰 / 春=淡緑 / 生育=濃緑 / 秋=琥珀）
+  const seasonColor = (m: number): string => {
+    if (m === 12 || m <= 2) return '#aebfc9';
+    if (m <= 4) return '#bfe0a8';
+    if (m <= 9) return '#5a9e63';
+    return '#e2b878';
+  };
+  const pol = (deg: number, rad: number) => {
+    const a = (deg - 90) * Math.PI / 180;
+    return [cx + rad * Math.cos(a), cy + rad * Math.sin(a)];
+  };
+  let seg = '';
+  for (let i = 0; i < 12; i++) {
+    const m = i + 1;
+    const a0 = i * 30, a1 = (i + 1) * 30;
+    const [ox0, oy0] = pol(a0, R), [ox1, oy1] = pol(a1, R);
+    const [ix1, iy1] = pol(a1, r), [ix0, iy0] = pol(a0, r);
+    seg += `<path d="M${ox0.toFixed(1)} ${oy0.toFixed(1)} A${R} ${R} 0 0 1 ${ox1.toFixed(1)} ${oy1.toFixed(1)} L${ix1.toFixed(1)} ${iy1.toFixed(1)} A${r} ${r} 0 0 0 ${ix0.toFixed(1)} ${iy0.toFixed(1)} Z" fill="${seasonColor(m)}" stroke="#f3f7f0" stroke-width="1.5"/>`;
+    const [lx, ly] = pol(a0 + 15, (R + r) / 2);
+    const dark = m >= 5 && m <= 9;
+    seg += `<text x="${lx.toFixed(1)}" y="${(ly + 4).toFixed(1)}" font-size="13" font-weight="700" text-anchor="middle" fill="${dark ? '#ffffff' : '#33433a'}">${m}</text>`;
+  }
+  // 肥料の適期リング（4〜9月）= 外周の弧
+  const fa: string[] = [];
+  for (let i = 3; i <= 8; i++) {
+    const [x0, y0] = pol(i * 30 + 2, R + 9), [x1, y1] = pol((i + 1) * 30 - 2, R + 9);
+    fa.push(`<path d="M${x0.toFixed(1)} ${y0.toFixed(1)} A${R + 9} ${R + 9} 0 0 1 ${x1.toFixed(1)} ${y1.toFixed(1)}" stroke="#c9a14a" stroke-width="4" fill="none" stroke-linecap="round"/>`);
+  }
+  const [flx, fly] = pol(195, R + 9);
+  return (
+    `<svg class="diagram-single" viewBox="0 0 300 300" width="100%" role="img" aria-label="モンステラの1年の世話のサイクル図">` +
+    `<rect width="300" height="300" fill="${LEAF_BG}"/>` +
+    seg + fa.join('') +
+    `<text x="${(flx - 6).toFixed(1)}" y="${fly.toFixed(1)}" font-size="10" fill="#a07a1f" text-anchor="end">肥料 4〜9月</text>` +
+    // 中央
+    `<circle cx="${cx}" cy="${cy}" r="${r - 4}" fill="#f3f7f0"/>` +
+    `<text x="${cx}" y="${cy - 16}" font-size="13" font-weight="700" text-anchor="middle" fill="#1E3F2A">生育期</text>` +
+    `<text x="${cx}" y="${cy}" font-size="12" text-anchor="middle" fill="#3D7A52">5〜9月</text>` +
+    `<text x="${cx}" y="${cy + 20}" font-size="11" text-anchor="middle" fill="#6b7a82">休眠期 12〜2月</text>` +
+    `<text x="${cx}" y="${cy + 36}" font-size="10" text-anchor="middle" fill="#9b7b3a">植替/剪定/挿木 5〜7月</text>` +
+    `</svg>`
+  );
+}
+
 // figure id → { caption, innerHtml }
 const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
+  'year-cycle': {
+    caption: '1年の世話のサイクル（模式図）。濃い緑が生育期（5〜9月＝水やり・肥料をしっかり）、青灰が休眠期（12〜2月＝乾かし気味・保温）。外周の金色の弧は肥料の適期、植え替え・剪定・挿し木は5〜7月がねらいめです。地域・室内環境で前後します。',
+    inner: `<div class="diagram-wrap">${yearCycleSvg()}</div>`,
+  },
   'raphide-mechanism': {
     caption: '毒性の仕組み（模式図）。葉や茎の細胞には針状の結晶（不溶性シュウ酸カルシウム＝ラフィド）が束で詰まっており、噛むと飛び出して口の粘膜に刺さり、機械的に刺激します。体に吸収される全身毒ではなく、刺さった口まわりの局所的な刺激です。',
     inner: `<div class="diagram-wrap">${raphideSvg()}</div>`,
