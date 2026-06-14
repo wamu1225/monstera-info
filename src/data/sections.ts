@@ -506,6 +506,10 @@ export const sections: Section[] = [
 📖 病害虫対策の基本は「予防（風通し・灌水管理）→ 監視（葉水時の観察）→ 物理的対処（切除・洗浄）→ 化学防除」の順。最初から薬剤散布に頼らず、まず環境を整えることが重要です。
 `,
     updatedAt: '2026-05-21',
+    references: [
+      { label: 'How to grow Swiss cheese plants（よくあるトラブル：葉先の枯れ＝乾燥・切れ込み減＝低光・根腐れ＝過湿・コナカイガラムシ）', publisher: 'Royal Horticultural Society（英国王立園芸協会）', url: 'https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants' },
+      { label: 'Monstera deliciosa（害虫・病害・接触皮膚炎の一覧）', publisher: 'North Carolina Extension Gardener Plant Toolbox, NC State University', url: 'https://plants.ces.ncsu.edu/plants/monstera-deliciosa/' },
+    ],
   },
   {
     id: 'selection',
@@ -610,6 +614,10 @@ export const sections: Section[] = [
 📖 通販で届いた段ボールから出したばかりの株は、輸送ストレスで葉が垂れることがあります。これは多くの場合、数日〜1週間で回復します。慌てて水や肥料を増やさず、まずは静かに環境に慣れさせてください。
 `,
     updatedAt: '2026-05-21',
+    references: [
+      { label: "Monstera deliciosa 'Thai Constellation'（品種の特徴：濃緑にクリーム白の斑・標準種よりやや緩成長・栽培と耐寒性）", publisher: 'Royal Horticultural Society（英国王立園芸協会）', url: 'https://www.rhs.org.uk/plants/520520/monstera-deliciosa-thai-constellation-(v)/details' },
+      { label: "Monstera deliciosa 'Variegata'（斑入り種の特徴・栽培）", publisher: 'Royal Horticultural Society', url: 'https://www.rhs.org.uk/plants/90394/i-monstera-deliciosa-i-variegata-(v)/details' },
+    ],
   },
   {
     id: 'safety',
