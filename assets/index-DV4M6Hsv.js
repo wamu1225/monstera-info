@@ -159,7 +159,7 @@ Error generating stack: `+e.message+`
 | 成長が止まる・新芽が出ない | 低温・休眠・根詰まり | 10°C以上を確保／1〜2年植え替えていなければ植え替えを検討 |
 
 💡 多くの不調は「水のやりすぎ」「光不足」「乾燥」のいずれかが原因です。肥料を足す前に、まずこの3つを見直すのが回復の近道です。
-`,updatedAt:`2026-06-01`,references:[{label:`Monstera deliciosa（耐寒性 H1b＝10〜15℃・明るい間接光・水やり・施肥の管理）`,publisher:`Royal Horticultural Society（英国王立園芸協会）`,url:`https://www.rhs.org.uk/plants/11192/monstera-deliciosa-(f)/details`},{label:`How to grow Swiss cheese plants（育て方ガイド）`,publisher:`Royal Horticultural Society`,url:`https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants`}]},{id:`seasonal`,title:`季節管理と剪定・増やし方`,shortTitle:`季節管理・剪定・増やし方`,description:`春夏秋冬それぞれの管理ポイント、剪定の正しいやり方、水苔密閉法や水挿しによる増やし方を解説します。`,icon:`scissors`,emoji:`✂️`,lead:`モンステラは季節に合わせた管理が栽培成功の鍵。さらに、剪定の正しい知識と増やし方を覚えれば、株姿を整えながら新しい株も楽しめます。このページでは、四季ごとの管理と、剪定の節（ふし）の扱い、3種類の繁殖手法を整理します。`,toc:[`四季ごとの管理早見表`,`剪定の基本：節を守る`,`幹立ち仕立てと支柱の選び方`,`増やし方の3手法を比較`,`増やし方でつまずいたときは`,`まとめ`],content:`## 四季ごとの管理早見表
+`,updatedAt:`2026-06-01`,references:[{label:`Monstera deliciosa（耐寒性 H1b＝10〜15℃・明るい間接光・水やり・施肥の管理）`,publisher:`Royal Horticultural Society（英国王立園芸協会）`,url:`https://www.rhs.org.uk/plants/11192/monstera-deliciosa-(f)/details`},{label:`How to grow Swiss cheese plants（育て方ガイド）`,publisher:`Royal Horticultural Society`,url:`https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants`}]},{id:`seasonal`,title:`季節管理と剪定・増やし方`,shortTitle:`季節管理・剪定・増やし方`,description:`春夏秋冬それぞれの管理ポイント、剪定で節（ふし）を守るコツ、水苔密閉法・水挿し・土挿しの3つの増やし方と、発根しないときの対処までを解説します。`,icon:`scissors`,emoji:`✂️`,lead:`モンステラは季節に合わせた管理が栽培成功の鍵。さらに、剪定の正しい知識と増やし方を覚えれば、株姿を整えながら新しい株も楽しめます。このページでは、四季ごとの管理と、剪定の節（ふし）の扱い、3種類の繁殖手法を整理します。`,toc:[`四季ごとの管理早見表`,`剪定の基本：節を守る`,`幹立ち仕立てと支柱の選び方`,`増やし方の3手法を比較`,`増やし方でつまずいたときは`,`まとめ`],content:`## 四季ごとの管理早見表
 
 | 時期 | 温度・配置 | 水やり | 肥料 | 主な作業 |
 |---|---|---|---|---|
@@ -186,7 +186,7 @@ Error generating stack: `+e.message+`
 4. ハサミは事前にアルコールや熱で消毒する
 5. ゴム手袋を着用（樹液で皮膚炎を起こすことがある）
 
-⚠️ 鋭利でないハサミを使うと、切り口が潰れて病原菌の侵入口になります。剪定の前にハサミを研ぐか、新しい剪定ばさみを用意しましょう。
+⚠️ 鋭利でないハサミを使うと、切り口が潰れて病原菌の侵入口になります。剪定の前にハサミを研ぐか、新しい剪定ばさみを用意しましょう。切り口からの感染や根腐れなどの不調は、[病害虫・トラブル対処](/monstera-info/troubles/) で見分け方と対処を解説しています。
 
 {{figure:pruning-node}}
 
@@ -437,7 +437,7 @@ Error generating stack: `+e.message+`
 
 ⚠️ 切除した感染組織を**コンポストや鉢周辺に放置しない** こと（胞子の飛散源になります）。
 
-📖 病害虫対策の基本は「予防（風通し・灌水管理）→ 監視（葉水時の観察）→ 物理的対処（切除・洗浄）→ 化学防除」の順。最初から薬剤散布に頼らず、まず環境を整えることが重要です。
+📖 病害虫対策の基本は「予防（風通し・灌水管理）→ 監視（葉水時の観察）→ 物理的対処（切除・洗浄）→ 化学防除」の順。最初から薬剤散布に頼らず、まず環境を整えることが重要です。日々の置き場所・水やり・風通しの整え方は [育て方の基本](/monstera-info/growing/) を参照してください。
 `,updatedAt:`2026-05-21`,references:[{label:`How to grow Swiss cheese plants（よくあるトラブル：葉先の枯れ＝乾燥・切れ込み減＝低光・根腐れ＝過湿・コナカイガラムシ）`,publisher:`Royal Horticultural Society（英国王立園芸協会）`,url:`https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants`},{label:`Monstera deliciosa（害虫・病害・接触皮膚炎の一覧）`,publisher:`North Carolina Extension Gardener Plant Toolbox, NC State University`,url:`https://plants.ces.ncsu.edu/plants/monstera-deliciosa/`}]},{id:`selection`,title:`選び方と購入後の管理`,shortTitle:`選び方・購入後の管理`,description:`園芸店・通販での優良株の見分け方、流通価格帯の目安、斑入り品種の選定ポイント、購入後の順化の手順を整理します。`,icon:`shopping-bag`,emoji:`🛒`,lead:`モンステラはホームセンターから専門通販、フリマアプリまで幅広く流通しており、価格帯と品質に大きな差があります。買う前のチェックポイントと、家に迎えてから1〜2週間の順化が、長く健康に育てる出発点です。`,toc:[`流通の概要と価格帯`,`優良株のチェックポイント`,`斑入り品種を選ぶときのコツ`,`購入後 1〜2週間の順化`],content:`## 流通の概要と価格帯
 
 日本国内では、ホームセンターや園芸店から専門の通販サイト、フリマアプリ、ネットオークションまで、多様なチャネルでモンステラが流通しています。価格は品種・サイズ・由来によって大きく異なります。
@@ -616,7 +616,7 @@ Error generating stack: `+e.message+`
 確実な誤食防止は **物理的に届かない場所に置く** ことです。
 
 - **高さで分ける**：好奇心旺盛な犬・猫・幼児の手が届かない棚やプラントスタンドの上に
-- **ハンギング**：天井や壁面からつるす（特にアダンソニーやヒメモンステラはハンギング向き）
+- **ハンギング**：天井や壁面からつるす（特に[アダンソニーやヒメモンステラ](/monstera-info/basics/)はハンギング向き）
 - **個室の分離**：ペット・子どもが入らない部屋で管理
 - **落葉・剪定くずの即時処理**：落ちた葉や剪定くずも誤食原因に。床に放置しない
 - **鉢の安定**：好奇心の強い動物が鉢を倒すと、土の摂取や寄生虫感染のリスクも生じるため、安定した台に置く
