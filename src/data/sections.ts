@@ -300,6 +300,9 @@ export const sections: Section[] = [
 - 増やすときは節と気根を含む茎を選び、温度と湿度を確保する
 `,
     updatedAt: '2026-05-21',
+    references: [
+      { label: 'How to grow Swiss cheese plants（剪定は春・茎挿しで春〜晩夏に増やす）', publisher: 'Royal Horticultural Society（英国王立園芸協会）', url: 'https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants' },
+    ],
   },
   {
     id: 'care-calendar',
@@ -359,6 +362,10 @@ export const sections: Section[] = [
 - 植え替え・剪定・増やし方は **5〜7月** がねらいめ。
 `,
     updatedAt: '2026-06-01',
+    references: [
+      { label: 'How to grow Swiss cheese plants（生育期の水やり・施肥は4〜9月・冬は控えめ・植え替えは数年に一度）', publisher: 'Royal Horticultural Society（英国王立園芸協会）', url: 'https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants' },
+      { label: 'Monstera deliciosa（耐寒性 H1b＝10〜15℃）', publisher: 'Royal Horticultural Society', url: 'https://www.rhs.org.uk/plants/11192/monstera-deliciosa-(f)/details' },
+    ],
   },
   {
     id: 'troubles',
