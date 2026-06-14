@@ -3,6 +3,11 @@ import type { ReactNode } from 'react';
 import { ArrowLeft, List, ChevronRight, Menu, X, Calendar, AlertCircle, Stethoscope, Microscope, Dna } from 'lucide-react';
 import { Figure } from './figures';
 import { referencesHtml } from './references';
+import { sectionIconSvg } from './section-icons';
+
+function SectionIcon({ name, size = 24 }: { name: string; size?: number }) {
+  return <span className="section-icon" dangerouslySetInnerHTML={{ __html: sectionIconSvg(name, size) }} />;
+}
 import { sections } from './data/sections';
 import type { Section } from './data/sections';
 import { FAQ_BY_SECTION } from './data/faqs';
@@ -18,22 +23,25 @@ import './App.css';
 
 const BASE = '/monstera-info';
 
-const SECTION_GROUPS: { label: string; emoji: string; description: string; sectionIds: string[] }[] = [
+const SECTION_GROUPS: { label: string; emoji: string; icon: string; description: string; sectionIds: string[] }[] = [
   {
     label: '知る・選ぶ',
     emoji: '🪴',
+    icon: 'leaf',
     description: '迎える前にまず理解する基礎と、購入時のチェックポイント',
     sectionIds: ['basics', 'selection'],
   },
   {
     label: '育てる',
     emoji: '☀️',
+    icon: 'sun',
     description: '光・水・温度の基本から、季節ごとの管理・剪定・増やし方まで',
     sectionIds: ['growing', 'seasonal'],
   },
   {
     label: '守る',
     emoji: '🛡️',
+    icon: 'shield',
     description: 'トラブルの早期発見と対処、ペットや家族と安全に暮らすための注意',
     sectionIds: ['troubles', 'safety'],
   },
@@ -329,7 +337,7 @@ function Header() {
               href={`${BASE}/${s.id}/`}
               onClick={(e) => { e.preventDefault(); navigateTo(`/${s.id}/`); setNavOpen(false); }}
             >
-              <span className="nav-emoji">{s.emoji}</span>
+              <span className="nav-emoji"><SectionIcon name={s.icon} size={18} /></span>
               <span>{s.shortTitle}</span>
             </a>
           ))}
@@ -447,7 +455,7 @@ function Home() {
         <div key={group.label} className="section-group">
           <div className="section-group-head">
             <h3 className="section-group-label">
-              <span className="section-group-emoji" aria-hidden="true">{group.emoji}</span>
+              <span className="section-group-emoji" aria-hidden="true"><SectionIcon name={group.icon} size={20} /></span>
               {group.label}
             </h3>
             <p className="section-group-desc">{group.description}</p>
@@ -463,7 +471,7 @@ function Home() {
                   className="section-card"
                   onClick={(e) => { e.preventDefault(); navigateTo(`/${s.id}/`); }}
                 >
-                  <div className="section-card-emoji" aria-hidden="true">{s.emoji}</div>
+                  <div className="section-card-emoji" aria-hidden="true"><SectionIcon name={s.icon} size={28} /></div>
                   <h2 className="section-card-title">{s.shortTitle}</h2>
                   <p className="section-card-desc">{s.description}</p>
                   <span className="section-card-cta">読む →</span>
@@ -534,7 +542,7 @@ function ChapterNav({ currentId }: { currentId: string }) {
           onClick={(e) => { e.preventDefault(); navigateTo(`/${prev.id}/`); }}
         >
           <span className="chapter-nav-label"><ArrowLeft size={14} aria-hidden="true" /> 前の章</span>
-          <span className="chapter-nav-title">{prev.emoji} {prev.shortTitle}</span>
+          <span className="chapter-nav-title"><SectionIcon name={prev.icon} size={16} /> {prev.shortTitle}</span>
         </a>
       ) : <span className="chapter-nav-spacer" />}
       {next ? (
@@ -544,7 +552,7 @@ function ChapterNav({ currentId }: { currentId: string }) {
           onClick={(e) => { e.preventDefault(); navigateTo(`/${next.id}/`); }}
         >
           <span className="chapter-nav-label">次の章 <ChevronRight size={14} aria-hidden="true" /></span>
-          <span className="chapter-nav-title">{next.emoji} {next.shortTitle}</span>
+          <span className="chapter-nav-title"><SectionIcon name={next.icon} size={16} /> {next.shortTitle}</span>
         </a>
       ) : <span className="chapter-nav-spacer" />}
     </nav>
@@ -564,7 +572,7 @@ function RelatedSections({ currentId }: { currentId: string }) {
             className="related-card"
             onClick={(e) => { e.preventDefault(); navigateTo(`/${s.id}/`); }}
           >
-            <span className="related-emoji" aria-hidden="true">{s.emoji}</span>
+            <span className="related-emoji" aria-hidden="true"><SectionIcon name={s.icon} size={20} /></span>
             <span className="related-title">{s.shortTitle}</span>
           </a>
         ))}
@@ -620,7 +628,7 @@ function SectionPage({ section }: { section: Section }) {
       <Breadcrumb currentTitle={section.shortTitle} />
       <article className="section-page">
         <header className="article-header">
-          <div className="article-emoji" aria-hidden="true">{section.emoji}</div>
+          <div className="article-emoji" aria-hidden="true"><SectionIcon name={section.icon} size={34} /></div>
           <h1>{section.title}</h1>
           <div className="article-meta">
             <span className="article-meta-item"><Calendar size={14} /> 最終更新: {formatDate(section.updatedAt)}</span>

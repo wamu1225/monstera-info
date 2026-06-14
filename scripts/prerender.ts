@@ -11,6 +11,10 @@ import { varieties, quizQuestions } from '../src/data/variety-quiz.ts';
 import type { VarietyId } from '../src/data/variety-quiz.ts';
 import { figureHtml } from '../src/figures-data.ts';
 import { referencesHtml } from '../src/references.ts';
+import { sectionIconSvg } from '../src/section-icons.ts';
+
+const ico = (name: string, size: number, color = '#2D5C3E') =>
+  `<span style="color:${color};display:inline-flex;vertical-align:middle">${sectionIconSvg(name, size)}</span>`;
 
 const DIST_DIR = path.resolve(process.cwd(), 'dist');
 const INDEX_HTML_PATH = path.join(DIST_DIR, 'index.html');
@@ -199,10 +203,10 @@ function buildTocHtml(toc: string[]): string {
 }
 
 // ── ルート index.html に静的フォールバック + JSON-LD を注入 ──
-const PRERENDER_GROUPS: { label: string; emoji: string; description: string; sectionIds: string[] }[] = [
-  { label: '知る・選ぶ', emoji: '🪴', description: '迎える前にまず理解する基礎と、購入時のチェックポイント', sectionIds: ['basics', 'selection'] },
-  { label: '育てる', emoji: '☀️', description: '光・水・温度の基本から、季節ごとの管理・剪定・増やし方まで', sectionIds: ['growing', 'seasonal'] },
-  { label: '守る', emoji: '🛡️', description: 'トラブルの早期発見と対処、ペットや家族と安全に暮らすための注意', sectionIds: ['troubles', 'safety'] },
+const PRERENDER_GROUPS: { label: string; icon: string; description: string; sectionIds: string[] }[] = [
+  { label: '知る・選ぶ', icon: 'leaf', description: '迎える前にまず理解する基礎と、購入時のチェックポイント', sectionIds: ['basics', 'selection'] },
+  { label: '育てる', icon: 'sun', description: '光・水・温度の基本から、季節ごとの管理・剪定・増やし方まで', sectionIds: ['growing', 'seasonal'] },
+  { label: '守る', icon: 'shield', description: 'トラブルの早期発見と対処、ペットや家族と安全に暮らすための注意', sectionIds: ['troubles', 'safety'] },
 ];
 
 const sectionListHtml = PRERENDER_GROUPS
@@ -215,7 +219,7 @@ const sectionListHtml = PRERENDER_GROUPS
           `<li style="margin-bottom:14px"><a href="/monstera-info/${s.id}/" style="color:#2D5C3E;font-weight:600;text-decoration:none">${escapeHtml(s.shortTitle)}</a><br><span style="color:#555;font-size:0.9rem">${escapeHtml(s.description)}</span></li>`
       )
       .join('\n');
-    return `<div style="margin:24px 0 16px"><div style="font-size:0.78rem;color:#6b7280;font-weight:700;margin-bottom:4px;letter-spacing:0.05em">${group.emoji} ${escapeHtml(group.label)}</div><div style="font-size:0.85rem;color:#4b5563;margin-bottom:10px">${escapeHtml(group.description)}</div><ul style="list-style:none;padding:0;margin:0">${groupItems}</ul></div>`;
+    return `<div style="margin:24px 0 16px"><div style="font-size:0.78rem;color:#6b7280;font-weight:700;margin-bottom:4px;letter-spacing:0.05em">${ico(group.icon, 15)} ${escapeHtml(group.label)}</div><div style="font-size:0.85rem;color:#4b5563;margin-bottom:10px">${escapeHtml(group.description)}</div><ul style="list-style:none;padding:0;margin:0">${groupItems}</ul></div>`;
   })
   .join('\n');
 
@@ -311,10 +315,10 @@ function buildChapterNav(currentId: string): string {
   const next = idx < sections.length - 1 ? sections[idx + 1] : null;
   if (!prev && !next) return '';
   const prevHtml = prev
-    ? `<a href="/monstera-info/${prev.id}/" style="display:block;flex:1;padding:14px 16px;background:#fff;border:1px solid #d4dfc8;border-radius:10px;text-decoration:none;color:#1f2937"><div style="font-size:0.78rem;color:#6b7280;margin-bottom:4px">← 前の章</div><div style="font-size:0.95rem;font-weight:700;color:#2D5C3E">${prev.emoji} ${escapeHtml(prev.shortTitle)}</div></a>`
+    ? `<a href="/monstera-info/${prev.id}/" style="display:block;flex:1;padding:14px 16px;background:#fff;border:1px solid #d4dfc8;border-radius:10px;text-decoration:none;color:#1f2937"><div style="font-size:0.78rem;color:#6b7280;margin-bottom:4px">← 前の章</div><div style="font-size:0.95rem;font-weight:700;color:#2D5C3E">${ico(prev.icon, 15)} ${escapeHtml(prev.shortTitle)}</div></a>`
     : `<span style="flex:1"></span>`;
   const nextHtml = next
-    ? `<a href="/monstera-info/${next.id}/" style="display:block;flex:1;padding:14px 16px;background:#fff;border:1px solid #d4dfc8;border-radius:10px;text-decoration:none;color:#1f2937;text-align:right"><div style="font-size:0.78rem;color:#6b7280;margin-bottom:4px">次の章 →</div><div style="font-size:0.95rem;font-weight:700;color:#2D5C3E">${next.emoji} ${escapeHtml(next.shortTitle)}</div></a>`
+    ? `<a href="/monstera-info/${next.id}/" style="display:block;flex:1;padding:14px 16px;background:#fff;border:1px solid #d4dfc8;border-radius:10px;text-decoration:none;color:#1f2937;text-align:right"><div style="font-size:0.78rem;color:#6b7280;margin-bottom:4px">次の章 →</div><div style="font-size:0.95rem;font-weight:700;color:#2D5C3E">${ico(next.icon, 15)} ${escapeHtml(next.shortTitle)}</div></a>`
     : `<span style="flex:1"></span>`;
   return `<nav style="display:flex;gap:10px;margin:32px 0">${prevHtml}${nextHtml}</nav>`;
 }
@@ -335,7 +339,7 @@ function buildSectionFallback(s: (typeof sections)[number]): string {
   return `<article style="font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic',Meiryo,sans-serif;line-height:1.85;max-width:920px;margin:0 auto;padding:24px 16px;color:#1f2937">
   <nav style="font-size:0.85rem;color:#6b7280;margin:0 0 16px"><a href="/monstera-info/" style="color:#2D5C3E;text-decoration:none">モンステラの基本ガイド</a> <span style="color:#9ca3af">›</span> <span style="color:#4b5563;font-weight:600">${escapeHtml(s.shortTitle)}</span></nav>
   <header style="margin-bottom:20px">
-    <div style="font-size:2.4rem;line-height:1;margin-bottom:8px">${s.emoji}</div>
+    <div style="line-height:1;margin-bottom:8px">${ico(s.icon, 32)}</div>
     <h1 style="font-size:1.7rem;color:#2D5C3E;border-bottom:2px solid #2D5C3E;padding-bottom:10px;margin:0 0 8px">${escapeHtml(s.title)}</h1>
     <div style="font-size:0.85rem;color:#6b7280;margin-top:10px">最終更新: ${formatDateJa(s.updatedAt)}</div>
   </header>
