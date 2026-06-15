@@ -282,8 +282,44 @@ function yearCycleSvg(): string {
   );
 }
 
+// 切れ込み・穴の役割（光を下葉へ通す／風雨を受け流す）の模式図
+function fenestrationSvg(): string {
+  // 上の大きな葉（穴あき）と、穴を通った光が届く下の小さな葉
+  const holes = [{ x: 120, y: 78 }, { x: 158, y: 70 }, { x: 188, y: 84 }];
+  const lightRays = holes.map(h =>
+    `<line x1="${h.x - 14}" y1="26" x2="${h.x}" y2="${h.y}" stroke="#e6b800" stroke-width="1.6" stroke-dasharray="3 3"/>` +
+    `<line x1="${h.x}" y1="${h.y}" x2="${h.x + 6}" y2="150" stroke="#e6b800" stroke-width="1.6" stroke-dasharray="3 3"/>`
+  ).join('');
+  return (
+    `<svg class="diagram-single" viewBox="0 0 300 184" width="100%" role="img" aria-label="葉の切れ込みと穴が光を下の葉に通し風雨を受け流す仕組みの図">` +
+    `<rect width="300" height="184" fill="${LEAF_BG}"/>` +
+    // 太陽
+    `<circle cx="40" cy="24" r="11" fill="#f4c430"/>` +
+    `${[0, 45, 90, 135, 180, 225, 270, 315].map(a => { const r = a * Math.PI / 180; return `<line x1="${(40 + 14 * Math.cos(r)).toFixed(1)}" y1="${(24 + 14 * Math.sin(r)).toFixed(1)}" x2="${(40 + 19 * Math.cos(r)).toFixed(1)}" y2="${(24 + 19 * Math.sin(r)).toFixed(1)}" stroke="#f4c430" stroke-width="2"/>`; }).join('')}` +
+    `<text x="62" y="22" font-size="10" fill="#a07a1f">ひかり・風雨</text>` +
+    // 光線（穴を通る）
+    lightRays +
+    // 上の大きな葉
+    `<path d="M70 84 C70 58 110 44 150 44 C190 44 230 58 230 84 C230 104 195 116 150 116 C105 116 70 104 70 84 Z" fill="#3D7A52"/>` +
+    `<path d="M230 80 L196 84 L230 88 Z" fill="${LEAF_BG}"/>` +
+    `<path d="M70 80 L104 84 L70 88 Z" fill="${LEAF_BG}"/>` +
+    holes.map(h => `<ellipse cx="${h.x}" cy="${h.y}" rx="5.5" ry="8" fill="${LEAF_BG}"/>`).join('') +
+    // 風の矢印（切れ込みを抜ける）
+    `<path d="M244 84 h16" stroke="#7fa8c9" stroke-width="2" fill="none"/><path d="M260 84 l-5 -3 M260 84 l-5 3" stroke="#7fa8c9" stroke-width="2" fill="none"/>` +
+    // 下の小さな葉（木漏れ日が届く）
+    `<path d="M120 158 C120 148 135 142 150 142 C165 142 180 148 180 158 C180 166 167 171 150 171 C133 171 120 166 120 158 Z" fill="#6aa57c"/>` +
+    `<circle cx="146" cy="156" r="2" fill="#f4e3a1"/><circle cx="158" cy="159" r="2" fill="#f4e3a1"/>` +
+    `<text x="150" y="182" font-size="10" fill="#1E3F2A" text-anchor="middle">下の葉にも光が届く</text>` +
+    `</svg>`
+  );
+}
+
 // figure id → { caption, innerHtml }
 const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
+  'fenestration-why': {
+    caption: '切れ込みと穴の役割（模式図）。穴を通った光が株の下のほうの葉にも届き、強い風雨は切れ込みを通り抜けて葉へのダメージを減らします。この構造は葉が開く前（筒状の新芽の段階）に作られます。',
+    inner: `<div class="diagram-wrap">${fenestrationSvg()}</div>`,
+  },
   'year-cycle': {
     caption: '1年の世話のサイクル（模式図）。濃い緑が生育期（5〜9月＝水やり・肥料をしっかり）、青灰が休眠期（12〜2月＝乾かし気味・保温）。外周の金色の弧は肥料の適期、植え替え・剪定・挿し木は5〜7月がねらいめです。地域・室内環境で前後します。',
     inner: `<div class="diagram-wrap">${yearCycleSvg()}</div>`,
