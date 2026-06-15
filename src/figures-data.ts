@@ -314,8 +314,70 @@ function fenestrationSvg(): string {
   );
 }
 
+// 置き場所の良し悪し（窓からの距離と光）の模式図
+function lightPlacementSvg(): string {
+  const plant = (x: number, color: string) =>
+    `<path d="M${x} 150 L${x} 132" stroke="#5a8a64" stroke-width="3"/>` +
+    `<ellipse cx="${x}" cy="126" rx="11" ry="7" fill="${color}"/>` +
+    `<rect x="${x - 8}" y="150" width="16" height="9" rx="2" fill="#b07a52"/>`;
+  return (
+    `<svg class="diagram-single" viewBox="0 0 300 180" width="100%" role="img" aria-label="窓からの距離による置き場所の良し悪しの図">` +
+    `<rect width="300" height="180" fill="${LEAF_BG}"/>` +
+    // 床
+    `<line x1="10" y1="159" x2="290" y2="159" stroke="#cbb9a3" stroke-width="2"/>` +
+    // 左の窓＋太陽＋レースカーテン
+    `<rect x="6" y="34" width="20" height="96" fill="#cfe3f2" stroke="#8aa9bf" stroke-width="2"/>` +
+    `<circle cx="-2" cy="44" r="9" fill="#f4c430"/>` +
+    `${[34, 50, 66, 82, 98, 114].map(y => `<line x1="26" y1="${y}" x2="40" y2="${y + 6}" stroke="#cdd6db" stroke-width="1.4"/>`).join('')}` +
+    `<text x="16" y="150" font-size="9" fill="#5b7081" text-anchor="middle">窓</text>` +
+    // 1) 窓に密着＋直射 ✗
+    plant(60, '#6f8f5a') +
+    `${[40, 48, 56].map(y => `<line x1="28" y1="${y}" x2="54" y2="${y + 18}" stroke="#f0a500" stroke-width="2"/>`).join('')}` +
+    `<text x="60" y="172" font-size="9.5" fill="#b23b2e" text-anchor="middle">✗ 直射で葉焼け</text>` +
+    // 2) レース越し・少し離す ◎
+    plant(150, '#3D7A52') +
+    `<text x="150" y="172" font-size="9.5" fill="#1f7a43" text-anchor="middle" font-weight="700">◎ レース越しの光</text>` +
+    // 3) 部屋の奥・暗い ✗（徒長気味に細く）
+    `<path d="M244 150 C240 138 248 130 244 120" stroke="#7a9168" stroke-width="2.4" fill="none"/>` +
+    `<ellipse cx="246" cy="116" rx="8" ry="5" fill="#8aa07b"/>` +
+    `<rect x="236" y="150" width="16" height="9" rx="2" fill="#b07a52"/>` +
+    `<text x="246" y="172" font-size="9.5" fill="#b23b2e" text-anchor="middle">✗ 奥は暗く徒長</text>` +
+    `</svg>`
+  );
+}
+
+// 根腐れの進行（健康→中度→末期）の模式図
+function rootRotSvg(): string {
+  const panel = (label: string, sub: string, rootColor: string, stemColor: string, dead: boolean) =>
+    `<figure class="leaf-panel">` +
+    `<svg viewBox="0 0 100 100" width="100%" role="img" aria-label="${label}の根">` +
+    `<rect width="100" height="100" fill="${LEAF_BG}"/>` +
+    `<path d="M50 18 L50 44" stroke="${stemColor}" stroke-width="6" stroke-linecap="round"/>` +
+    // 根
+    `<path d="M50 44 C42 60 36 72 30 86 M50 44 C50 62 50 76 50 90 M50 44 C58 60 64 72 70 86 M50 56 C42 64 38 74 36 84 M50 56 C58 64 62 74 64 84" stroke="${rootColor}" stroke-width="3" fill="none" stroke-linecap="round"/>` +
+    (dead ? `<circle cx="50" cy="48" r="6" fill="#2b1a0f"/>` : '') +
+    `</svg>` +
+    `<figcaption><strong>${label}</strong><span>${sub}</span></figcaption>` +
+    `</figure>`;
+  return (
+    `<div class="leaf-grid" style="grid-template-columns:repeat(3,1fr)">` +
+    panel('健康', '白〜クリームで張りがある', '#e7d8b0', '#3D7A52', false) +
+    panel('中度', '根が茶色く軟らかい', '#9c7a3a', '#6f7a3a', false) +
+    panel('末期', '黒くブヨブヨ・地際も黒変', '#3b2a1a', '#2b1a0f', true) +
+    `</div>`
+  );
+}
+
 // figure id → { caption, innerHtml }
 const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
+  'light-placement': {
+    caption: '置き場所の目安（模式図）。窓に近すぎると直射で葉焼け、部屋の奥は暗くて徒長します。レースカーテン越しの明るい光が当たり、窓から少し離した位置がもっとも安定します。',
+    inner: `<div class="diagram-wrap">${lightPlacementSvg()}</div>`,
+  },
+  'root-rot-stages': {
+    caption: '根の状態の見分け（模式図）。健康な根は白〜クリーム色で張りがあります。茶色く軟らかくなったら中度、黒くブヨブヨして地際まで黒変したら末期で、早い段階ほど回復の見込みが高まります。',
+    inner: rootRotSvg(),
+  },
   'fenestration-why': {
     caption: '切れ込みと穴の役割（模式図）。穴を通った光が株の下のほうの葉にも届き、強い風雨は切れ込みを通り抜けて葉へのダメージを減らします。この構造は葉が開く前（筒状の新芽の段階）に作られます。',
     inner: `<div class="diagram-wrap">${fenestrationSvg()}</div>`,
