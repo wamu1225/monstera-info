@@ -368,8 +368,47 @@ function rootRotSvg(): string {
   );
 }
 
+// 増やし方3手法（水苔密閉・水挿し・土挿し）のセットアップ模式図
+function propagationSvg(): string {
+  // 共通の挿し穂（節・葉）。yオフセットで配置
+  const cutting = (topY: number, rootColor: string | null) =>
+    `<path d="M50 ${topY + 36} L50 ${topY + 8}" stroke="#5a8a64" stroke-width="4" stroke-linecap="round"/>` +
+    `<circle cx="50" cy="${topY + 20}" r="3" fill="#3D7A52"/>` + // 節
+    `<path d="M50 ${topY + 8} C58 ${topY} 70 ${topY + 2} 74 ${topY + 8} C66 ${topY + 16} 56 ${topY + 16} 50 ${topY + 12} Z" fill="#3D7A52"/>` + // 葉
+    (rootColor ? `<path d="M50 ${topY + 36} C46 ${topY + 44} 44 ${topY + 50} 46 ${topY + 56} M50 ${topY + 36} C50 ${topY + 46} 50 ${topY + 52} 50 ${topY + 58} M50 ${topY + 36} C54 ${topY + 44} 56 ${topY + 50} 54 ${topY + 56}" stroke="${rootColor}" stroke-width="2" fill="none" stroke-linecap="round"/>` : '');
+  const panel = (label: string, sub: string, body: string) =>
+    `<figure class="leaf-panel"><svg viewBox="0 0 100 110" width="100%" role="img" aria-label="${label}">` +
+    `<rect width="100" height="110" fill="${LEAF_BG}"/>${body}</svg>` +
+    `<figcaption><strong>${label}</strong><span>${sub}</span></figcaption></figure>`;
+  // 1) 水苔密閉（ジップロック）
+  const moss = `<rect x="22" y="44" width="56" height="54" rx="6" fill="#eef3df" stroke="#9bbf8a" stroke-width="2"/>` +
+    `<line x1="22" y1="50" x2="78" y2="50" stroke="#9bbf8a" stroke-width="2"/>` +
+    `${[30, 42, 54, 66].map(x => [70, 82, 90].map(y => `<circle cx="${x + (y % 7)}" cy="${y}" r="2" fill="#a98c5a"/>`).join('')).join('')}` +
+    cutting(36, null);
+  // 2) 水挿し（コップ）
+  const water = `<path d="M28 50 L72 50 L66 100 L34 100 Z" fill="#dcecf6" stroke="#8aa9bf" stroke-width="2"/>` +
+    `<path d="M31 70 L69 70 L66 100 L34 100 Z" fill="#bfdcf0"/>` +
+    `<line x1="31" y1="70" x2="69" y2="70" stroke="#8aa9bf" stroke-width="1.5"/>` +
+    cutting(34, '#e7d8b0');
+  // 3) 土挿し（鉢）
+  const soil = `<path d="M30 52 L70 52 L64 100 L36 100 Z" fill="#c8b09a" stroke="#8a6f57" stroke-width="2"/>` +
+    `<path d="M33 60 L67 60 L63 96 L37 96 Z" fill="#6b4f3a"/>` +
+    cutting(36, '#e7d8b0');
+  return (
+    `<div class="leaf-grid" style="grid-template-columns:repeat(3,1fr)">` +
+    panel('水苔密閉', 'ジップロックで高湿度', moss) +
+    panel('水挿し', '水に挿して発根を観察', water) +
+    panel('土挿し', '赤玉土に直接挿す', soil) +
+    `</div>`
+  );
+}
+
 // figure id → { caption, innerHtml }
 const FIGURE_DATA: Record<string, { caption: string; inner: string }> = {
+  'propagation-methods': {
+    caption: '3つの増やし方のセットアップ（模式図）。いずれも節と気根を含む茎を使い、室温20〜25℃・明るい日陰で養生します。水苔密閉は高湿度を保ちやすく、水挿しは発根を目で追え、土挿しは発根後そのまま育てられます。',
+    inner: propagationSvg(),
+  },
   'light-placement': {
     caption: '置き場所の目安（模式図）。窓に近すぎると直射で葉焼け、部屋の奥は暗くて徒長します。レースカーテン越しの明るい光が当たり、窓から少し離した位置がもっとも安定します。',
     inner: `<div class="diagram-wrap">${lightPlacementSvg()}</div>`,
