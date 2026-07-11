@@ -614,10 +614,10 @@ function SectionPage({ section }: { section: Section }) {
       requestAnimationFrame(() => {
         const el = document.getElementById(decodeURIComponent(hash.slice(1)));
         if (el) el.scrollIntoView({ behavior: 'auto', block: 'start' });
-        else window.scrollTo(0, 0);
+        else window.scrollTo({ top: 0, behavior: 'instant' });
       });
     } else {
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }
   }, [section.id, section.title]);
 
@@ -670,7 +670,7 @@ function VarietyCheck() {
 
   useEffect(() => {
     document.title = '品種判別ガイド | モンステラの基本ガイド';
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
 
   const total = quizQuestions.length;
@@ -685,10 +685,10 @@ function VarietyCheck() {
     setScores(newScores);
     if (step + 1 >= total) {
       setShowResult(true);
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, behavior: 'instant' });
     } else {
       setStep(step + 1);
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }
   };
 
@@ -698,7 +698,7 @@ function VarietyCheck() {
     setScores(last.scores);
     setHistory(history.slice(0, -1));
     setStep(Math.max(0, step - 1));
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   const reset = () => {
@@ -706,7 +706,7 @@ function VarietyCheck() {
     setScores({});
     setShowResult(false);
     setHistory([]);
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   // 結果の算出：得点上位を取り、確信度を計算
@@ -862,7 +862,7 @@ function VariegatedCheck() {
 
   useEffect(() => {
     document.title = '斑入り苗チェックリスト | モンステラの基本ガイド';
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
 
   const setAnswer = (id: string, val: CheckAnswer) => {
@@ -872,7 +872,7 @@ function VariegatedCheck() {
   const reset = () => {
     setAnswers({});
     setShowResult(false);
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   // 判定ロジック
@@ -990,7 +990,7 @@ function VariegatedCheck() {
               <button
                 className="check-submit"
                 disabled={totalAnswered === 0}
-                onClick={() => { setShowResult(true); window.scrollTo(0, 0); }}
+                onClick={() => { setShowResult(true); window.scrollTo({ top: 0, behavior: 'instant' }); }}
                 type="button"
               >
                 判定する（{totalAnswered} / {totalItems} 回答済み）
@@ -1087,7 +1087,7 @@ function Diagnose() {
 
   useEffect(() => {
     document.title = '症状逆引き診断 | モンステラの基本ガイド';
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }, [categoryId, symptomId]);
 
   const category = symptomCategories.find((c) => c.id === categoryId) ?? null;
@@ -1261,6 +1261,7 @@ function Footer() {
           href={`${BASE}/privacy/`}
           onClick={(e) => { e.preventDefault(); navigateTo('/privacy/'); }}
         >プライバシーポリシー</a>
+        <a href="https://study-apps.com/editorial-policy/">編集方針</a>
         <a href="https://study-apps.com/">study-apps.com</a>
       </div>
       <div style={{ marginTop: 8 }}>
@@ -1297,7 +1298,7 @@ const PRIVACY_CONTENT = `## アクセス解析
 function Glossary() {
   useEffect(() => {
     document.title = '用語集 | モンステラの基本ガイド';
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
   const sorted = [...glossary].sort((a, b) =>
     (a.reading || a.term).localeCompare(b.reading || b.term, 'ja')
