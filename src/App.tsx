@@ -1241,6 +1241,26 @@ function Diagnose() {
           </section>
         )}
 
+        <section style={{ marginTop: 44 }}>
+          <h2 style={{ fontSize: '1.2rem', color: '#2D5C3E', margin: '0 0 6px', paddingLeft: 12, borderLeft: '4px solid #2D5C3E' }}>この診断が扱う症状の一覧</h2>
+          <p style={{ fontSize: '0.92rem', color: '#4b5563', margin: '0 0 16px', paddingLeft: 16, lineHeight: 1.75 }}>
+            葉・茎・根・株全体の異変を、原因のカテゴリごとに整理しています。あてはまる症状を上の診断ツールで選ぶと、原因の候補を絞り込めます。くわしい対処は <a href={`${BASE}/troubles/`} onClick={(e) => { e.preventDefault(); navigateTo('/troubles/'); }} style={{ color: '#2D5C3E' }}>トラブルと対処</a> にまとめています。
+          </p>
+          {symptomCategories.map((c) => (
+            <section key={c.id} style={{ background: '#fff', border: '1px solid #d4dfc8', borderRadius: 10, padding: '16px 18px', marginBottom: 12 }}>
+              <h3 style={{ fontSize: '1.05rem', color: '#2D5C3E', margin: '0 0 4px' }}>
+                <span aria-hidden="true">{c.emoji}</span> {c.label}
+              </h3>
+              <p style={{ fontSize: '0.88rem', color: '#4b5563', margin: '0 0 8px', lineHeight: 1.75 }}>{c.description}</p>
+              <ul style={{ margin: 0, paddingLeft: 22, fontSize: '0.9rem', color: '#1f2937' }}>
+                {c.symptoms.map((s) => (
+                  <li key={s.id} style={{ marginBottom: 4, lineHeight: 1.75 }}>{s.label}</li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </section>
+
         <div className="section-footer">
           <a
             href={`${BASE}/`}
