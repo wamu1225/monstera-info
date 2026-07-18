@@ -832,6 +832,31 @@ function VarietyCheck() {
           </section>
         )}
 
+        <section style={{ marginTop: 44 }}>
+          <h2 style={{ fontSize: '1.2rem', color: '#2D5C3E', margin: '0 0 6px', paddingLeft: 12, borderLeft: '4px solid #2D5C3E' }}>判別できる品種の一覧</h2>
+          <p style={{ fontSize: '0.92rem', color: '#4b5563', margin: '0 0 16px', paddingLeft: 16, lineHeight: 1.75 }}>
+            このガイドが区別する系統を、特徴とともにまとめました。診断の結果とあわせて、手もとの株と見くらべる参照にしてください。
+          </p>
+          {(Object.keys(varieties) as VarietyId[]).map((id) => {
+            const v = varieties[id];
+            return (
+              <section key={id} style={{ background: '#fff', border: '1px solid #d4dfc8', borderRadius: 10, padding: '16px 18px', marginBottom: 14 }}>
+                <h3 style={{ fontSize: '1.05rem', color: '#2D5C3E', margin: '0 0 4px' }}>
+                  <span aria-hidden="true">{v.emoji}</span> {v.name}{' '}
+                  <span style={{ fontSize: '0.85rem', color: '#6b7280', fontWeight: 400 }}>({v.scientificName})</span>
+                </h3>
+                <p style={{ fontSize: '0.9rem', color: '#4b5563', margin: '0 0 10px', lineHeight: 1.75 }}>{v.summary}</p>
+                <ul style={{ margin: '0 0 8px', paddingLeft: 22, fontSize: '0.87rem', color: '#1f2937' }}>
+                  {v.traits.map((t, i) => (
+                    <li key={i} style={{ marginBottom: 4, lineHeight: 1.75 }}>{t}</li>
+                  ))}
+                </ul>
+                <p style={{ fontSize: '0.85rem', color: '#6b7280', margin: '8px 0 0', fontStyle: 'italic' }}>{v.notes}</p>
+              </section>
+            );
+          })}
+        </section>
+
         <div className="section-footer">
           <a
             href={`${BASE}/`}
