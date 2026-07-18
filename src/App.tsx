@@ -1084,43 +1084,6 @@ function VariegatedCheck() {
           </section>
         )}
 
-        <section style={{ marginTop: 44 }}>
-          <h2 style={{ fontSize: '1.2rem', color: '#2D5C3E', margin: '0 0 6px', paddingLeft: 12, borderLeft: '4px solid #2D5C3E' }}>購入前チェックの全項目</h2>
-          <p style={{ fontSize: '0.92rem', color: '#4b5563', margin: '0 0 16px', paddingLeft: 16, lineHeight: 1.75 }}>
-            このチェックリストで確認する項目を、なぜ重要かとあわせてすべて掲載します。斑入り苗を検討するときの見どころの参照にしてください。
-          </p>
-          {(Object.keys(checkCategories) as CheckCategory[]).map((cat) => {
-            const meta = checkCategories[cat];
-            const items = checkItems.filter((i) => i.category === cat);
-            if (items.length === 0) return null;
-            return (
-              <section key={cat} style={{ margin: '28px 0' }}>
-                <h3 style={{ fontSize: '1.1rem', color: '#2D5C3E', margin: '0 0 6px', paddingLeft: 12, borderLeft: '4px solid #2D5C3E' }}>
-                  <span aria-hidden="true">{meta.emoji}</span> {meta.label}
-                </h3>
-                <p style={{ fontSize: '0.9rem', color: '#4b5563', margin: '0 0 14px', paddingLeft: 16 }}>{meta.description}</p>
-                {items.map((item) => {
-                  const wt = weightLabel(item.weight);
-                  return (
-                    <div key={item.id} style={{ background: '#fff', border: '1px solid #d4dfc8', borderRadius: 10, padding: '16px 18px', marginBottom: 12 }}>
-                      <div style={{ marginBottom: 6 }}>
-                        <span className={`check-weight ${wt.className}`} style={{ marginRight: 8 }}>{wt.text}</span>
-                        <strong style={{ fontSize: '0.97rem' }}>{item.question}</strong>
-                      </div>
-                      <div style={{ fontSize: '0.88rem', color: '#4b5563', lineHeight: 1.75, margin: '4px 0 10px' }}>{item.detail}</div>
-                      <ul style={{ background: '#eef4e8', borderRadius: 6, padding: '10px 14px 10px 30px', margin: 0, fontSize: '0.87rem', color: '#1f2937' }}>
-                        {item.checkPoints.map((pt, i) => (
-                          <li key={i} style={{ marginBottom: 4, lineHeight: 1.75 }}>{pt}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  );
-                })}
-              </section>
-            );
-          })}
-        </section>
-
         <div className="section-footer">
           <a
             href={`${BASE}/`}
