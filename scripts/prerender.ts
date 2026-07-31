@@ -4,6 +4,7 @@ import { sections } from '../src/data/sections.ts';
 import { FAQ_BY_SECTION } from '../src/data/faqs.ts';
 import { glossary } from '../src/data/glossary.ts';
 import { symptomCategories } from '../src/data/symptoms.ts';
+import type { Severity } from '../src/data/symptoms.ts';
 import { getCurrentMonthTip } from '../src/data/monthly-tips.ts';
 import { checkCategories, checkItems } from '../src/data/variegated-checklist.ts';
 import type { CheckCategory } from '../src/data/variegated-checklist.ts';
@@ -558,12 +559,35 @@ const glossaryHtml = glossarySorted
   .join('');
 
 // ── 症状逆引き診断ページ ──
+// 原因・対処データ（symptoms.ts の causes）はステップ式ウィザードの結果画面でのみ描画され、
+// 静的HTMLには症状ラベルの一覧しか出ていなかった（原因・対処の本文が丸ごとクローラから不可視）。
+// 診断ツールとしての核心情報のため、全症状・全原因を静的ページ本文にも展開する。
+const sevLabel = (s: Severity): { text: string; className: string } => {
+  switch (s) {
+    case 'high': return { text: '緊急度：高', className: 'sev-high' };
+    case 'medium': return { text: '緊急度：中', className: 'sev-medium' };
+    case 'low': return { text: '緊急度：低', className: 'sev-low' };
+  }
+};
+
 const diagnoseCategoriesHtml = symptomCategories
   .map((c) => {
     const symptomsHtml = c.symptoms
-      .map((s) => `<li style="margin-bottom:6px;line-height:1.7"><a href="/monstera-info/troubles/" style="color:#2D5C3E;text-decoration:none">${escapeHtml(s.label)}</a></li>`)
+      .map((s) => {
+        const causesHtml = s.causes
+          .map((cause) => {
+            const sev = sevLabel(cause.severity);
+            const related = sections.find((sec) => sec.id === cause.relatedSectionId);
+            const relatedLink = related
+              ? `<a href="/monstera-info/${related.id}/" class="diagnose-cause-link">詳しく：${escapeHtml(related.shortTitle)} →</a>`
+              : '';
+            return `<div class="diagnose-cause"><div class="diagnose-cause-head"><span class="diagnose-sev ${sev.className}">${sev.text}</span><h4 class="diagnose-cause-title">${escapeHtml(cause.title)}</h4></div><p class="diagnose-cause-desc">${escapeHtml(cause.description)}</p><div class="diagnose-cause-action"><div class="diagnose-cause-action-label">すぐできる対処</div><p>${escapeHtml(cause.quickAction)}</p></div>${relatedLink}</div>`;
+          })
+          .join('');
+        return `<div style="margin:18px 0"><h3 style="font-size:1rem;color:#1f2937;margin:0 0 8px">${escapeHtml(s.label)}</h3><div class="diagnose-causes">${causesHtml}</div></div>`;
+      })
       .join('');
-    return `<section style="margin:24px 0;padding:18px;background:#fff;border:1px solid #d4dfc8;border-radius:10px"><h2 style="font-size:1.15rem;color:#2D5C3E;margin:0 0 10px"><span aria-hidden="true">${c.emoji}</span> ${escapeHtml(c.label)}：${escapeHtml(c.description)}</h2><ul style="margin:0;padding-left:22px;font-size:0.93rem">${symptomsHtml}</ul></section>`;
+    return `<section style="margin:24px 0;padding:18px;background:#fff;border:1px solid #d4dfc8;border-radius:10px"><h2 style="font-size:1.15rem;color:#2D5C3E;margin:0 0 10px"><span aria-hidden="true">${c.emoji}</span> ${escapeHtml(c.label)}：${escapeHtml(c.description)}</h2>${symptomsHtml}</section>`;
   })
   .join('');
 
@@ -571,7 +595,7 @@ writeStaticPage(
   'diagnose',
   '症状逆引き診断',
   'モンステラの異変（葉色・葉先・茎・根の症状）から考えられる原因と対処を 2 ステップで絞り込む診断ツール。',
-  `<p style="color:#555;font-size:1.05rem;margin:16px 0 16px">モンステラの異変から、考えられる原因と対処を絞り込みます。質問は 2 ステップで完了します。</p><div style="background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;margin:0 0 24px;font-size:0.92rem;line-height:1.75;color:#78410f">これは確定診断ではなく、症状から推定される<strong>可能性の高い原因</strong>です。複数の症状が当てはまる場合は、複数の原因が重なっていることもあります。</div><p style="font-size:0.93rem;color:#4b5563;margin:0 0 16px">下記は症状の一覧です。JavaScript が有効な環境では、ステップ式の診断ツールが表示されます。</p>${diagnoseCategoriesHtml}`,
+  `<p style="color:#555;font-size:1.05rem;margin:16px 0 16px">モンステラの異変から、考えられる原因と対処を絞り込みます。質問は 2 ステップで完了します。</p><div style="background:#fffbeb;border:1px solid #fde68a;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;margin:0 0 24px;font-size:0.92rem;line-height:1.75;color:#78410f">これは確定診断ではなく、症状から推定される<strong>可能性の高い原因</strong>です。複数の症状が当てはまる場合は、複数の原因が重なっていることもあります。</div><p style="font-size:0.93rem;color:#4b5563;margin:0 0 16px">下記は全症状と考えられる原因・対処の一覧です。JavaScript が有効な環境では、ステップ式の診断ツールで絞り込めます。</p>${diagnoseCategoriesHtml}`,
   [buildWebApplicationJsonLd('モンステラ症状逆引き診断', 'モンステラの葉・茎・根・全体の異変から、考えられる原因と対処を 2 ステップで絞り込む無料診断ツール。', `${BASE_URL}/diagnose/`)]
 );
 
