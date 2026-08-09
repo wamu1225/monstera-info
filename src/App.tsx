@@ -19,6 +19,7 @@ import { checkCategories, checkItems } from './data/variegated-checklist';
 import type { CheckCategory, Weight } from './data/variegated-checklist';
 import { quizQuestions, varieties } from './data/variety-quiz';
 import type { VarietyId } from './data/variety-quiz';
+import { ABOUT_CONTENT, PRIVACY_CONTENT } from './data/static-pages';
 import './App.css';
 
 const BASE = '/monstera-info';
@@ -1315,30 +1316,6 @@ function Footer() {
     </footer>
   );
 }
-
-const ABOUT_CONTENT = `本サイト「モンステラの基本ガイド」は、観葉植物モンステラ（Monstera deliciosa）に興味を持った方が、まずひととおりの情報に触れられるようにまとめたリファレンスサイトです。植物としての基礎知識、育て方、季節管理、剪定や増やし方、病害虫対処、選び方、ペットを含む安全性までを家庭目線で紹介しています。
-
-本サイトの内容は一般的な情報提供を目的としており、専門家による診断・処方・処置の代わりにはなりません。植物が深刻な病害虫被害を受けた場合は園芸専門店や植物医に、ペットの誤食が疑われる場合は速やかに獣医師にご相談ください。
-
-## 編集・制作方針
-
-本サイトのコンテンツは、一般に入手できる書籍や公開されている情報を参照しつつ、運営者が内容を再構成し、家庭の読者に分かりやすい形で独自に解説しています。他サイトの文章をそのまま転載することはありません。育て方や安全性に関わる記述は地域・環境・個体によって結果が異なる場合があり、内容に誤りや古くなった情報を見つけた場合は、お問い合わせを受けて随時見直し・修正します。
-
-## お問い合わせ
-
-ご質問・誤りのご指摘は[こちらのGoogleフォーム](https://forms.gle/ccMv7oKwz6ysDHBe6)からお願いします。`;
-
-const PRIVACY_CONTENT = `## アクセス解析
-
-本サイトでは、サイトの利用状況把握のために Google Analytics を使用しています。Google Analytics はクッキーを利用して匿名のトラフィックデータを収集します。収集される情報は匿名で、個人を特定するものではありません。
-
-## 広告について
-
-本サイトでは Google AdSense などの第三者配信の広告サービスを利用することがあります。広告配信事業者は、ユーザーの興味に応じた広告を表示するためにクッキーを使用することがあります。Google が広告 Cookie を使用することにより、Google や提携サイトによる広告の配信が可能になります。
-
-## 免責事項
-
-本サイトの情報は可能な限り正確を期していますが、その完全性・正確性を保証するものではありません。本サイトの情報を利用したことにより生じた損害について、運営者は一切の責任を負いません。`;
 
 function Glossary() {
   useEffect(() => {
