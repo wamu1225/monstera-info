@@ -602,7 +602,7 @@ function FAQBlock({ sectionId }: { sectionId: string }) {
 function SafetyDisclaimer() {
   return (
     <div className="safety-disclaimer">
-      <strong>⚠️ ペット・小児の誤食にご注意ください</strong>：モンステラは不溶性シュウ酸カルシウムを含むため、犬・猫・小児が誤食すると口腔の刺激や嘔吐などを引き起こすことがあります。誤食が疑われる場合は速やかに獣医師または医療機関にご相談ください。本サイトの情報は獣医学的・医学的助言の代替ではありません。
+      <strong>ペット・小児の誤食にご注意ください</strong>：モンステラは不溶性シュウ酸カルシウムを含むため、犬・猫・小児が誤食すると口腔の刺激や嘔吐などを引き起こすことがあります。誤食が疑われる場合は速やかに獣医師または医療機関にご相談ください。本サイトの情報は獣医学的・医学的助言の代替ではありません。
     </div>
   );
 }
@@ -1330,7 +1330,7 @@ function Glossary() {
       <Breadcrumb currentTitle="用語集" />
       <article className="section-page">
         <header className="article-header">
-          <div className="article-emoji" aria-hidden="true">📖</div>
+          <div className="article-emoji" aria-hidden="true"><SectionIcon name="book-open" size={30} /></div>
           <h1>モンステラ用語集</h1>
         </header>
         <p className="lead">
