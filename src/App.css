@@ -34,7 +34,7 @@
   color: white;
   /* 7分野ナビがブランドと同じ行に収まりきらず2段になる（O-3-27）ため、
      上下の余白を詰めて2段でも占有率を抑える。 */
-  padding: 8px 0;
+  padding: 6px 0;
   margin-bottom: 24px;
   box-shadow: var(--shadow-md);
   position: sticky;
@@ -83,9 +83,9 @@
 .site-nav a {
   color: rgba(255,255,255,0.92);
   text-decoration: none;
-  padding: 4px 8px;
+  padding: 3px 8px;
   border-radius: 6px;
-  font-size: 0.84rem;
+  font-size: 0.82rem;
   display: inline-flex;
   align-items: center;
   gap: 4px;
