@@ -161,13 +161,13 @@ function pruningNodeSvg(): string {
     // 切る位置（上の節の約1cm上・破線）
     `<line x1="118" y1="54" x2="184" y2="54" stroke="#c0392b" stroke-width="2.4" stroke-dasharray="6 4"/>` +
     `<text x="196" y="50" font-size="12" fill="#c0392b" font-weight="700">ここで切る</text>` +
-    `<text x="196" y="63" font-size="10" fill="#c0392b">節の約1cm上</text>` +
+    `<text x="196" y="63" font-size="11.5" fill="#c0392b">節の約1cm上</text>` +
     // ラベル（重なり回避のため要素に引出線を添える）
     `<line x1="150" y1="78" x2="178" y2="92" stroke="#1E3F2A" stroke-width="0.8"/>` +
-    `<text x="181" y="96" font-size="11" fill="#1E3F2A" font-weight="700">節</text>` +
-    `<text x="86" y="120" font-size="11" fill="#1E3F2A">節間</text>` +
+    `<text x="181" y="96" font-size="11.5" fill="#1E3F2A" font-weight="700">節</text>` +
+    `<text x="86" y="120" font-size="11.5" fill="#1E3F2A">節間</text>` +
     `<line x1="120" y1="186" x2="92" y2="190" stroke="#6b5836" stroke-width="0.8"/>` +
-    `<text x="58" y="194" font-size="11" fill="#6b5836" font-weight="700">気根</text>` +
+    `<text x="58" y="194" font-size="11.5" fill="#6b5836" font-weight="700">気根</text>` +
     `</svg>`
   );
 }
@@ -189,17 +189,17 @@ function raphideSvg(): string {
     // 左：細胞（idioblast）と針束
     `<ellipse cx="70" cy="78" rx="46" ry="40" fill="#eef3df" stroke="#3D7A52" stroke-width="2"/>` +
     needlesInCell.join('') +
-    `<text x="70" y="142" font-size="11" fill="#1E3F2A" font-weight="700" text-anchor="middle">細胞の中の針の束</text>` +
-    `<text x="70" y="156" font-size="10" fill="#4f7a3f" text-anchor="middle">（ラフィド）</text>` +
+    `<text x="70" y="142" font-size="11.5" fill="#1E3F2A" font-weight="700" text-anchor="middle">細胞の中の針の束</text>` +
+    `<text x="70" y="156" font-size="11.5" fill="#4f7a3f" text-anchor="middle">（ラフィド）</text>` +
     // 中央：矢印「噛むと」
-    `<text x="150" y="70" font-size="11" fill="#6b5836" text-anchor="middle">噛むと</text>` +
+    `<text x="150" y="70" font-size="11.5" fill="#6b5836" text-anchor="middle">噛むと</text>` +
     `<path d="M126 80 L174 80" stroke="#6b5836" stroke-width="2.4"/>` +
     `<path d="M174 80 L166 75 M174 80 L166 85" stroke="#6b5836" stroke-width="2.4" fill="none"/>` +
     // 右：粘膜に刺さる
     `<rect x="180" y="116" width="100" height="14" fill="#f3c9c4"/>` +
     `<path d="M180 116 H280" stroke="#d98b82" stroke-width="2"/>` +
     stuck.join('') +
-    `<text x="230" y="150" font-size="11" fill="#9b3a30" font-weight="700" text-anchor="middle">粘膜に刺さって刺激</text>` +
+    `<text x="230" y="150" font-size="11.5" fill="#9b3a30" font-weight="700" text-anchor="middle">粘膜に刺さって刺激</text>` +
     `</svg>`
   );
 }
@@ -227,10 +227,10 @@ function potSoilSvg(): string {
     // 配合バー（右）
     `<rect x="232" y="56" width="20" height="71" fill="#cdb48f" stroke="#8a6f57" stroke-width="1"/>` +
     `<rect x="232" y="127" width="20" height="31" fill="#5a4030" stroke="#8a6f57" stroke-width="1"/>` +
-    `<text x="258" y="92" font-size="10" fill="#1E3F2A">赤玉土7</text>` +
-    `<text x="258" y="146" font-size="10" fill="#1E3F2A">腐葉土3</text>` +
+    `<text x="244" y="92" font-size="11.5" fill="#1E3F2A">赤玉土7</text>` +
+    `<text x="244" y="146" font-size="11.5" fill="#1E3F2A">腐葉土3</text>` +
     // ラベル
-    `<text x="150" y="192" font-size="10" fill="#6b5836" text-anchor="middle">鉢底に軽石・排水穴</text>` +
+    `<text x="150" y="192" font-size="11.5" fill="#6b5836" text-anchor="middle">鉢底に軽石・排水穴</text>` +
     `</svg>`
   );
 }
@@ -271,13 +271,13 @@ function yearCycleSvg(): string {
     `<svg class="diagram-single" viewBox="0 0 300 300" width="100%" role="img" aria-label="モンステラの1年の世話のサイクル図">` +
     `<rect width="300" height="300" fill="${LEAF_BG}"/>` +
     seg + fa.join('') +
-    `<text x="${(flx - 6).toFixed(1)}" y="${fly.toFixed(1)}" font-size="10" fill="#a07a1f" text-anchor="end">肥料 4〜9月</text>` +
+    `<text x="${(flx - 6).toFixed(1)}" y="${fly.toFixed(1)}" font-size="11.5" fill="#a07a1f" text-anchor="end">肥料 4〜9月</text>` +
     // 中央
     `<circle cx="${cx}" cy="${cy}" r="${r - 4}" fill="#f3f7f0"/>` +
     `<text x="${cx}" y="${cy - 16}" font-size="13" font-weight="700" text-anchor="middle" fill="#1E3F2A">生育期</text>` +
     `<text x="${cx}" y="${cy}" font-size="12" text-anchor="middle" fill="#3D7A52">5〜9月</text>` +
-    `<text x="${cx}" y="${cy + 20}" font-size="11" text-anchor="middle" fill="#6b7a82">休眠期 12〜2月</text>` +
-    `<text x="${cx}" y="${cy + 36}" font-size="10" text-anchor="middle" fill="#9b7b3a">植替/剪定/挿木 5〜7月</text>` +
+    `<text x="${cx}" y="${cy + 20}" font-size="11.5" text-anchor="middle" fill="#6b7a82">休眠期 12〜2月</text>` +
+    `<text x="${cx}" y="${cy + 36}" font-size="11.5" text-anchor="middle" fill="#9b7b3a">植替/剪定/挿木 5〜7月</text>` +
     `</svg>`
   );
 }
@@ -296,7 +296,7 @@ function fenestrationSvg(): string {
     // 太陽
     `<circle cx="40" cy="24" r="11" fill="#f4c430"/>` +
     `${[0, 45, 90, 135, 180, 225, 270, 315].map(a => { const r = a * Math.PI / 180; return `<line x1="${(40 + 14 * Math.cos(r)).toFixed(1)}" y1="${(24 + 14 * Math.sin(r)).toFixed(1)}" x2="${(40 + 19 * Math.cos(r)).toFixed(1)}" y2="${(24 + 19 * Math.sin(r)).toFixed(1)}" stroke="#f4c430" stroke-width="2"/>`; }).join('')}` +
-    `<text x="62" y="22" font-size="10" fill="#a07a1f">ひかり・風雨</text>` +
+    `<text x="62" y="22" font-size="11.5" fill="#a07a1f">ひかり・風雨</text>` +
     // 光線（穴を通る）
     lightRays +
     // 上の大きな葉
@@ -309,7 +309,7 @@ function fenestrationSvg(): string {
     // 下の小さな葉（木漏れ日が届く）
     `<path d="M120 158 C120 148 135 142 150 142 C165 142 180 148 180 158 C180 166 167 171 150 171 C133 171 120 166 120 158 Z" fill="#6aa57c"/>` +
     `<circle cx="146" cy="156" r="2" fill="#f4e3a1"/><circle cx="158" cy="159" r="2" fill="#f4e3a1"/>` +
-    `<text x="150" y="182" font-size="10" fill="#1E3F2A" text-anchor="middle">下の葉にも光が届く</text>` +
+    `<text x="150" y="182" font-size="11.5" fill="#1E3F2A" text-anchor="middle">下の葉にも光が届く</text>` +
     `</svg>`
   );
 }
@@ -321,27 +321,30 @@ function lightPlacementSvg(): string {
     `<ellipse cx="${x}" cy="126" rx="11" ry="7" fill="${color}"/>` +
     `<rect x="${x - 8}" y="150" width="16" height="9" rx="2" fill="#b07a52"/>`;
   return (
-    `<svg class="diagram-single" viewBox="0 0 300 180" width="100%" role="img" aria-label="窓からの距離による置き場所の良し悪しの図">` +
-    `<rect width="300" height="180" fill="${LEAF_BG}"/>` +
+    `<svg class="diagram-single" viewBox="0 0 300 196" width="100%" role="img" aria-label="窓からの距離による置き場所の良し悪しの図">` +
+    `<rect width="300" height="196" fill="${LEAF_BG}"/>` +
     // 床
     `<line x1="10" y1="159" x2="290" y2="159" stroke="#cbb9a3" stroke-width="2"/>` +
     // 左の窓＋太陽＋レースカーテン
     `<rect x="6" y="34" width="20" height="96" fill="#cfe3f2" stroke="#8aa9bf" stroke-width="2"/>` +
     `<circle cx="-2" cy="44" r="9" fill="#f4c430"/>` +
     `${[34, 50, 66, 82, 98, 114].map(y => `<line x1="26" y1="${y}" x2="40" y2="${y + 6}" stroke="#cdd6db" stroke-width="1.4"/>`).join('')}` +
-    `<text x="16" y="150" font-size="9" fill="#5b7081" text-anchor="middle">窓</text>` +
+    `<text x="16" y="150" font-size="11.5" fill="#5b7081" text-anchor="middle">窓</text>` +
     // 1) 窓に密着＋直射 ✗
     plant(60, '#6f8f5a') +
     `${[40, 48, 56].map(y => `<line x1="28" y1="${y}" x2="54" y2="${y + 18}" stroke="#f0a500" stroke-width="2"/>`).join('')}` +
-    `<text x="60" y="172" font-size="9.5" fill="#b23b2e" text-anchor="middle">✗ 直射で葉焼け</text>` +
+    `<text x="60" y="171" font-size="11.5" fill="#b23b2e" text-anchor="middle">✗</text>` +
+    `<text x="60" y="187" font-size="11.5" fill="#b23b2e" text-anchor="middle">直射で葉焼け</text>` +
     // 2) レース越し・少し離す ◎
     plant(150, '#3D7A52') +
-    `<text x="150" y="172" font-size="9.5" fill="#1f7a43" text-anchor="middle" font-weight="700">◎ レース越しの光</text>` +
+    `<text x="150" y="171" font-size="11.5" fill="#1f7a43" text-anchor="middle" font-weight="700">◎</text>` +
+    `<text x="150" y="187" font-size="11.5" fill="#1f7a43" text-anchor="middle" font-weight="700">レース越しの光</text>` +
     // 3) 部屋の奥・暗い ✗（徒長気味に細く）
     `<path d="M244 150 C240 138 248 130 244 120" stroke="#7a9168" stroke-width="2.4" fill="none"/>` +
     `<ellipse cx="246" cy="116" rx="8" ry="5" fill="#8aa07b"/>` +
     `<rect x="236" y="150" width="16" height="9" rx="2" fill="#b07a52"/>` +
-    `<text x="246" y="172" font-size="9.5" fill="#b23b2e" text-anchor="middle">✗ 奥は暗く徒長</text>` +
+    `<text x="246" y="171" font-size="11.5" fill="#b23b2e" text-anchor="middle">✗</text>` +
+    `<text x="246" y="187" font-size="11.5" fill="#b23b2e" text-anchor="middle">奥は暗く徒長</text>` +
     `</svg>`
   );
 }
