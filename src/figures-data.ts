@@ -225,8 +225,8 @@ function potSoilSvg(): string {
     `<rect x="134" y="176" width="12" height="5" fill="#6b4f3a"/>` +
     `<path d="M140 184 C137 188 137 192 140 193 C143 192 143 188 140 184 Z" fill="#5b9bd5"/>` +
     // 配合バー（右）
-    `<rect x="232" y="56" width="20" height="71" fill="#cdb48f" stroke="#8a6f57" stroke-width="1"/>` +
-    `<rect x="232" y="127" width="20" height="31" fill="#5a4030" stroke="#8a6f57" stroke-width="1"/>` +
+    `<rect x="218" y="56" width="20" height="71" fill="#cdb48f" stroke="#8a6f57" stroke-width="1"/>` +
+    `<rect x="218" y="127" width="20" height="31" fill="#5a4030" stroke="#8a6f57" stroke-width="1"/>` +
     `<text x="244" y="92" font-size="11.5" fill="#1E3F2A">赤玉土7</text>` +
     `<text x="244" y="146" font-size="11.5" fill="#1E3F2A">腐葉土3</text>` +
     // ラベル
