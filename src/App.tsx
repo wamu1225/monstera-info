@@ -782,6 +782,7 @@ function VarietyCheck() {
               <>
                 <div className={`check-verdict verdict-${confidence === '◎' ? 'good' : confidence === '○' ? 'caution' : 'caution'}`}>
                   <div className="variety-confidence">{confidenceText}</div>
+                  <div className="variety-top-score">{topScore} 点</div>
                   <h2 className="variety-top-name">
                     <span className="variety-top-emoji" aria-hidden="true">{varieties[sortedResults[0].id].emoji}</span>
                     {varieties[sortedResults[0].id].name}

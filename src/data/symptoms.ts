@@ -125,7 +125,7 @@ export const symptomCategories: SymptomCategory[] = [
             title: '省エネモード（環境ストレスのサイン）',
             description: '株がエネルギーを節約する状態に入っており、切れ込みを作る余裕がない。複数の原因が重なっていることが多い。',
             severity: 'medium',
-            quickAction: '日照・根詰まり・温度ストレス・水分ストレスを総合的に見直す。',
+            quickAction: 'まず日照（レースカーテン越しの明るい窓際にあるか）を確認。次に鉢底から根が飛び出していないか（根詰まり）を見る。それでも改善しなければ、置き場の気温（18℃以上を保てているか）と水やり間隔を順に見直す。',
             relatedSectionId: 'troubles',
           },
           {
@@ -407,6 +407,33 @@ export const symptomCategories: SymptomCategory[] = [
             description: '株のサイズに対して鉢と土の量が多すぎると、土が乾きにくくなる。',
             severity: 'medium',
             quickAction: '次回植え替え時に株のサイズに合った鉢へ。鉢サイズアップは 1 段階まで。',
+            relatedSectionId: 'seasonal',
+          },
+        ],
+      },
+      {
+        id: 'too-big',
+        label: '大きくなりすぎた・置き場所に困っている',
+        causes: [
+          {
+            title: '順調な成長のあかし（トラブルではありません）',
+            description: 'モンステラは生育期に大きく育つ植物です。数年で見違えるほど大きくなりすぎたと感じるのは、株が元気に育っている証拠でもあります。',
+            severity: 'low',
+            quickAction: '好きなサイズに切り戻して仕立て直すか、カットした茎を挿し木で増やして株を分けられます。',
+            relatedSectionId: 'seasonal',
+          },
+          {
+            title: '切り戻して仕立て直す（仕立て直しの手順）',
+            description: '伸びすぎたツルや茎を、好きな高さ・位置でカットして株の形を整え直す方法です。引っ越しや模様替えで置き場所が変わるときにも使えます。',
+            severity: 'low',
+            quickAction: '節を1〜2個残してカット。切り口に近い節からわき芽が伸び、小さくまとまった姿に仕立て直せます。',
+            relatedSectionId: 'seasonal',
+          },
+          {
+            title: '切った茎を挿し木で増やす',
+            description: '切り戻しで出た茎は、捨てずに新しい株として再生できます。1株が2株・3株に増え、小さく株分けした姿で育て直せます。',
+            severity: 'low',
+            quickAction: '節と気根を含む 10〜15cm を切り出し、水挿しまたは土挿しで発根させる。',
             relatedSectionId: 'seasonal',
           },
         ],

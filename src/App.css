@@ -1234,8 +1234,20 @@
   font-size: 0.85rem;
   color: var(--text-muted);
   font-weight: 700;
-  margin-bottom: 8px;
   letter-spacing: 0.03em;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.variety-top-score {
+  display: inline-block;
+  font-size: 0.82rem;
+  color: var(--primary);
+  font-weight: 600;
+  background: var(--bg-warm);
+  padding: 2px 10px;
+  border-radius: 999px;
+  margin-bottom: 8px;
 }
 
 .variety-top-name {
