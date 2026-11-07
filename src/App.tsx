@@ -1311,6 +1311,7 @@ function Footer() {
         <a href="https://study-apps.com/editorial-policy/">編集方針</a>
         <a href="https://study-apps.com/">study-apps.com</a>
       </div>
+      <div style={{ marginTop: 8, wordBreak: 'keep-all' }}>ほかの 植物ガイド：<a href="https://study-apps.com/beets-info/">ビーツ</a> ・ <a href="https://study-apps.com/gajumaru-info/">ガジュマル</a> ・ <a href="https://study-apps.com/sprout-info/">スプラウト</a></div>
       <div style={{ marginTop: 8 }}>
         本サイトは一般的な情報を提供するもので、専門家の助言の代替ではありません。ペットの誤食など緊急時は獣医師にご相談ください。
       </div>
